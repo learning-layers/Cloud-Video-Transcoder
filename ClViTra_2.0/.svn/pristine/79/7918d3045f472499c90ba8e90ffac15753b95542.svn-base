@@ -1,0 +1,5 @@
+#location = d://uploaded/
+#location = http://10.255.255.4:8080/temp/
+location = /var/lib/tomcat7/webapps/temp/
+savePath = http://10.255.255.4:8080/temp/
+thumbnailPath = http://137.226.58.21:8080/temp/
