@@ -1,16 +1,103 @@
+<!DOCTYPE html>
 <html>
-<body>
-	<h1>Login to the ClViTra Service</h1>
- 
-	<form action="rest/ClViTra/videos" method="post" enctype="multipart/form-data">
- 
-	   <p>
-		Username: <input type="text" name="user"><br>
-		Password: <input type="password" name="pwd">
-	   </p>
- 
-	   <input type="submit" value="Login" />
-	</form>
- 
+    <head>
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+	<script src="jquery.base64.js"></script>
+    <link href="http://dbis.rwth-aachen.de/gadgets/lib/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen"/>
+    <!--link href="css/bootstrap-theme.min.css" rel="stylesheet"-->
+    
+    </head>
+    <body>
+    
+		<form id="navbar-loginform" class="navbar-form navbar-right hidden">
+                        <div class="form-group">
+                            <input id="signin-login" highlight="" placeholder="Username" class="form-control" type="text">
+                        </div>
+                        <div class="form-group">
+                            <input id= "signin-password" highlight="" placeholder="Password" class="form-control" type="password">
+                        </div>
+                        <button highlight="" type="submit" class="btn btn-success">Sign in</button>
+                    </form>
+
+<script>
+$( document ).ready(function() {
+	function dologin(login, password, callback) {
+		
+	    var resource = "http://137.226.58.21:9080/ClViTra_2.0/rest/auth";
+	    var that = this;
+
+	    var credentials = __make_base_auth(login.toLowerCase(), password);
+
+	    $.ajax({
+	        url: resource,
+	        type: "GET",
+	        dataType:'json',
+	        beforeSend: function(xhr) {
+	            xhr.setRequestHeader("Authorization", credentials);
+	        }, success: function(value) {
+	        	window.location="FileUpload.html";
+	        	
+	            that._login = login;
+	            that._cred = credentials;
+
+	            localStorage.setItem("annLogin",login);
+	            localStorage.setItem("annCred",credentials);
+
+	            callback({status:"ok", code:200});
+	        }, statusCode: {
+	            // if user does not exist, return authentication failed.
+	            404: function() {
+	                callback({status:"not found", code:404});
+	            },
+	            // if credentials were not correct, return authentication failed.
+	            401: function() {
+	                callback({status:"unauthorized", code:401});
+	            },
+	            // something went wrong....
+	            500: function() {
+	                callback({status:"server error", code:500});
+	            }
+	        }
+	    });
+	};
+    
+	$( "#navbar-loginform" ).submit(function(event) {
+            event.preventDefault();
+            $(this).find("button").attr("disabled", "disabled")
+
+            login = $("form input#signin-login").val();
+            pass  = $("form input#signin-password").first().val();
+            dologin(login, pass, function(r) {
+                switch (r.code){
+                case 404:
+                    alert("User does not exist!");      break;
+                case 401:
+                    alert("Wrong password!");           break;
+                case 500:
+                    alert("Something went wrong...");   break;
+                case 200:
+                    // if current tab is registration form, switch to "Home" div
+                    // registration not needed, when logged in successfully;
+                     alert("SUCCESS");
+                    break;
+                } 
+        	});
+	});
+});
+
+function __make_base_auth(user, password) {
+    var tok = user + ':' + password;
+    var hash = $.base64.encode(tok);
+    var result = "Basic " + hash;
+    return result;
+}
+
+//AnnClient.prototype.getVideos = function(count, callback){
+//    this._get(callback, this._videoResource, count);
+//};
+
+
+</script>
 </body>
 </html>

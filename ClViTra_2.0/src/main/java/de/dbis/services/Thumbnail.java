@@ -1,4 +1,4 @@
-package com.ClViTra.rest;
+package de.dbis.services;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -16,8 +16,8 @@ public class Thumbnail
 {
     public static final double SECONDS_BETWEEN_FRAMES = 1;
 
-    private static String inputFilename = null;//"C:/Users/Aarij/Desktop/Performance.mp4";
-    private static String outputFilePrefix = null;//"C:/Users/Aarij/Desktop/";
+    private static String inputFilename = null;
+    private static String outputFilePrefix = null;
     private static String outputFilename = null;
 
     // The video stream index, used to ensure we display frames from one and
@@ -38,8 +38,7 @@ public class Thumbnail
 
         IMediaReader mediaReader = ToolFactory.makeReader(inputFilename);
 
-        // stipulate that we want BufferedImages created in BGR 24bit color
-        // space
+        // stipulate that we want BufferedImages created in BGR 24bit color space
 
         try
         {
@@ -65,7 +64,9 @@ public class Thumbnail
             ex.printStackTrace();
         }
         //System.out.println("Total Time: " + (stopTime-startTime));
-		return outputFilename;
+        ObjectStore ob = new ObjectStore();
+	   	String URI = ob.ObjectStoreStart(outputFilename);
+		return URI;
     }
 
     private static class ImageSnapListener extends MediaListenerAdapter
@@ -106,7 +107,6 @@ public class Thumbnail
             try
             {
                 String outputFilename = outputFilePrefix + System.currentTimeMillis() + ".jpg";
-                //System.out.println("Thumbnail image name is going to be : =====>" + outputFilename);
                 ImageIO.write(image, "jpg", new File(outputFilename));
                 return outputFilename;
             }

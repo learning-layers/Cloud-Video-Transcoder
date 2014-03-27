@@ -1,4 +1,4 @@
-package com.ClViTra.rest;
+package de.dbis.services;
 
 import java.io.File;
 import java.util.HashMap;
@@ -34,10 +34,8 @@ public class ObjectStore {
 				oauth = GetProperty.getParam("oauth", INPUT_FILE);
 				stringEntity = GetProperty.getParam("stringEntity", INPUT_FILE);
 
-				//HttpPost post = new HttpPost("http://137.226.58.11:8081/i5Cloud/services/3/auth");
 				HttpPost post = new HttpPost(oauth);
 
-				//StringEntity se = new StringEntity("{\"username\": \"ClViTraUser\", \"password\": \"*********\"}");
 				StringEntity se = new StringEntity(stringEntity);
 
 				post.setEntity(se);
@@ -50,7 +48,7 @@ public class ObjectStore {
 		
 				// get token
 				String publicURL = jsResponse.getString("swift-url");
-				//System.out.println(publicURL);
+
 				String token = jsResponse.getString("X-Auth-Token");
 
 				HashMap<String, String> values = new HashMap<String, String>();
@@ -88,8 +86,6 @@ public class ObjectStore {
 				HttpClient client = new DefaultHttpClient();
 				
 				upload = GetProperty.getParam("upload", INPUT_FILE);
-				//System.out.println("http://137.226.58.11:8081/i5Cloud/services/3/container/public/" + new File(params[1]).getName());
-				//HttpPut put = new HttpPut("http://137.226.58.11:8081/i5Cloud/services/3/storage/public/" + new File(params[1]).getName()); 
 				HttpPut put = new HttpPut(upload + new File(params[1]).getName());
 
 				FileEntity fe = new FileEntity(new File(params[1]), "video/mp4");
@@ -102,7 +98,6 @@ public class ObjectStore {
 				String responseBody = client.execute(put, responseHandler);
 				responseBody = responseBody.substring(18);
 				responseBody = responseBody.substring(0, responseBody.length()- 3);
-				//System.out.println(responseBody);
 				return responseBody;
 
 			} catch (Exception e) {

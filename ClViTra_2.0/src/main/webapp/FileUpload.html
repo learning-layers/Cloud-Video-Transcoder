@@ -1,15 +1,68 @@
 <html>
+<head>
+	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+	<script>
+	
+	if(localStorage.annLogin==null) {
+		window.location="NewLogin.html";
+	}
+	
+	</script>
+</head>
+
+
+
 <body>
 	<h1>File Upload with Jersey</h1>
  
-	<form action="rest/file/upload" method="post" enctype="multipart/form-data">
+	<form action="/ClViTra_2.0/rest/upload" method="post" enctype="multipart/form-data">
  
 	   <p>
 		Select a file : <input type="file" name="file" size="45" />
 	   </p>
- 
 	   <input type="submit" value="Upload It" />
 	   
-	</form> 	
+	</form> 
+	<div id='videolist'></div>	
+	<script>
+	$.ajax({
+	        url: "/ClViTra_2.0/rest/videos",
+	        type: "GET",
+	        dataType:'json',
+	        //beforeSend: function(xhr) {
+	          //  xhr.setRequestHeader("Authorization", localStorage.annCred);
+	        //}, 
+	        success: function(value) {
+	        	console.log(value);
+	        	$('#videolist').html(value.videolist);
+	        	//window.location="FileUpload.html";
+	        	
+	            //that._login = login;
+	            //that._cred = credentials;
+
+	            //localStorage.setItem("annLogin",login);
+	            //localStorage.setItem("annCred",credentials);
+
+	            //callback({status:"ok", code:200});
+	        //}, statusCode: {
+	            // if user does not exist, return authentication failed.
+	          //  404: function() {
+	            //    callback({status:"not found", code:404});
+	            //},
+	            // if credentials were not correct, return authentication failed.
+	            //401: function() {
+	              //  callback({status:"unauthorized", code:401});
+	            //},
+	            // something went wrong....
+	            //500: function() {
+	              //  callback({status:"server error", code:500});
+	            //}
+	        }
+	    });
+	    </script>
+	
+	
 </body>
 </html>

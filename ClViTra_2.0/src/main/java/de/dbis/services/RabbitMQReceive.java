@@ -1,4 +1,4 @@
-package com.ClViTra.rest;
+package de.dbis.services;
 import java.io.File;
 import java.io.IOException;
 
@@ -8,9 +8,11 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.ConsumerCancelledException;
 import com.rabbitmq.client.QueueingConsumer;
 import com.rabbitmq.client.ShutdownSignalException;
-import com.ClViTra.rest.Java2MySql;
 
-public class Recv_C implements Runnable{
+import de.dbis.services.Java2MySql;
+import de.dbis.xmpp.PubsubSender;
+
+public class RabbitMQReceive implements Runnable{
 
     private final static String QUEUE_NAME = "Send";
     private static String server;
@@ -18,7 +20,7 @@ public class Recv_C implements Runnable{
 
     public static void recv() {
     	
-    	(new Thread(new Recv_C())).start();
+    	(new Thread(new RabbitMQReceive())).start();
     }
 
     public void run() {
@@ -45,6 +47,7 @@ public class Recv_C implements Runnable{
 	            String URI = Split[2];
 	            String status = Split[3];
 	            Java2MySql.VideoUpdate(ID, outputFile.getPath(), URI);
+	            PubsubSender.xmpp_send(ID, outputFile.getName(),URI);
 	            System.out.println(" [x] Received '" + ID + "  " +status + "'");
 	        }
 		} catch (IOException e) {
@@ -57,6 +60,9 @@ public class Recv_C implements Runnable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

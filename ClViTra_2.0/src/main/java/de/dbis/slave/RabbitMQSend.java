@@ -1,10 +1,11 @@
-package com.socket.server;
-import com.ClViTra.rest.GetProperty;
+package de.dbis.slave;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
 
-public class Send {
+import de.dbis.services.GetProperty;
+
+public class RabbitMQSend {
 
 	private final static String QUEUE_NAME = "Send";
 	private static String server;
@@ -19,9 +20,7 @@ public class Send {
 		Channel channel = connection.createChannel();
 		
 		channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-    //	String message = "Hello World!";
 		channel.basicPublish("", QUEUE_NAME, null, status.getBytes());
-    //	System.out.println(" [x] Sent '" + message + "'");
 		
 		channel.close();
 		connection.close();

@@ -1,7 +1,7 @@
 /* ATLAS Group - Virtual Campfire - www.dbis.rwth-aachen.de
  * Copyright © 2010-2012 Lehrstuhl Informatik V, RWTH Aachen, Germany. All Rights Reserved.
  */
-package com.ClViTra.rest;
+package de.dbis.services;
 
 
 /*

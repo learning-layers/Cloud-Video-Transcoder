@@ -1,18 +1,17 @@
-package com.socket.server;
-import java.io.File;
+package de.dbis.slave;
+
 import java.io.IOException;
 
-import com.ClViTra.rest.*;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.ConsumerCancelledException;
 import com.rabbitmq.client.QueueingConsumer;
 import com.rabbitmq.client.ShutdownSignalException;
-import com.xuggle.mediatool.IMediaReader;
-import com.xuggle.mediatool.ToolFactory;
 
-public class Recv implements Runnable {
+import de.dbis.services.*;
+
+public class RabbitMQReceive implements Runnable {
 
     private final static String QUEUE_NAME = "Receive";
     private static String server;
@@ -21,7 +20,7 @@ public class Recv implements Runnable {
     public static void recv() {
     	
     	System.out.println("start");
-		(new Thread(new Recv())).start();
+		(new Thread(new RabbitMQReceive())).start();
 		
 	}
 
@@ -45,14 +44,11 @@ public class Recv implements Runnable {
     		while (true) {
     			QueueingConsumer.Delivery delivery = consumer.nextDelivery();
     			String ID = new String(delivery.getBody());
-	      //	String status = 
+
     			System.out.println(ID);
     			System.out.println("test0");
     			Java2MySql.Processing(ID);
     			Transcode.transcode(ID);
-	      //	String send_message = message + "%" + status;
-	      //	Send.send(status);
-	      //	System.out.println(" [x] Received '" + message + "'" + status + "  " + status);
     		}
     	} catch (IOException e) {
 		// 	TODO Auto-generated catch block
