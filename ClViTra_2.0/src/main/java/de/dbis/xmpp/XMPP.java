@@ -19,6 +19,7 @@ public class XMPP {
 		super();
 	}
 	
+	
 	public static XMPPConnection getConnection(){
 		
 		String server, port, service, username, password;

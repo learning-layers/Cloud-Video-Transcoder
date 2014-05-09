@@ -6,6 +6,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.OPTIONS;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Component;
 
 import de.dbis.util.CORS;
 
-@Path("/videos")
+@Path("/videos/{id}/{request}")
 @Component
 public class DisplayVideos {
 	
@@ -32,12 +33,19 @@ public class DisplayVideos {
 	
 	@GET
 	@Produces("application/json")
-	public Response VideosDisplay() throws JSONException{
+	public Response VideosDisplay(@PathParam("id") String username, @PathParam("request") String request) throws JSONException{
 		   String Name, Thumbnail;
 		   //String output = "<form action=\"upload\" method=\"post\" enctype=\"multipart/form-data\"> "
 		   	//	+ "<p> Select a file : <input type=\"file\" name=\"file\" size=\"45\" /> </p> <input type=\"submit\" value=\"Upload It\" /> </form> ";
-		   new Java2MySql();
-		   List<String> myList = Java2MySql.TranscodedVideos();
+		   //new Java2MySql();
+		   
+		   //System.out.println("UserID: "+username);
+		   //System.out.println("request: "+request);
+		   int UserId = Java2MySql.getUserId(username);
+		   
+		   
+		   
+		   List<String> myList = Java2MySql.getVideos(UserId, request);
 		   
 		   JSONObject j[] =  new JSONObject[myList.size()/2];//null; =
 		   JSONObject j_final = new JSONObject();

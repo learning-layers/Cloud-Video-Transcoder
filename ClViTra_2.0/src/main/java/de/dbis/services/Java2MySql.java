@@ -102,7 +102,32 @@ public class Java2MySql
         return Return_code;
     }
 	
-	public static String VideoUpdate(String filename, String ext, String ThumbnailFilename, long Duration) {
+	public static int getUserId(String username) {
+		
+		init();
+		int ID = 0;
+		try {
+			Class.forName(driver).newInstance();
+			Connection conn = DriverManager.getConnection(url+dbName,userName,password);
+			
+			String insertQuery = "SELECT * FROM  user WHERE username=?";
+			PreparedStatement pstmt = conn.prepareStatement(insertQuery);
+			pstmt.setString(1, username);
+			ResultSet res = pstmt.executeQuery();
+  	  
+			//if(res.getString("Status").compareTo("INITIALIZED")==0)
+			if (res.next())	
+				ID = res.getInt("ID");
+
+			conn.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ID;
+	}
+	
+	
+	public static String VideoUpdate(String filename, String ext, String ThumbnailFilename, long Duration, int UserId) {
         
 		init();
 		PreparedStatement pstmt = null;
@@ -114,18 +139,31 @@ public class Java2MySql
       	  	Connection conn = DriverManager.getConnection(url+dbName,userName,password);
       	  	ID = UUID.randomUUID();
 
-      	  	String insertQuery = "INSERT INTO video (ID, Name, Format, Status, Duration, Thumbnail) VALUES (?,?,?,?,?,?)";
+      	  	String insertQuery = "INSERT INTO video (ID, Name, Format, Status, Duration, Thumbnail, UserId) VALUES (?,?,?,?,?,?,?)";
       	  	
       	  	pstmt = conn.prepareStatement(insertQuery);
       	  	pstmt.setString(1, ID.toString());
       	  	pstmt.setString(2, filename);
       	  	pstmt.setString(3, ext);
-      	  	if(ext == "MP4")
+      	  	if(ext.equals("MP4")){
+      	  		System.out.println("ext == MP4:  "+ext);
       	  		pstmt.setString(4, "TRANSCODED");
-      	  	else
+      	  	}
+    	  		
+      	  	else if (ext.equals("mp4")){
+      	  		System.out.println("ext == mp4:  "+ext);
+      	  		pstmt.setString(4, "TRANSCODED");
+      	  	}
+      	  		
+      	  	else{
+      	  		System.out.println("ext != MP4/mp4:   "+ext);
       	  		pstmt.setString(4, "INITIALIZED");
+      	  	}
+      	  		
+      	  	
       	  	pstmt.setLong(5, Duration);
       	  	pstmt.setString(6, ThumbnailFilename);
+      	  	pstmt.setInt(7, UserId);
       	  	System.out.println(ThumbnailFilename);
       	  	rowCount = pstmt.executeUpdate();
       	  	
@@ -256,7 +294,7 @@ public class Java2MySql
 		return ThumbnailURI;
 	}
 	
-	public static List<String> TranscodedVideos() {
+	public static List<String> getVideos(int UserId, String status) {
 		
 		init();
 		
@@ -267,9 +305,10 @@ public class Java2MySql
 			Class.forName(driver).newInstance();
 			Connection conn = DriverManager.getConnection(url+dbName,userName,password);
 
-			String Query = "SELECT * FROM video WHERE Status = ?";
+			String Query = "SELECT * FROM video WHERE UserId = ? AND Status = ?";
 			PreparedStatement pstmt = conn.prepareStatement(Query);
-			pstmt.setString(1, "TRANSCODED");
+			pstmt.setInt(1, UserId);
+			pstmt.setString(2, status);
 			ResultSet res = pstmt.executeQuery();
 			while (res.next()) {
 				Name = res.getString("URI");

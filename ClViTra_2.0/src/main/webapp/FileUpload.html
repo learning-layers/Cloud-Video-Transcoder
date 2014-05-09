@@ -6,7 +6,7 @@
 	<script>
 	
 	if(localStorage.annLogin==null) {
-		window.location="NewLogin.html";
+		window.location="Login.html";
 	}
 	
 	</script>
@@ -17,7 +17,7 @@
 <body>
 	<h1>File Upload with Jersey</h1>
  
-	<form action="/ClViTra_2.0/rest/upload" method="post" enctype="multipart/form-data">
+	<form id="upload_form" action="/ClViTra_2.0/rest/upload" method="post" enctype="multipart/form-data">
  
 	   <p>
 		Select a file : <input type="file" name="file" size="45" />
@@ -25,18 +25,44 @@
 	   <input type="submit" value="Upload It" />
 	   
 	</form> 
+
+	
 	<div id='videolist'></div>	
 	<script>
+	
+	$( "#upload_form" ).submit(function( event ) {
+	
+  		
+		event.preventDefault();
+		var form_data = new FormData($("#upload_form")[0]);
+  		$.ajax({
+	        url: "/ClViTra_2.0/rest/upload",
+	        type: "POST",
+	        data: form_data,
+	        processData:false,
+	        contentType:false,
+	        beforeSend: function(xhr) {
+	            xhr.setRequestHeader("User", localStorage.annLogin);
+	        },
+	        success: function(value) {
+	        	console.log("success1");
+	        }, error: function(e){console.log(e)}
+  		});
+  		//
+  		return false;
+	});
+	
 	$.ajax({
-	        url: "/ClViTra_2.0/rest/videos",
+	        url: "/ClViTra_2.0/rest/videos/"+localStorage.annLogin+"/initialized",
 	        type: "GET",
 	        dataType:'json',
 	        //beforeSend: function(xhr) {
-	          //  xhr.setRequestHeader("Authorization", localStorage.annCred);
+	            //xhr.setRequestHeader("User", localStorage.annCred);
 	        //}, 
 	        success: function(value) {
 	        	console.log(value);
-	        	$('#videolist').html(value.videolist);
+	        	
+	        	$('#videolist').text(value);
 	        	//window.location="FileUpload.html";
 	        	
 	            //that._login = login;

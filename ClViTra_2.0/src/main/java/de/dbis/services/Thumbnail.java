@@ -14,7 +14,7 @@ import com.xuggle.xuggler.Global;
 
 public class Thumbnail
 {
-    public static final double SECONDS_BETWEEN_FRAMES = 1;
+    public static final double SECONDS_BETWEEN_FRAMES = 0.2;
 
     private static String inputFilename = null;
     private static String outputFilePrefix = null;
@@ -31,6 +31,9 @@ public class Thumbnail
 
     public static String Generate_Thumbnail(String FileLocation, String Filename)
     {
+    	mVideoStreamIndex = -1;
+    	mLastPtsWrite = Global.NO_PTS;
+    	    	
     	inputFilename = FileLocation + Filename;
     	outputFilePrefix = FileLocation;
         long startTime = System.currentTimeMillis();
@@ -40,18 +43,21 @@ public class Thumbnail
 
         // stipulate that we want BufferedImages created in BGR 24bit color space
 
+        System.out.println("1");
         try
         {
             mediaReader
             .setBufferedImageTypeToGenerate(BufferedImage.TYPE_3BYTE_BGR);
             ImageSnapListener isListener = new ImageSnapListener();
             mediaReader.addListener(isListener);
+            System.out.println("1.3");
             // read out the contents of the media file and
             // dispatch events to the attached listener
             while (!isListener.isImageGrabbed())
             {
                 mediaReader.readPacket();
             }
+            System.out.println("1.4");
             /*
             while (mediaReader.readPacket() == null)
                 ;
@@ -63,9 +69,15 @@ public class Thumbnail
         {
             ex.printStackTrace();
         }
+        
         //System.out.println("Total Time: " + (stopTime-startTime));
         ObjectStore ob = new ObjectStore();
-	   	String URI = ob.ObjectStoreStart(outputFilename);
+        String URI = ob.ObjectStoreStart(outputFilename);
+        
+	   	File file = new File(outputFilename);
+	   	file.setWritable(true);
+		System.out.println("FILE DELETE: "+file.delete());
+		System.out.println("2");
 		return URI;
     }
 
@@ -74,6 +86,7 @@ public class Thumbnail
         public boolean imageGrabbed = false;
         public void onVideoPicture(IVideoPictureEvent event)
         {
+        	System.out.println("4.0");
             if (event.getStreamIndex() != mVideoStreamIndex)
             {
                 // if the selected video stream id is not yet set, go ahead an
@@ -89,8 +102,10 @@ public class Thumbnail
             if (mLastPtsWrite == Global.NO_PTS)
                 mLastPtsWrite = event.getTimeStamp() - MICRO_SECONDS_BETWEEN_FRAMES;
             // if it's time to write the next frame
+            System.out.println("4.1");
             if (event.getTimeStamp() - mLastPtsWrite >= MICRO_SECONDS_BETWEEN_FRAMES)
             {
+            	System.out.println("4.2");
                 outputFilename = dumpImageToFile(event.getImage());
                 this.imageGrabbed = true; //set this var to true once an image is grabbed out of the movie.
                 // indicate file written
@@ -107,7 +122,8 @@ public class Thumbnail
             try
             {
                 String outputFilename = outputFilePrefix + System.currentTimeMillis() + ".jpg";
-                ImageIO.write(image, "jpg", new File(outputFilename));
+                File file = new File(outputFilename);
+                ImageIO.write(image, "jpg", file);
                 return outputFilename;
             }
             catch (IOException e)

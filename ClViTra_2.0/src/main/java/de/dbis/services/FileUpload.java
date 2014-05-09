@@ -41,10 +41,11 @@ public class FileUpload
 	
 	@POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response uploadFile(
+	public Response uploadFile(@HeaderParam("User") String User,
 			@FormDataParam("file") InputStream uploadedInputStream,
 			@FormDataParam("file") FormDataContentDisposition fileDetail) {
 			   
+		System.out.println("User: " + User);
 		String uploadPath, savePath; //uploadCode;
 		String INPUT_FILE = "tempFileLocation";
 		//String INPUT_FILE_UploadCode = "FileUpload";
@@ -54,27 +55,51 @@ public class FileUpload
 					
 		String uploadedFileLocation = uploadPath + fileDetail.getFileName();
 
+		//System.out.println("saving the file");
 		// saving the file
 		writeToFile(uploadedInputStream, uploadedFileLocation);
 			
+		//System.out.println("Generating Thumbnail");
 		// Generating Thumbnail
 		String ThumbnailFilename = Thumbnail.Generate_Thumbnail(uploadPath, fileDetail.getFileName());
 
+		//System.out.println("Duration");
 		//Get the duration of the video
 		long Duration = getDuration(uploadedFileLocation);
 			
+		//System.out.println("Extension");
 		String ext = FilenameUtils.getExtension(fileDetail.getFileName());
-		String ID = Java2MySql.VideoUpdate(savePath+fileDetail.getFileName(), ext, ThumbnailFilename, Duration);
+		System.out.println("DB");
+		int UserId = Java2MySql.getUserId(User);
+		String ID = Java2MySql.VideoUpdate(savePath+fileDetail.getFileName(), ext, ThumbnailFilename, Duration, UserId);
 			
 		//String output = "<h1>ClViTra</h1> <p style=\"color:green\"> Upload Successful!</p>";
 		//output += VideosDisplay();
 
-		try {
-			RabbitMQSend.send(ID);
-			RabbitMQReceive.recv();
-		} catch (Exception e) {
-			e.printStackTrace();
+		if(ext.equals("MP4") || ext.equals("mp4"))
+		{
+			System.out.println("FileUpload -- ext==MP4");
+			ObjectStore ob = new ObjectStore();
+		   	String URI = ob.ObjectStoreStart(uploadPath + fileDetail.getFileName());
+		   	Java2MySql.VideoUpdate(ID, fileDetail.getFileName(),URI);
+		   	File inputfile = new File(uploadPath+fileDetail.getFileName());
+		   	inputfile.setWritable(true);
+    		boolean b = inputfile.delete();
 		}
+		else
+		{
+			try {
+				RabbitMQSend.send(ID);
+				RabbitMQReceive.recv();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		/*File file = new File(uploadedFileLocation);
+		file.setWritable(true);
+		boolean a = file.delete();
+		System.out.println("FILE DELETE: "+a);*/
 		//uploadCode = "<h1>ClViTra</h1> <p style=\"color:green\"> Upload Successful!</p>";
 		//uploadCode += GetProperty.getParam("uploadCode", INPUT_FILE_UploadCode);
 		

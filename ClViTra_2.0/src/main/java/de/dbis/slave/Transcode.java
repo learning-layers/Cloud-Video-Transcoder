@@ -2,6 +2,8 @@ package de.dbis.slave;
 
 import java.io.File;
 
+import org.apache.commons.io.FilenameUtils;
+
 import com.xuggle.mediatool.IMediaReader;
 import com.xuggle.mediatool.ToolFactory;
 
@@ -24,13 +26,19 @@ public class Transcode implements Runnable {
 
         	String VideoName = Java2MySql.getVideoName(ID);
         	File inputFile = new File(VideoName);
-        	String VideoNameWithoutExt = VideoName.substring(0, VideoName.length()- 4);
-        	File outputFile = new File(path + VideoNameWithoutExt.substring(30)+".mp4");
+        	String VideoNameWithoutExt = FilenameUtils.removeExtension(inputFile.getName()); 
+        			//VideoName.substring(0, VideoName.length()- 4);
+        	File outputFile = new File(path + VideoNameWithoutExt+".mp4");
             if (transcoder(inputFile, outputFile)) {
             	
             	ObjectStore ob = new ObjectStore();
     		   	String URI = ob.ObjectStoreStart(outputFile.getPath());
-    		   	Return_value= ID+"%"+outputFile.getPath()+"%"+URI+"%success";
+    		   	outputFile.setWritable(true);
+    			boolean a = outputFile.delete();
+    			System.out.println("FILE DELETE SLAVE: "+a);
+    		   	
+    		   	
+    		   	Return_value= ID+"%"+outputFile.getPath()+"%"+URI+"%"+FilenameUtils.getExtension(inputFile.getName())+"%success";
             }
         }
         try {

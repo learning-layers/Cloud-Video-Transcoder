@@ -35,7 +35,7 @@ public class RabbitMQReceive implements Runnable {
     		Channel channel = connection.createChannel();
     		
     		channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-    		new Java2MySql();
+    		//new Java2MySql();
     		System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
     		
     		QueueingConsumer consumer = new QueueingConsumer(channel);
