@@ -34,7 +34,7 @@ public class DisplayVideos {
 	@GET
 	@Produces("application/json")
 	public Response VideosDisplay(@PathParam("id") String username, @PathParam("request") String request) throws JSONException{
-		   String Name, Thumbnail;
+		   String Name, URI, Thumbnail;
 		   //String output = "<form action=\"upload\" method=\"post\" enctype=\"multipart/form-data\"> "
 		   	//	+ "<p> Select a file : <input type=\"file\" name=\"file\" size=\"45\" /> </p> <input type=\"submit\" value=\"Upload It\" /> </form> ";
 		   //new Java2MySql();
@@ -47,20 +47,25 @@ public class DisplayVideos {
 		   
 		   List<String> myList = Java2MySql.getVideos(UserId, request);
 		   
-		   JSONObject j[] =  new JSONObject[myList.size()/2];//null; =
+		   //System.out.println(myList.size());
+		   JSONObject j[] =  new JSONObject[myList.size()/3];//null; =
 		   JSONObject j_final = new JSONObject();
 		   
 		   //j.put("videolist", output);
 		   int a=0;
+		   //System.out.println(myList.size()/2);
 		   while (!myList.isEmpty()) {
 			   
 			   j[a] = new JSONObject();
 			   Name = myList.remove(0);
+			   URI = myList.remove(0);
 			   Thumbnail = myList.remove(0);
 			   //output += "<a href=\""+Name+"\"> <img src=\"http://upload.wikimedia.org/wikipedia/commons/3/39/Bachelor%27s_button,_Basket_flower,_Boutonniere_flower,_Cornflower_-_3.jpg\" height=\"42\" width=\"75\"></a><br>";
 			   //output += "<a href=\""+Name+"\"> <img src=\""+Thumbnail+"\" height=\"42\" width=\"75\"></a><br>";
-			   j[a].put("Video_URL", Name);
+			   j[a].put("Video_Name", Name);
+			   j[a].put("Video_URL", URI);
 			   j[a].put("Thumbnail_URL", Thumbnail);
+			   
 			   a++;
 		   }
 		   j_final.put("Videos", j);

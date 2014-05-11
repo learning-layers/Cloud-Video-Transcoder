@@ -2,6 +2,8 @@
 <head>
 	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 	<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 
 	<script>
 	
@@ -15,19 +17,50 @@
 
 
 <body>
-	<h1>File Upload with Jersey</h1>
+
+	<nav class="navbar navbar-inverse" role="navigation">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-9">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Cloud Video Transcoder</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-9">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Upload</a></li>
+
+          </ul>
+          <p id="nameField" class="navbar-text navbar-right">  </p>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+      
+    </nav>
+	
+	<form role="form" id="upload_form" action="/ClViTra_2.0/rest/upload" method="post" enctype="multipart/form-data">
  
-	<form id="upload_form" action="/ClViTra_2.0/rest/upload" method="post" enctype="multipart/form-data">
- 
-	   <p>
-		Select a file : <input type="file" name="file" size="45" />
-	   </p>
-	   <input type="submit" value="Upload It" />
+	   <div class="form-group">
+	  	 <label for="UploadFile">
+			Select a video for transcoding
+	   	</label>
+	   	<input type="file" id="UploadFile" name="file" />
+	   
+	   </div>
+	   <button type="submit" class="btn btn-default">Upload It</button>
 	   
 	</form> 
 
+	<button class="btn" id="transcoded_button">Transcoded Videos</button>
+	<button class="btn" id="processing_button">Processing Videos</button>
+	<button class="btn" id="initialized_button">Initialized Videos</button>
 	
-	<div id='videolist'></div>	
+	<table class="table table-hover" id='videolist'></table>	
 	<script>
 	
 	$( "#upload_form" ).submit(function( event ) {
@@ -45,48 +78,62 @@
 	            xhr.setRequestHeader("User", localStorage.annLogin);
 	        },
 	        success: function(value) {
-	        	console.log("success1");
+	        	alert("Video Successfully Uploaded!");
+	        	$("#upload_form")[0].reset();
 	        }, error: function(e){console.log(e)}
   		});
   		//
   		return false;
 	});
 	
-	$.ajax({
-	        url: "/ClViTra_2.0/rest/videos/"+localStorage.annLogin+"/initialized",
+	function getVideos(request, handler){
+		$.ajax({
+	        url: "/ClViTra_2.0/rest/videos/"+localStorage.annLogin+"/"+request,
 	        type: "GET",
 	        dataType:'json',
 	        //beforeSend: function(xhr) {
 	            //xhr.setRequestHeader("User", localStorage.annCred);
 	        //}, 
-	        success: function(value) {
-	        	console.log(value);
-	        	
-	        	$('#videolist').text(value);
-	        	//window.location="FileUpload.html";
-	        	
-	            //that._login = login;
-	            //that._cred = credentials;
-
-	            //localStorage.setItem("annLogin",login);
-	            //localStorage.setItem("annCred",credentials);
-
-	            //callback({status:"ok", code:200});
-	        //}, statusCode: {
-	            // if user does not exist, return authentication failed.
-	          //  404: function() {
-	            //    callback({status:"not found", code:404});
-	            //},
-	            // if credentials were not correct, return authentication failed.
-	            //401: function() {
-	              //  callback({status:"unauthorized", code:401});
-	            //},
-	            // something went wrong....
-	            //500: function() {
-	              //  callback({status:"server error", code:500});
-	            //}
-	        }
+	        success: handler
 	    });
+	}
+	
+	function printVideos(videos, self, show_URL){
+		$("#videolist").text("");
+		if(show_URL){
+			videos.Videos.forEach(function(v){
+				$("#videolist").append('<tr><td><a href="'+v.Video_URL+'"><img class="img-thumbnail" style="height:50px" src="'+v.Thumbnail_URL+'"></img></a></td><td><a href="'+v.Video_URL+'">'+v.Video_Name+'</a></td></tr>')
+			});
+		}
+		else{
+			videos.Videos.forEach(function(v){
+				$("#videolist").append('<tr><td><img class="img-thumbnail" style="height:50px" src="'+v.Thumbnail_URL+'"></img></td><td>'+v.Video_Name+'</td></tr>')
+			});
+		}
+		$(".btn-info").removeClass("btn-info");
+		$(self).addClass("btn-info");
+		
+	}
+	$("#transcoded_button").click(function (){
+		getVideos("transcoded", function(value){
+			printVideos(value,"#transcoded_button", true);
+		})
+	});
+	$("#processing_button").click(function (){
+		getVideos("processing", function(value){
+			printVideos(value,"#processing_button", false);
+		})
+	});
+	$("#initialized_button").click(function (){
+		getVideos("initialized", function(value){
+			printVideos(value, "#initialized_button", false);
+		})
+	});
+	getVideos("transcoded", function(value){
+		printVideos(value,"#transcoded_button",true);
+	})
+	
+	$("#nameField").text(localStorage.annLogin)
 	    </script>
 	
 	

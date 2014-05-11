@@ -300,7 +300,7 @@ public class Java2MySql
 		
 		List<String> myList = new ArrayList<String>();
         //myList.add("java");
-		String Thumbnail, Name;
+		String Thumbnail, Name, URI;
         try {
 			Class.forName(driver).newInstance();
 			Connection conn = DriverManager.getConnection(url+dbName,userName,password);
@@ -311,9 +311,11 @@ public class Java2MySql
 			pstmt.setString(2, status);
 			ResultSet res = pstmt.executeQuery();
 			while (res.next()) {
-				Name = res.getString("URI");
+				URI = res.getString("URI");
 				Thumbnail = res.getString("Thumbnail");
+				Name = res.getString("Name");
 				myList.add(Name);
+				myList.add(URI);
 				myList.add(Thumbnail);
 			}
 

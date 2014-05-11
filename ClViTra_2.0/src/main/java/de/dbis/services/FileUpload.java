@@ -54,6 +54,13 @@ public class FileUpload
 		savePath = GetProperty.getParam("savePath", INPUT_FILE);
 					
 		String uploadedFileLocation = uploadPath + fileDetail.getFileName();
+		
+		String newName = fileDetail.getFileName();
+		newName = newName.replaceAll(" ", "_");
+		File newFile = new File(uploadPath +newName);
+		
+		
+		uploadedFileLocation = uploadPath + newFile.getName();
 
 		//System.out.println("saving the file");
 		// saving the file
@@ -61,17 +68,17 @@ public class FileUpload
 			
 		//System.out.println("Generating Thumbnail");
 		// Generating Thumbnail
-		String ThumbnailFilename = Thumbnail.Generate_Thumbnail(uploadPath, fileDetail.getFileName());
+		String ThumbnailFilename = Thumbnail.Generate_Thumbnail(uploadPath, newFile.getName());
 
 		//System.out.println("Duration");
 		//Get the duration of the video
 		long Duration = getDuration(uploadedFileLocation);
 			
 		//System.out.println("Extension");
-		String ext = FilenameUtils.getExtension(fileDetail.getFileName());
+		String ext = FilenameUtils.getExtension(newFile.getName());
 		System.out.println("DB");
 		int UserId = Java2MySql.getUserId(User);
-		String ID = Java2MySql.VideoUpdate(savePath+fileDetail.getFileName(), ext, ThumbnailFilename, Duration, UserId);
+		String ID = Java2MySql.VideoUpdate(savePath+newFile.getName(), ext, ThumbnailFilename, Duration, UserId);
 			
 		//String output = "<h1>ClViTra</h1> <p style=\"color:green\"> Upload Successful!</p>";
 		//output += VideosDisplay();
@@ -80,9 +87,9 @@ public class FileUpload
 		{
 			System.out.println("FileUpload -- ext==MP4");
 			ObjectStore ob = new ObjectStore();
-		   	String URI = ob.ObjectStoreStart(uploadPath + fileDetail.getFileName());
-		   	Java2MySql.VideoUpdate(ID, fileDetail.getFileName(),URI);
-		   	File inputfile = new File(uploadPath+fileDetail.getFileName());
+		   	String URI = ob.ObjectStoreStart(uploadPath + newFile.getName());
+		   	Java2MySql.VideoUpdate(ID, newFile.getName(),URI);
+		   	File inputfile = new File(uploadPath+newFile.getName());
 		   	inputfile.setWritable(true);
     		boolean b = inputfile.delete();
 		}
