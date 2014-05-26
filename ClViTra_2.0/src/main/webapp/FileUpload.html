@@ -4,12 +4,39 @@
 	<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/black-tie/jquery-ui.css" />
 
 	<script>
 	
 	if(localStorage.annLogin==null) {
 		window.location="Login.html";
 	}
+	
+	(function($, window, undefined) {
+	    //is onprogress supported by browser?
+	    var hasOnProgress = ("onprogress" in $.ajaxSettings.xhr());
+
+	    //If not supported, do nothing
+	    if (!hasOnProgress) {
+	        return;
+	    }
+	    
+	    //patch ajax settings to call a progress callback
+	    var oldXHR = $.ajaxSettings.xhr;
+	    $.ajaxSettings.xhr = function() {
+	        var xhr = oldXHR();
+	        if(xhr instanceof window.XMLHttpRequest) {
+	            xhr.addEventListener('progress', this.progress, false);
+	        }
+	        
+	        if(xhr.upload) {
+	            xhr.upload.addEventListener('progress', this.progress, false);
+	        }
+	        
+	        return xhr;
+	    };
+	})(jQuery, window);
 	
 	</script>
 </head>
@@ -37,7 +64,10 @@
             <li class="active"><a href="#">Upload</a></li>
 
           </ul>
-          <p id="nameField" class="navbar-text navbar-right">  </p>
+          <ul class="nav navbar-nav navbar-right">
+	          <li class="active"> <a class="nav navbar-nav" href="/ClViTra_2.0/Login.html">Logout</a></li>
+	          <li id="nameField" class="navbar-text ">  </li>
+          </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
       
@@ -49,12 +79,13 @@
 	  	 <label for="UploadFile">
 			Select a video for transcoding
 	   	</label>
-	   	<input type="file" id="UploadFile" name="file" />
+	   	<input type="file" id="UploadFile" name="file"/>
 	   
 	   </div>
 	   <button type="submit" class="btn btn-default">Upload It</button>
 	   
 	</form> 
+	<div id="vids" style="width:30%"></div>
 
 	<button class="btn" id="transcoded_button">Transcoded Videos</button>
 	<button class="btn" id="processing_button">Processing Videos</button>
@@ -64,8 +95,13 @@
 	<script>
 	
 	$( "#upload_form" ).submit(function( event ) {
-	
-  		
+		var prog=$("<div></div>");
+		var vidname=$('#upload_form').prop("UploadFile").value;
+		vidname=vidname.split("\\");
+		vidname=vidname[vidname.length-1];
+		prog.appendTo("#vids").progressbar({ value: vidname });
+
+		
 		event.preventDefault();
 		var form_data = new FormData($("#upload_form")[0]);
   		$.ajax({
@@ -78,10 +114,23 @@
 	            xhr.setRequestHeader("User", localStorage.annLogin);
 	        },
 	        success: function(value) {
-	        	alert("Video Successfully Uploaded!");
-	        	$("#upload_form")[0].reset();
-	        }, error: function(e){console.log(e)}
+	        }, error: function(e){console.log(e)},
+	      	progress: function(e) {
+                    if(e.lengthComputable) {
+                        var pct = (e.loaded / e.total) * 100;
+
+                        prog
+                            .progressbar('option', 'value', pct)
+                            .children('.ui-progressbar-value')
+                            .html(vidname)
+                            .css('display', 'block');
+                    } else {
+                        console.warn('Content Length not reported!');
+                    }
+                }
   		});
+    	$("#upload_form")[0].reset();
+
   		//
   		return false;
 	});
@@ -134,7 +183,16 @@
 	})
 	
 	$("#nameField").text(localStorage.annLogin)
-	    </script>
+	    
+	
+	
+
+     
+                
+  
+	
+	
+	</script>
 	
 	
 </body>

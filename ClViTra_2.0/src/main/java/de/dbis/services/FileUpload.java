@@ -57,6 +57,7 @@ public class FileUpload
 		
 		String newName = fileDetail.getFileName();
 		newName = newName.replaceAll(" ", "_");
+		newName = User+"_"+newName;
 		File newFile = new File(uploadPath +newName);
 		
 		
@@ -75,15 +76,17 @@ public class FileUpload
 		long Duration = getDuration(uploadedFileLocation);
 			
 		//System.out.println("Extension");
-		String ext = FilenameUtils.getExtension(newFile.getName());
+		//String ext = FilenameUtils.getExtension(newFile.getName());
 		System.out.println("DB");
+		
+		String Codec = VideoInfo.videoInfo(uploadedFileLocation);
 		int UserId = Java2MySql.getUserId(User);
-		String ID = Java2MySql.VideoUpdate(savePath+newFile.getName(), ext, ThumbnailFilename, Duration, UserId);
+		String ID = Java2MySql.VideoUpdate(savePath+newFile.getName(), Codec, ThumbnailFilename, Duration, UserId);
 			
 		//String output = "<h1>ClViTra</h1> <p style=\"color:green\"> Upload Successful!</p>";
 		//output += VideosDisplay();
 
-		if(ext.equals("MP4") || ext.equals("mp4"))
+		if(Codec.equals("h264"))
 		{
 			System.out.println("FileUpload -- ext==MP4");
 			ObjectStore ob = new ObjectStore();
@@ -103,15 +106,12 @@ public class FileUpload
 			}
 		}
 		
-		/*File file = new File(uploadedFileLocation);
-		file.setWritable(true);
-		boolean a = file.delete();
-		System.out.println("FILE DELETE: "+a);*/
+		
 		//uploadCode = "<h1>ClViTra</h1> <p style=\"color:green\"> Upload Successful!</p>";
 		//uploadCode += GetProperty.getParam("uploadCode", INPUT_FILE_UploadCode);
 		
 		//ResponseBuilder x = Response.temporaryRedirect(location);
-		ResponseBuilder x = Response.status(200);
+		ResponseBuilder x = Response.status(200).entity(ID);
 		return CORS.makeCORS(x, _corsHeaders);
 	}
 	

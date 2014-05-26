@@ -65,7 +65,7 @@ public class RabbitMQReceive implements Runnable{
 	    		//System.out.println("FILE DELETE MP4 ("+ outputFile.getPath() + ") : " + a);
 	    		System.out.println("FILE DELETE INPUT ("+ path+Filewoext+"."+ext + ") : " + b);
 	    		
-	            PubsubSender.xmpp_send(ID, outputFile.getName(),URI);
+	            //PubsubSender.xmpp_send(ID, outputFile.getName(),URI);
 	            System.out.println(" [x] Received '" + ID + "  " +status + "'");
 	        }
 		} catch (IOException e) {

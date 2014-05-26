@@ -52,6 +52,9 @@ $( document ).ready(function() {
 	            401: function() {
 	                callback({status:"unauthorized", code:401});
 	            },
+	            406: function() {
+	                callback({status:"Wrong Password", code:406});
+	            },
 	            // something went wrong....
 	            500: function() {
 	                callback({status:"server error", code:500});
@@ -62,7 +65,7 @@ $( document ).ready(function() {
     
 	$( "#navbar-loginform" ).submit(function(event) {
             event.preventDefault();
-            $(this).find("button").attr("disabled", "disabled")
+            //$(this).find("button").attr("disabled", "disabled")
 
             login = $("form input#signin-login").val();
             pass  = $("form input#signin-password").first().val();
@@ -70,14 +73,14 @@ $( document ).ready(function() {
                 switch (r.code){
                 case 404:
                     alert("User does not exist!");      break;
-                case 401:
+                case 406:
                     alert("Wrong password!");           break;
                 case 500:
                     alert("Something went wrong...");   break;
                 case 200:
                     // if current tab is registration form, switch to "Home" div
                     // registration not needed, when logged in successfully;
-                     alert("SUCCESS");
+                     //alert("SUCCESS");
                     break;
                 } 
         	});

@@ -145,22 +145,15 @@ public class Java2MySql
       	  	pstmt.setString(1, ID.toString());
       	  	pstmt.setString(2, filename);
       	  	pstmt.setString(3, ext);
-      	  	if(ext.equals("MP4")){
+      	  	if(ext.equals("h264")){
       	  		System.out.println("ext == MP4:  "+ext);
       	  		pstmt.setString(4, "TRANSCODED");
       	  	}
-    	  		
-      	  	else if (ext.equals("mp4")){
-      	  		System.out.println("ext == mp4:  "+ext);
-      	  		pstmt.setString(4, "TRANSCODED");
-      	  	}
-      	  		
       	  	else{
       	  		System.out.println("ext != MP4/mp4:   "+ext);
       	  		pstmt.setString(4, "INITIALIZED");
       	  	}
-      	  		
-      	  	
+
       	  	pstmt.setLong(5, Duration);
       	  	pstmt.setString(6, ThumbnailFilename);
       	  	pstmt.setInt(7, UserId);
@@ -325,5 +318,47 @@ public class Java2MySql
 		}
         return myList;
 	}
+
+	public static String[] getVideoDetails(int UserId, String videoId) {
+		
+		init();
+		
+		//ArrayList<String> Details = new ArrayList<String>();
+		String Details[]=new String[4];
+        //myList.add("java");
+		String Thumbnail, Name, URI, Status;
+        try {
+			Class.forName(driver).newInstance();
+			Connection conn = DriverManager.getConnection(url+dbName,userName,password);
+
+			String Query = "SELECT * FROM video WHERE UserId = ? AND ID = ?";
+			PreparedStatement pstmt = conn.prepareStatement(Query);
+			pstmt.setInt(1, UserId);
+			pstmt.setString(2, videoId);
+			ResultSet res = pstmt.executeQuery();
+			//while (res.next()) {
+			if (res.next()){
+				
+				URI = res.getString("URI");
+				Thumbnail = res.getString("Thumbnail");
+				Name = res.getString("Name");
+				Status = res.getString("Status");
+				Details[0]=Name;
+				Details[1]=URI;
+				Details[2]=Thumbnail;
+				Details[3]=Status;
+			}
+			else{
+				Details[0]="Not Found";
+			}
+
+			conn.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        return Details;
+	}
+
+	
 	
 }
