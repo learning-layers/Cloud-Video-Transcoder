@@ -14,7 +14,7 @@ import com.xuggle.xuggler.Global;
 
 public class Thumbnail
 {
-    public static final double SECONDS_BETWEEN_FRAMES = 0.2;
+    public static final double SECONDS_BETWEEN_FRAMES = 1;
 
     private static String inputFilename = null;
     private static String outputFilePrefix = null;

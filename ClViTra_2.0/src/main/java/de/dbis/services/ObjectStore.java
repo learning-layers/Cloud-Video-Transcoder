@@ -42,7 +42,7 @@ public class ObjectStore {
 				post.setHeader("Content-type", "application/json");
 				
 				ResponseHandler responseHandler = new BasicResponseHandler();
-				String responseBody = client.execute(post, responseHandler);
+				String responseBody = client.execute(post, responseHandler).toString();
 
 				JSONObject jsResponse = new JSONObject(responseBody);
 		
@@ -95,7 +95,7 @@ public class ObjectStore {
 				put.setHeader("Content-type", "application/x-www-form-urlencoded");
 
 				ResponseHandler responseHandler = new BasicResponseHandler();
-				String responseBody = client.execute(put, responseHandler);
+				String responseBody = client.execute(put, responseHandler).toString();
 				responseBody = responseBody.substring(18);
 				responseBody = responseBody.substring(0, responseBody.length()- 3);
 				return responseBody;
