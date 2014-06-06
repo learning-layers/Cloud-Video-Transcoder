@@ -1,10 +1,14 @@
 package de.dbis.services;
 
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+
+import org.apache.commons.io.FilenameUtils;
 
 import com.xuggle.mediatool.IMediaReader;
 import com.xuggle.mediatool.MediaListenerAdapter;
@@ -73,13 +77,44 @@ public class Thumbnail
         //System.out.println("Total Time: " + (stopTime-startTime));
         ObjectStore ob = new ObjectStore();
         String URI = ob.ObjectStoreStart(outputFilename);
-        
+        String newThumbnailImage = thumbnailResize(inputFilename, outputFilename, 400, 600);
+        System.out.println(newThumbnailImage);
 	   	File file = new File(outputFilename);
 	   	file.setWritable(true);
 		System.out.println("FILE DELETE: "+file.delete());
 		System.out.println("2");
 		return URI;
     }
+    
+    
+    public static String thumbnailResize(String outputName, String image, int width, int height){
+    	
+    	String Name_without_ext = null;
+    	try{
+    		
+    		Name_without_ext = FilenameUtils.removeExtension(new File(outputName).getName());
+    		BufferedImage originalImage = ImageIO.read(new File(image));
+    		int type = originalImage.getType() == 0? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
+    		
+    		BufferedImage resizeImageJpg = resizeImage(originalImage, type, width, height);
+    		ImageIO.write(resizeImageJpg, "jpg", new File(Name_without_ext+"_"+width+"x"+height));
+    		
+    	}catch(IOException e){
+    		System.out.println(e.getMessage());
+    	}
+		return Name_without_ext+"_"+width+"x"+height+"jpg";
+    }
+    
+    private static BufferedImage resizeImage(BufferedImage originalImage, int type, int width, int height){
+    	
+    	BufferedImage resizedImage = new BufferedImage(width, height, type);
+    	Graphics2D g = resizedImage.createGraphics();
+    	g.drawImage(originalImage, 0, 0, width, height, null);
+    	g.dispose();
+
+    	return resizedImage;
+    }
+    
 
     private static class ImageSnapListener extends MediaListenerAdapter
     {
