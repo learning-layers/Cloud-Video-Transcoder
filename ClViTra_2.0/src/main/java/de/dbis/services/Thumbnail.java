@@ -1,10 +1,13 @@
 package de.dbis.services;
 
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+
+import org.apache.commons.io.FilenameUtils;
 
 import com.xuggle.mediatool.IMediaReader;
 import com.xuggle.mediatool.MediaListenerAdapter;
@@ -14,7 +17,7 @@ import com.xuggle.xuggler.Global;
 
 public class Thumbnail
 {
-    public static final double SECONDS_BETWEEN_FRAMES = 0.2;
+    public static final double SECONDS_BETWEEN_FRAMES = 1;
 
     private static String inputFilename = null;
     private static String outputFilePrefix = null;
@@ -73,12 +76,45 @@ public class Thumbnail
         //System.out.println("Total Time: " + (stopTime-startTime));
         ObjectStore ob = new ObjectStore();
         String URI = ob.ObjectStoreStart(outputFilename);
-        
+        String newThumbnailImage = thumbnailResize(inputFilename, outputFilename, 400, 600);
+        System.out.println(newThumbnailImage);
 	   	File file = new File(outputFilename);
 	   	file.setWritable(true);
 		System.out.println("FILE DELETE: "+file.delete());
 		System.out.println("2");
 		return URI;
+    }
+    
+    public static String thumbnailResize(String outputName, String image, int width, int height){
+    	
+    	String name_without_ext = null;
+    	String path=null;
+    	try{
+    		
+    		name_without_ext = FilenameUtils.removeExtension(new File(outputName).getName());
+    		path = FilenameUtils.getFullPath(outputName);
+    		BufferedImage originalImage = ImageIO.read(new File(image));
+    		int type = originalImage.getType() == 0? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
+    		
+    		BufferedImage resizeImageJpg = resizeImage(originalImage, type, width, height);
+    		File thumbnailJpg = new File(path+name_without_ext+"_"+width+"x"+height+".jpg");
+
+    		ImageIO.write(resizeImageJpg, "jpg", thumbnailJpg);
+    		
+    	}catch(IOException e){
+    		System.out.println(e.getMessage());
+    	}
+		return path+name_without_ext+"_"+width+"x"+height+"jpg";
+    }
+    
+    private static BufferedImage resizeImage(BufferedImage originalImage, int type, int width, int height){
+    	
+    	BufferedImage resizedImage = new BufferedImage(width, height, type);
+    	Graphics2D g = resizedImage.createGraphics();
+    	g.drawImage(originalImage, 0, 0, width, height, null);
+    	g.dispose();
+
+    	return resizedImage;
     }
 
     private static class ImageSnapListener extends MediaListenerAdapter
