@@ -3,6 +3,7 @@ package de.dbis.services;
 import java.io.File;
 import java.util.HashMap;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpPost;
@@ -41,7 +42,7 @@ public class ObjectStore {
 				post.setEntity(se);
 				post.setHeader("Content-type", "application/json");
 				
-				ResponseHandler responseHandler = new BasicResponseHandler();
+				ResponseHandler<String> responseHandler = new BasicResponseHandler();
 				String responseBody = client.execute(post, responseHandler);
 
 				JSONObject jsResponse = new JSONObject(responseBody);
@@ -94,7 +95,8 @@ public class ObjectStore {
 				put.setHeader("X-Auth-Token", params[0]);
 				put.setHeader("Content-type", "application/x-www-form-urlencoded");
 
-				ResponseHandler responseHandler = new BasicResponseHandler();
+				ResponseHandler<String> responseHandler = new BasicResponseHandler();
+				 
 				String responseBody = client.execute(put, responseHandler);
 				responseBody = responseBody.substring(18);
 				responseBody = responseBody.substring(0, responseBody.length()- 3);

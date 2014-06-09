@@ -1,5 +1,5 @@
 /* ATLAS Group - Virtual Campfire - www.dbis.rwth-aachen.de
- * Copyright © 2010-2012 Lehrstuhl Informatik V, RWTH Aachen, Germany. All Rights Reserved.
+ * Copyright 2010-2012 Lehrstuhl Informatik V, RWTH Aachen, Germany. All Rights Reserved.
  */
 package de.dbis.services;
 
@@ -10,6 +10,13 @@ package de.dbis.services;
  */
 
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Locale;
+import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
 // TODO: Auto-generated Javadoc
@@ -26,8 +33,8 @@ public class GetProperty {
        * @param fileName the file name
        * @return the object
        */
-      public static Object getObject(String key,String fileName) {          
-        ResourceBundle resourceBundle = ResourceBundle.getBundle(fileName);
+      /*public static Object getObject(String key,String fileName) {          
+        ResourceBundle resourceBundle = ResourceBundle.getBundle(fileName, Locale.getDefault());
         String objName = resourceBundle.getString(key);
         
         if (objName == null) {
@@ -41,7 +48,7 @@ public class GetProperty {
                     "Factory unable to construct instance of "
                             + objName );
         }
-    }
+    }*/
       
       /**
        * Gets the param.
@@ -51,6 +58,21 @@ public class GetProperty {
        * @return the param
        */
       public static String getParam(String key,String fileName) {
+    	  /*FileInputStream prop;
+    	  ResourceBundle resourceBundle = null;
+    	  //File try12 = new File("hello.txt");
+    	  try {
+    		  prop = new FileInputStream ("resources/"+fileName+".properties");
+    		  resourceBundle = new PropertyResourceBundle(prop);
+    	  } catch (FileNotFoundException e) {
+    		  // TODO Auto-generated catch block
+    		  e.printStackTrace();
+    	  }
+    	  catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+    	  }*/
+    	  
           ResourceBundle resourceBundle = ResourceBundle .getBundle(fileName);
           String paramVal = resourceBundle.getString(key);
           
