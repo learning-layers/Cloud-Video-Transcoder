@@ -1,5 +1,7 @@
 package de.dbis.services;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.OPTIONS;
@@ -35,6 +37,12 @@ public class Auth
 	@GET
 	@Produces("application/json")
 	public Response authenticateUser(@HeaderParam("authorization") String authHeader) throws JSONException{
+		
+		
+		OIDCLoginStart oidclogin = new OIDCLoginStart();
+		
+		oidclogin.doGet();
+		
 		
 		if(authHeader != null){
 			String[] dauth = null;

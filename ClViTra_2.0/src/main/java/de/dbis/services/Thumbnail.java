@@ -77,10 +77,17 @@ public class Thumbnail
         ObjectStore ob = new ObjectStore();
         String URI = ob.ObjectStoreStart(outputFilename);
         String newThumbnailImage = thumbnailResize(inputFilename, outputFilename, 400, 600);
-        System.out.println(newThumbnailImage);
+        
+        String URI_smallThumbnail = ob.ObjectStoreStart(newThumbnailImage);
+        System.out.println("NEW: "+URI_smallThumbnail);
+        
 	   	File file = new File(outputFilename);
 	   	file.setWritable(true);
 		System.out.println("FILE DELETE: "+file.delete());
+		
+		File file1 = new File(newThumbnailImage);
+	   	file1.setWritable(true);
+		System.out.println("FILE DELETE2: "+file1.delete());
 		System.out.println("2");
 		return URI;
     }
@@ -104,7 +111,7 @@ public class Thumbnail
     	}catch(IOException e){
     		System.out.println(e.getMessage());
     	}
-		return path+name_without_ext+"_"+width+"x"+height+"jpg";
+		return path+name_without_ext+"_"+width+"x"+height+".jpg";
     }
     
     private static BufferedImage resizeImage(BufferedImage originalImage, int type, int width, int height){

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+		<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+		<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
+	    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/black-tie/jquery-ui.css" />
+    </head>
+    <body>
+    
+    	<nav class="navbar navbar-inverse" role="navigation">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-9">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Cloud Video Transcoder</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-9">
+          
+          <ul class="nav navbar-nav navbar-right">
+	          <li class="active" id="Loginbtn"> <a class="nav navbar-nav" href="#"> Login</a></li>
+	          
+	          <!--   -->
+	          <li id="nameField" class="navbar-text ">  </li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+      
+    </nav>
+	
+		<h2 style="text-align:center; color:#0099FF "> Welcome to ClViTra 2.0!</h2>
+		
+		<script>
+		$("#Loginbtn").click(function( event ) {
+			//alert("hello");
+			$.ajax({
+		        url: "/ClViTra_2.0/rest/auth123",
+		        type: "GET",
+		        dataType:'text',
+		        success: function(value) {
+		        	window.location=value;
+		    	}
+			})
+		});
+		
+		</script>
+		
+	</body>
+</html>
