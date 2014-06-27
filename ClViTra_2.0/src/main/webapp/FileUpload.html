@@ -102,7 +102,7 @@
 	    	statusCode: {
 	            404: function() {
 	            	console.log("2.2");
-	            	window.location("/ClViTra_2.0/")
+	            	window.location="/ClViTra_2.0/";
 	            }
 	    	},
 	    	error: function(e){console.log(e);}
@@ -159,7 +159,7 @@
 	        processData:false,
 	        contentType:false,
 	        beforeSend: function(xhr) {
-	            xhr.setRequestHeader("User", localStorage.annLogin);
+	            xhr.setRequestHeader("User", username);
 	        },
 	        success: function(value) {
 	        }, error: function(e){console.log(e)},
@@ -227,8 +227,15 @@
 		})
 	});
 	
+	$("#Logoutbtn").click(function( event ) {
+		localStorage.removeItem("clvitraAccessToken");
+	    window.location="/ClViTra_2.0/";
+	});
 	
 	});
+	
+	
+	
 	</script>
 </head>
 
@@ -256,7 +263,7 @@
 
           </ul>
           <ul class="nav navbar-nav navbar-right">
-	          <li class="active"> <a class="nav navbar-nav" href="/ClViTra_2.0/Login.html">Logout</a></li>
+	          <li class="active" id="Logoutbtn"> <a class="nav navbar-nav" href="#">Logout</a></li>
 	          <li id="nameField" class="navbar-text ">  </li>
           </ul>
         </div><!-- /.navbar-collapse -->

@@ -99,8 +99,8 @@ public class FileUpload
 		else
 		{
 			try {
-				//RabbitMQSend.send(ID);
-				//RabbitMQReceive.recv();
+				RabbitMQSend.send(ID);
+				RabbitMQReceive.recv();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

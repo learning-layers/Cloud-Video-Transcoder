@@ -29,7 +29,7 @@ import de.dbis.util.CORS;
 /**
  * OpenID Connect login start page.
 */
-@Path("/auth123")
+@Path("/openIDauth")
 @Component
 public class OIDCLoginStart extends HttpServlet {
 
@@ -61,8 +61,8 @@ public class OIDCLoginStart extends HttpServlet {
 		// Set the redirect URL after successful OIDC login / 
 		// authorisation. This URL is typically registered in advance 
 		// with the OIDC server
-		
-		URI redirectURI = new URI("http://127.0.0.1:8080/ClViTra_2.0/FileUpload.html");
+		//URI redirectURI = new URI("http://137.226.58.27:9080/ClViTra_2.0/FileUpload.html");
+		URI redirectURI = new URI("http://137.226.58.27:9080/ClViTra_2.0/FileUpload.html");
 		//URI redirectURI = new URI("http://127.0.0.1:8080/oidc-test-client/in");
 		
 		// Generate random state value. It's used to link the
@@ -114,20 +114,4 @@ public class OIDCLoginStart extends HttpServlet {
 		
 	}
 	
-	public String Authorize() {
-
-		URL authzURL = null;
-
-		try {
-			authzURL = composeAuthzRequestURL();
-
-		} catch (Exception e) {
-
-			System.out.println("<p>Couldn't compose OIDC authorisation request URL: " + e.getMessage() + "</p>");
-			//return;
-		}
-		
-		return authzURL.toString();
-		
-	}
 }
