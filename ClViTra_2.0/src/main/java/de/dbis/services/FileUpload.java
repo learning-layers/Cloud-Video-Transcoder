@@ -26,6 +26,12 @@ import com.xuggle.xuggler.IContainer;
 
 import de.dbis.util.CORS;
 
+/**
+ * 
+ * Uploads the File to server.
+ * Uses 'tempFileLocation.properties' file for configuration.
+ */
+
 @Path("/upload")
 @Component
 public class FileUpload
@@ -38,6 +44,14 @@ public class FileUpload
 		_corsHeaders = requestH;
 		return CORS.makeCORS(Response.ok(), requestH);
 	}
+	
+	/**
+	 * Uploads the file from multipart form to ClViTra v2.0 server.
+	 * @param User sent as simple string.
+	 * @param uploadedInputStream sent as InputStream.
+	 * @param fileDetail complete file path.
+	 * @return javax.ws.rs.core.Response status code along with video ID that was uploaded.
+	 */
 	
 	@POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -136,6 +150,7 @@ public class FileUpload
 		}
 	}
 		
+	
 	private long getDuration(String movie) {
 			
 		IContainer container = IContainer.make();

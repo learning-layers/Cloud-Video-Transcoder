@@ -18,6 +18,11 @@ import org.springframework.stereotype.Component;
 
 import de.dbis.util.CORS;
 
+/**
+ * 
+ * Retrieves the list of Videos from the server for a specific category for the logged in user.
+ *
+ */
 @Path("/videos/{id}/{request}")
 @Component
 public class DisplayVideos {
@@ -31,6 +36,14 @@ public class DisplayVideos {
 		return CORS.makeCORS(Response.ok(), requestH);
 	}
 	
+	/**
+	 * Returns a list of Videos in a particular request category.
+	 * For each video it contains Video Name, Video URL, and Thumbnail URL.
+	 * @param username Simple string username.
+	 * @param request "Transcoded", "Processing" or "Initialized".
+	 * @return javax.ws.rs.core.Response
+	 * @throws JSONException
+	 */
 	@GET
 	@Produces("application/json")
 	public Response VideosDisplay(@PathParam("id") String username, @PathParam("request") String request) throws JSONException{

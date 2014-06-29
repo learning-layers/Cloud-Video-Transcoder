@@ -9,7 +9,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
- 
+
+/**
+ * 
+ * Establishes connection to the MySql database.
+ * Uses 'dbconnection.properties' file for configuration.
+ *
+ */
 public class Java2MySql
 {
 	private final static String INPUT_FILE = "dbconnection";
@@ -42,6 +48,13 @@ public class Java2MySql
 
 	}
 
+	/**
+	 * DEPRICATED after Open ID Connect integration.
+	 * Responsible for doing the login verification. 
+	 * @param u_username
+	 * @param u_password
+	 * @return int code
+	 */
 	public static int LoginVerification(String u_username, String u_password) {
 		
 		init();
@@ -102,6 +115,11 @@ public class Java2MySql
         return Return_code;
     }
 	
+	/**
+	 * Returns the corresponding UserId for a given username.
+	 * @param username
+	 * @return int UserID
+	 */
 	public static int getUserId(String username) {
 		
 		init();
@@ -126,7 +144,15 @@ public class Java2MySql
 		return ID;
 	}
 	
-	
+	/**
+	 * Updates or enter the database with the video details. 
+	 * @param filename
+	 * @param ext
+	 * @param ThumbnailFilename
+	 * @param Duration
+	 * @param UserId
+	 * @return String Video ID
+	 */
 	public static String VideoUpdate(String filename, String ext, String ThumbnailFilename, long Duration, int UserId) {
         
 		init();
@@ -167,6 +193,13 @@ public class Java2MySql
 		return ID.toString();
 	}
 	
+	/**
+	 * Updates the database with the video details.
+	 * @param ID
+	 * @param outputFile
+	 * @param URI
+	 * @return
+	 */
 	public static int VideoUpdate(String ID, String outputFile, String URI) {
         
 		init();
@@ -193,6 +226,10 @@ public class Java2MySql
 		return rowCount;
 	}
 
+	/**
+	 * Returns the first initialized video, from the database, to be transcoded.
+	 * @return String Video ID
+	 */
 	public static String getFirstInitializedVideo() {
 	
 		init();
@@ -217,6 +254,10 @@ public class Java2MySql
 		return ID;
 	}
 	
+	/**
+	 * Sets the status of the video to 'Processing'
+	 * @param ID Video ID
+	 */
 	public static void Processing(String ID) {
 		init();
 		
@@ -236,6 +277,11 @@ public class Java2MySql
         }
 	}
 	
+	/**
+	 * Returns the name of the video for the corresponding ID.
+	 * @param ID
+	 * @return String Name
+	 */
 	public static String getVideoName(String ID) {
 		
 		init();
@@ -261,7 +307,11 @@ public class Java2MySql
 		return Name;
 	}
 	
-	
+	/**
+	 * Returns the Thumbnail URI for the given video ID.
+	 * @param ID
+	 * @return String Thumbnail URI
+	 */
 	public static String getThumbnailURI(String ID) {
 		
 		init();
@@ -287,6 +337,12 @@ public class Java2MySql
 		return ThumbnailURI;
 	}
 	
+	/**
+	 * Returns a list of video(s) uploaded by the given User having the given status. 
+	 * @param UserId
+	 * @param status 'Initialized', 'Processing', or 'Transcoded'.
+	 * @return List<String> List of Videos with their Name, Thumbnail URL, and Video URL.
+	 */
 	public static List<String> getVideos(int UserId, String status) {
 		
 		init();
@@ -319,6 +375,12 @@ public class Java2MySql
         return myList;
 	}
 
+	/**
+	 * Returns the Video URL, Thumbnail URL, Name, and Status for the given video ID uploaded by the given User.
+	 * @param UserId
+	 * @param videoId
+	 * @return String[] Video details.
+	 */
 	public static String[] getVideoDetails(int UserId, String videoId) {
 		
 		init();

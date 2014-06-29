@@ -3,12 +3,24 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
 
+/**
+ * 
+ * Sends the video to the RabbitMQ server for transcoding.
+ * The video is then forwarded by the RabbitMQ server to any available slave node.
+ * Uses 'RabbitMQ.properties' file for configuration.
+ *
+ */
 public class RabbitMQSend {
 
 	private final static String QUEUE_NAME = "Receive";
 	private static String server;
 	private final static String INPUT_FILE = "RabbitMQ";
 
+	/**
+	 * Sends the video to the RabbitMQ server for transcoding.
+	 * @param ID VideoID of the video to be sent for transcoding
+	 * @throws Exception
+	 */
 	public static void send(String ID) throws Exception {
 		
 		server = GetProperty.getParam("server", INPUT_FILE);

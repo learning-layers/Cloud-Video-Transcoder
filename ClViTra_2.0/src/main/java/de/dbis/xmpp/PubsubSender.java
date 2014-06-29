@@ -12,12 +12,24 @@ import org.jivesoftware.smackx.pubsub.SimplePayload;
 import de.dbis.services.GetProperty;
 import de.dbis.services.Java2MySql;
 
+/**
+ * Sends the message to the pubsub node via XMPP message transfer. 
+ * Uses 'xmpp.properties' file for configuration.
+ *
+ */
 public class PubsubSender {
 
 	public PubsubSender(){
 		
 	}
 	
+	/**
+	 * Sends the message to the pubsub node via XMPP message transfer.
+	 * The message includes video ID, video name, and video URL.
+	 * @param ID Video ID
+	 * @param Name Video Name
+	 * @param VideoURI Video URL
+	 */
 	public static void xmpp_send(String ID, String Name, String VideoURI){
 		XMPPConnection con = XMPP.getConnection();
 		

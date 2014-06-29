@@ -10,9 +10,20 @@ import com.sun.jersey.multipart.FormDataParam;
 
 import de.dbis.slave.RabbitMQReceive;
 
+/**
+ * 
+ * Configures the machine to work as a Master or Slave.
+ *
+ */
+
 @Path("/config")
 public class Configuration {
 	
+	/**
+	 * Configures the application as Master or Slave.
+	 * @param func it can be "slave" or "master" 
+	 * @return javax.ws.rs.core.Response
+	 */
 	@POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public Response MasterSlaveConfig(@FormDataParam("func") String func)

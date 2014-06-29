@@ -11,6 +11,12 @@ import com.rabbitmq.client.ShutdownSignalException;
 
 import de.dbis.services.*;
 
+/**
+ * 
+ * Receives the video from server and forwards it to the transcoder.
+ * Uses 'RabbitMQ.properties' file for configuration.
+ *
+ */
 public class RabbitMQReceive implements Runnable {
 
     private final static String QUEUE_NAME = "Receive";
@@ -24,6 +30,9 @@ public class RabbitMQReceive implements Runnable {
 		
 	}
 
+    /**
+     * Receives the video to be transcoded from the server.
+     */
     public void run() {
 
     	server = GetProperty.getParam("server", INPUT_FILE);

@@ -14,8 +14,19 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
 
+/**
+ * 
+ * Uploads the given File to i5 cloud object store.
+ *
+ */
 public class ObjectStore {
 
+	/**
+	 * Uploads a file to the open stack object store on i5 cloud.
+	 * Uses 'objectStore.properties' file for configuration.
+	 * @param filepath Filepath to the file that is needed to be uploaded.
+	 * @return String URL to the uploaded file.
+	 */
 	public String ObjectStoreStart(String filepath) {
 		
 		return new RetrieveTokenTask().OAuth(filepath);

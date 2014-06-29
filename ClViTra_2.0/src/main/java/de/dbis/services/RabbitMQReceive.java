@@ -14,6 +14,14 @@ import com.rabbitmq.client.ShutdownSignalException;
 import de.dbis.services.Java2MySql;
 import de.dbis.xmpp.PubsubSender;
 
+/**
+ * 
+ * Receives the notification from slave nodes through RabbitMQ server once the video is uploaded.
+ * Pushes the notification to the client through XMPP. 
+ * Uses 'RabbitMQ.properties' file for configuration.
+ * Uses 'tempFileLocation.properties' file for configuration.
+ *
+ */
 public class RabbitMQReceive implements Runnable{
 
     private final static String QUEUE_NAME = "Send";
@@ -26,6 +34,10 @@ public class RabbitMQReceive implements Runnable{
     	(new Thread(new RabbitMQReceive())).start();
     }
 
+    /**
+     * The notification is received along with videoID, video URL, and video status.
+     * The URL and status are then updated in the database for the given ID.
+     */
     public void run() {
     	
     	server = GetProperty.getParam("server", INPUT_FILE);

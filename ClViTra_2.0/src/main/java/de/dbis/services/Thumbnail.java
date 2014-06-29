@@ -15,6 +15,11 @@ import com.xuggle.mediatool.ToolFactory;
 import com.xuggle.mediatool.event.IVideoPictureEvent;
 import com.xuggle.xuggler.Global;
 
+/**
+ *
+ * Generates Thumbnails for the given Video
+ *
+ */
 public class Thumbnail
 {
     public static final double SECONDS_BETWEEN_FRAMES = 1;
@@ -32,6 +37,13 @@ public class Thumbnail
 
     public static final long MICRO_SECONDS_BETWEEN_FRAMES = (long) (Global.DEFAULT_PTS_PER_SECOND * SECONDS_BETWEEN_FRAMES);
 
+    
+    /**
+     * Generates Thumbnails for the given Video and uploads it to i5 cloud object store. 
+     * @param FileLocation Path to the file.
+     * @param Filename Name of the file.
+     * @return String URL to uploaded Thumbnail.
+     */
     public static String Generate_Thumbnail(String FileLocation, String Filename)
     {
     	mVideoStreamIndex = -1;

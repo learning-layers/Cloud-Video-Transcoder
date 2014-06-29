@@ -48,6 +48,11 @@ import com.thetransactioncompany.json.pretty.PrettyJson;
 import de.dbis.util.CORS;
 
 
+/**
+ * 
+ * Get Access Tokens for Open ID connect login.
+ *
+ */
 @Path("/getAccessToken")
 @Component
 public class OIDCTokens {
@@ -60,6 +65,14 @@ public class OIDCTokens {
 		_corsHeaders = requestH;
 		return CORS.makeCORS(Response.ok(), requestH);
 	}
+	
+	/**
+	 * Requests the OpenID Connect service for the access token by sending the "code".
+	 * Once access token is received, it is then sent to the client as Response. 
+	 * @param Header Code as String object.
+	 * @return javax.ws.rs.core.Response Access Token as String object.
+	 * @throws JSONException
+	 */
 	
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)

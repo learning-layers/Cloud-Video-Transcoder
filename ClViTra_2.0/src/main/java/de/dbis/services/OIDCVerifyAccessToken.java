@@ -28,7 +28,11 @@ import com.nimbusds.openid.connect.sdk.claims.UserInfo;
 
 import de.dbis.util.CORS;
 
-
+/**
+ * 
+ * Verifies the Access Token for validity.
+ *
+ */
 @Path("/verifyAccessToken")
 @Component
 public class OIDCVerifyAccessToken {
@@ -42,6 +46,13 @@ public class OIDCVerifyAccessToken {
 		return CORS.makeCORS(Response.ok(), requestH);
 	}
 	
+	/**
+	 * Verifies access token and request user information corresponding to that token.
+	 * The information is then sent to the client as a Response.   
+	 * @param Header Access Token as String object
+	 * @return javax.ws.rs.core.Response username along with Status Code
+	 * @throws JSONException
+	 */
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response verifyAccessToken(@HeaderParam("AccessToken") String Header) throws JSONException{

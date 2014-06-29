@@ -4,9 +4,18 @@ import com.xuggle.xuggler.IContainer;
 import com.xuggle.xuggler.IStream;
 import com.xuggle.xuggler.IStreamCoder;
 
-
+/**
+ * 
+ * Returns the video codec of the input file
+ *
+ */
 public class VideoInfo {
 	
+	/**
+	 * Returns the video codec of the input file, irrespective of its extension. 
+	 * @param filename video filename
+	 * @return String Codec
+	 */
     public static String videoInfo(String filename) {
     	// first we create a Xuggler container object
     	IContainer container = IContainer.make();

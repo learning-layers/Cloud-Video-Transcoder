@@ -9,6 +9,12 @@ import com.xuggle.mediatool.ToolFactory;
 
 import de.dbis.services.*;
 
+/**
+ * 
+ * Transcodes the given video to MP4. Transcoding is done using Xuggler which is a Java wrapper for ffmpeg.
+ * Uses 'tempFileLocation.properties' file for configuration.
+ *
+ */
 public class Transcode implements Runnable {
 	
 	private static String Return_value;
@@ -16,6 +22,10 @@ public class Transcode implements Runnable {
 	public void run() {
 	}
 	
+	/**
+	 * Starts the transcoding for the given video ID.
+	 * @param ID video ID
+	 */
 	public Transcode(String ID) {
 		
 		String path;

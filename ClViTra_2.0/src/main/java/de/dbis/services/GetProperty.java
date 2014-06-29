@@ -21,8 +21,8 @@ import java.util.ResourceBundle;
 
 // TODO: Auto-generated Javadoc
 /**
- * To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates.
+ * Read and returns the configurations from .properties files.
+ * 
  */
 public class GetProperty {
 

@@ -27,7 +27,7 @@ import de.dbis.util.CORS;
 
 
 /**
- * OpenID Connect login start page.
+ * Initializes OpenID Connect login procedure.
 */
 @Path("/openIDauth")
 @Component
@@ -94,6 +94,11 @@ public class OIDCLoginStart extends HttpServlet {
 	}
 
 
+	/**
+	 * Composes the URL which enables the user to login through openID and redirects to the ClViTra v2.0 app.
+	 * @return javax.ws.rs.core.Response URL as String object
+	 */
+	
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response doGet() {

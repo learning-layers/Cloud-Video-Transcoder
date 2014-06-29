@@ -9,6 +9,12 @@ import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 
 import de.dbis.services.GetProperty;
 
+/**
+ * 
+ * Establishes the connection for the XMPP message transfer. 
+ * Uses 'xmpp.properties' file for configuration.
+ *
+ */
 public class XMPP {
 	
 	
@@ -19,7 +25,10 @@ public class XMPP {
 		super();
 	}
 	
-	
+	/**
+	 * Establishes the connection for the XMPP message transfer.
+	 * @return XMPPConnection
+	 */
 	public static XMPPConnection getConnection(){
 		
 		String server, port, service, username, password;
