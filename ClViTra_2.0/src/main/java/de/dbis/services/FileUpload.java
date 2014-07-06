@@ -72,6 +72,12 @@ public class FileUpload
 		String newName = fileDetail.getFileName();
 		newName = newName.replaceAll(" ", "_");
 		newName = User+"_"+newName;
+		
+		//System.out.println();
+		if(Java2MySql.Exists(User,newName)){
+			ResponseBuilder x = Response.status(406);
+			return CORS.makeCORS(x, _corsHeaders);
+		}
 		File newFile = new File(uploadPath +newName);
 		
 		

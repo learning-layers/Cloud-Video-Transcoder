@@ -144,8 +144,60 @@ public class Java2MySql
 		return ID;
 	}
 	
+	public static void deleteVideo(String username, String videoName) {
+		
+		init();
+		int userID = getUserId(username);
+		//String videoID;
+		try {
+			Class.forName(driver).newInstance();
+			Connection conn = DriverManager.getConnection(url+dbName,userName,password);
+			
+			String insertQuery = "DELETE FROM video WHERE Name=? AND UserId = ?";
+			PreparedStatement pstmt = conn.prepareStatement(insertQuery);
+			pstmt.setString(1, videoName);
+			pstmt.setInt(2, userID);
+			Boolean res = pstmt.execute();
+  	  
+			System.out.println("DELETE VIDEO: "+res);
+			//if(res.getString("Status").compareTo("INITIALIZED")==0)
+
+			conn.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		//return ID;
+	}
+	
+	public static Boolean Exists(String username, String videoName) {
+		
+		init();
+		int userID = getUserId(username);
+		ResultSet res = null;
+		try {
+			Class.forName(driver).newInstance();
+			Connection conn = DriverManager.getConnection(url+dbName,userName,password);
+			
+			String insertQuery = "SELECT * FROM video WHERE Name=? AND UserId = ?";
+			PreparedStatement pstmt = conn.prepareStatement(insertQuery);
+			pstmt.setString(1, videoName);
+			pstmt.setInt(2, userID);
+			res = pstmt.executeQuery();
+
+			if (!res.next()) {
+				System.out.println("No record found!");
+				return false;
+			}
+
+			conn.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return true;
+	}
+	
 	/**
-	 * Updates or enter the database with the video details. 
+	 * Updates or enter the database with the video details.
 	 * @param filename
 	 * @param ext
 	 * @param ThumbnailFilename

@@ -163,6 +163,12 @@
 	        },
 	        success: function(value) {
 	        }, error: function(e){console.log(e)},
+	        
+	        statusCode: {
+	            406: function() {
+	            	alert("Video already exists!");
+	            }
+	    	},
 	      	progress: function(e) {
                if(e.lengthComputable) {
                    var pct = (e.loaded / e.total) * 100;
@@ -199,8 +205,13 @@
 		$("#videolist").text("");
 		if(show_URL){
 			videos.Videos.forEach(function(v){
-				$("#videolist").append('<tr><td><a href="'+v.Video_URL+'"><img class="img-thumbnail" style="height:50px" src="'+v.Thumbnail_URL+'"></img></a></td><td><a href="'+v.Video_URL+'">'+v.Video_Name+'</a></td></tr>')
+				$("#videolist").append('<tr><td><a href="'+v.Video_URL+'"><img class="img-thumbnail" style="height:50px" src="'+v.Thumbnail_URL+'"></img></a></td><td><a href="'+v.Video_URL+'">'+v.Video_Name+'</a></td><td><button class="btn delete_btn" value="'+v.Video_Name+'">Delete</button></td></tr>')
+				
+			
 			});
+			
+			
+			
 		}
 		else{
 			videos.Videos.forEach(function(v){
@@ -209,6 +220,35 @@
 		}
 		$(".btn-info").removeClass("btn-info");
 		$(self).addClass("btn-info");
+		
+		$(".delete_btn").click(function (){
+			var videoName=$(this).attr("value"); 
+			console.log(username);
+			console.log(videoName);
+			$.ajax({
+		        url: "/ClViTra_2.0/rest/delete",
+		        type: "GET",
+		        dataType:'json',
+		        beforeSend: function(xhr) {
+		            xhr.setRequestHeader("User", username);
+		            xhr.setRequestHeader("videoName", videoName);
+		        },
+		        success: function() {
+		        	//username = value;
+		        	getVideos("transcoded", function(username){
+		        		printVideos(username,"#transcoded_button",true);
+		        	})
+		        	//$("#nameField").text(username)
+		    	}, 
+					        
+		        statusCode: {
+		            404: function() {
+		            	console.log("404");
+		            }
+		    	}
+		    });
+			//alert(v.Video_Name);
+		});
 		
 	}
 	$("#transcoded_button").click(function (){
@@ -227,12 +267,15 @@
 		})
 	});
 	
+	
+	
 	$("#Logoutbtn").click(function( event ) {
 		localStorage.removeItem("clvitraAccessToken");
 	    window.location="/ClViTra_2.0/";
 	});
 	
 	});
+	
 	
 	
 	
@@ -291,6 +334,8 @@
 	
 	<table class="table table-hover" id='videolist'></table>	
 	<script>
+	
+	
 	
 	
 	</script>

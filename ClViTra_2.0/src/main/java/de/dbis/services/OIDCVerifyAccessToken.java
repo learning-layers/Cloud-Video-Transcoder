@@ -73,7 +73,8 @@ public class OIDCVerifyAccessToken {
 
 		URI userinfoEndpointURL = null;
 		try {
-			userinfoEndpointURL = new URI("http://10.255.255.17:9085/openid-connect-server-webapp/userinfo");
+			//userinfoEndpointURL = new URI("http://10.255.255.17:9085/openid-connect-server-webapp/userinfo");
+			userinfoEndpointURL = new URI("http://137.226.58.15:9085/openid-connect-server-webapp/userinfo");
 		} catch (URISyntaxException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
