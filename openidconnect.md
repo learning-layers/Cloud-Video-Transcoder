@@ -9,7 +9,8 @@ So basically there are three classes that are required to be integarted within y
 
 So let's get started!
 
-1. OIDCLoginStart.java
+OIDCLoginStart.java
+--------
 
 In this class we compose the URL, here is the link to the class in Cloud Video Transcoder Application: 
 
@@ -22,7 +23,8 @@ But there are some changes that are needed to be made in this class:
 
 That's all for the first class.
 
-2. OIDCTokens.java
+OIDCTokens.java
+--------
 
 In this class we acquire the Access token from the server, here is the link to the class in Cloud Video Transcoder Application:
 
@@ -36,8 +38,8 @@ But again there are some changes that are needed to be made in this class:
 
 That's all for the second class.
 
-
-3. OIDCVerifyAccessToken.java
+OIDCVerifyAccessToken.java
+--------
 
 In this class we authenticate the Access token from the server and get the user information, here is the link to the class in Cloud Video Transcoder Application:
 
@@ -47,6 +49,7 @@ Once again this class is not a necessary requirement for Open ID Connect login p
 
 But this time there are no changes required.
 
+That's all for the third class.
 
 
 So now we just need to call these classes.
