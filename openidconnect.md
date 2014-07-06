@@ -1,5 +1,125 @@
 Authors: Aarij Siddiqui, Sadik Bakiu, Dominik Renzel, Petru Nicolaescu, István Koren
 
+Update 07/07/2014
+--------
+
+The following guide is specifically for those developers who intend to integrate their application with Open ID Connect with ease.
+
+So basically there are three classes that are required to be integarted within your application. Out of these three classes two are required to fullfil the basic functionality of Open ID Connect, whereas third is an optional one, depending on the application.
+
+So let's get started!
+
+1. OIDCLoginStart.java
+
+In this class we compose the URL, here is the link to the class in Cloud Video Transcoder Application: 
+
+https://github.com/learning-layers/Cloud-Video-Transcoder/blob/master/ClViTra_2.0/src/main/java/de/dbis/services/OIDCLoginStart.java
+
+But there are some changes that are needed to be made in this class:
+
+1. Change the client ID to the client ID of your application on line number 59.
+2. Change the Redirect URL to your own URL on line number 65.
+
+That's all for the first class.
+
+2. OIDCTokens.java
+
+In this class we acquire the Access token from the server, here is the link to the class in Cloud Video Transcoder Application:
+
+https://github.com/learning-layers/Cloud-Video-Transcoder/blob/master/ClViTra_2.0/src/main/java/de/dbis/services/OIDCTokens.java
+
+But again there are some changes that are needed to be made in this class:
+
+1. Change the client ID to the client ID of your application on line number 105.
+2. Change the client secret to the client secret of your application on line number 106.
+3. Change the Redirect URL to your own URL on line number 113.
+
+That's all for the second class.
+
+
+3. OIDCVerifyAccessToken.java
+
+In this class we authenticate the Access token from the server and get the user information, here is the link to the class in Cloud Video Transcoder Application:
+
+https://github.com/learning-layers/Cloud-Video-Transcoder/blob/master/ClViTra_2.0/src/main/java/de/dbis/services/OIDCVerifyAccessToken.java
+
+Once again this class is not a necessary requirement for Open ID Connect login process. It entirely depends on the application idf it needs to manage the user roles, or if it needs to display username on its page after login or not.
+
+But this time there are no changes required.
+
+
+
+So now we just need to call these classes.
+
+All these three classes will be called through RESTful API calls.
+
+
+OIDCLoginStart.java
+--------
+
+Call this class from your application where you intend to login your user. It will return the URL which should be visited by the user to login (User can of course be automatically redirected to that URL).
+
+A sample call is as follows:
+
+			$.ajax({
+		        	url: "/ClViTra_2.0/rest/openIDauth",
+		        	type: "GET",
+		        	dataType:'text',
+		    		}
+			});
+
+A detailed call and implementation can be seen in the following html file:
+
+https://github.com/learning-layers/Cloud-Video-Transcoder/blob/master/ClViTra_2.0/src/main/webapp/index.html
+
+
+OIDCTokens.java
+--------
+
+This call should be in the file which was given as the redirect URL in the above java classes.
+
+A sample call is as follows:
+
+Here 'code' is a value from the response sent by the server after the login.
+
+			$.ajax({
+	        	        url: "/ClViTra_2.0/rest/getAccessToken",
+	        	        type: "GET",
+	        	        dataType:'text',
+	        	        beforeSend: function(xhr) {
+	        	            xhr.setRequestHeader("Code", code);
+	        	        }
+        		});
+
+A detailed call and implementation can be seen in the following html file:
+
+https://github.com/learning-layers/Cloud-Video-Transcoder/blob/master/ClViTra_2.0/src/main/webapp/FileUpload.html
+
+
+OIDCVerifyAccessToken.java
+--------
+
+It (in most scenarios) is called everytime the user logs in, but it completely depends on the application requirement. It is not a necessary element of Open ID Login.
+
+			$.ajax({
+	        		url: "/ClViTra_2.0/rest/verifyAccessToken",
+	        		type: "GET",
+	        		dataType:'text',
+	        		beforeSend: function(xhr) {
+	            		xhr.setRequestHeader("AccessToken", localStorage.clvitraAccessToken);
+	        		}
+			});
+
+It will respond with a username, but what is returned can of course be changed in the java class.
+
+Once again a detailed call and implementation can be seen in the following html file:
+
+https://github.com/learning-layers/Cloud-Video-Transcoder/blob/master/ClViTra_2.0/src/main/webapp/FileUpload.html
+
+
+Old documentation
+--------
+
 Summary
 --------
 
