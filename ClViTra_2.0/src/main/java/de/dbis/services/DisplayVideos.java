@@ -54,11 +54,11 @@ public class DisplayVideos {
 		   
 		   //System.out.println("UserID: "+username);
 		   //System.out.println("request: "+request);
-		   int UserId = Java2MySql.getUserId(username);
+		   //int UserId = Java2MySql.getUserId(username);
 		   
 		   
 		   
-		   List<String> myList = Java2MySql.getVideos(UserId, request);
+		   List<String> myList = Java2MySql.getVideos(username, request);
 		   
 		   //System.out.println(myList.size());
 		   JSONObject j[] =  new JSONObject[myList.size()/3];//null; =

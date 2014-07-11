@@ -120,7 +120,7 @@ public class Java2MySql
 	 * @param username
 	 * @return int UserID
 	 */
-	public static int getUserId(String username) {
+	/*public static int getUserId(String username) {
 		
 		init();
 		int ID = 0;
@@ -142,21 +142,21 @@ public class Java2MySql
 			e.printStackTrace();
 		}
 		return ID;
-	}
+	}*/
 	
 	public static void deleteVideo(String username, String videoName) {
 		
 		init();
-		int userID = getUserId(username);
+		//int userID = getUserId(username);
 		//String videoID;
 		try {
 			Class.forName(driver).newInstance();
 			Connection conn = DriverManager.getConnection(url+dbName,userName,password);
 			
-			String insertQuery = "DELETE FROM video WHERE Name=? AND UserId = ?";
+			String insertQuery = "DELETE FROM video WHERE Name=? AND Username = ?";
 			PreparedStatement pstmt = conn.prepareStatement(insertQuery);
 			pstmt.setString(1, videoName);
-			pstmt.setInt(2, userID);
+			pstmt.setString(2, username);
 			Boolean res = pstmt.execute();
   	  
 			System.out.println("DELETE VIDEO: "+res);
@@ -172,16 +172,16 @@ public class Java2MySql
 	public static Boolean Exists(String username, String videoName) {
 		
 		init();
-		int userID = getUserId(username);
+		//int userID = getUserId(username);
 		ResultSet res = null;
 		try {
 			Class.forName(driver).newInstance();
 			Connection conn = DriverManager.getConnection(url+dbName,userName,password);
 			
-			String insertQuery = "SELECT * FROM video WHERE Name=? AND UserId = ?";
+			String insertQuery = "SELECT * FROM video WHERE Name=? AND Username = ?";
 			PreparedStatement pstmt = conn.prepareStatement(insertQuery);
 			pstmt.setString(1, videoName);
-			pstmt.setInt(2, userID);
+			pstmt.setString(2, username);
 			res = pstmt.executeQuery();
 
 			if (!res.next()) {
@@ -205,7 +205,7 @@ public class Java2MySql
 	 * @param UserId
 	 * @return String Video ID
 	 */
-	public static String VideoUpdate(String filename, String ext, String ThumbnailFilename, long Duration, int UserId) {
+	public static String VideoUpdate(String filename, String ext, String ThumbnailFilename, long Duration, String Username) {
         
 		init();
 		PreparedStatement pstmt = null;
@@ -217,7 +217,7 @@ public class Java2MySql
       	  	Connection conn = DriverManager.getConnection(url+dbName,userName,password);
       	  	ID = UUID.randomUUID();
 
-      	  	String insertQuery = "INSERT INTO video (ID, Name, Format, Status, Duration, Thumbnail, UserId) VALUES (?,?,?,?,?,?,?)";
+      	  	String insertQuery = "INSERT INTO video (ID, Name, Format, Status, Duration, Thumbnail, Username) VALUES (?,?,?,?,?,?,?)";
       	  	
       	  	pstmt = conn.prepareStatement(insertQuery);
       	  	pstmt.setString(1, ID.toString());
@@ -234,7 +234,7 @@ public class Java2MySql
 
       	  	pstmt.setLong(5, Duration);
       	  	pstmt.setString(6, ThumbnailFilename);
-      	  	pstmt.setInt(7, UserId);
+      	  	pstmt.setString(7, Username);
       	  	System.out.println(ThumbnailFilename);
       	  	rowCount = pstmt.executeUpdate();
       	  	
@@ -395,7 +395,7 @@ public class Java2MySql
 	 * @param status 'Initialized', 'Processing', or 'Transcoded'.
 	 * @return List<String> List of Videos with their Name, Thumbnail URL, and Video URL.
 	 */
-	public static List<String> getVideos(int UserId, String status) {
+	public static List<String> getVideos(String Username, String status) {
 		
 		init();
 		
@@ -406,9 +406,9 @@ public class Java2MySql
 			Class.forName(driver).newInstance();
 			Connection conn = DriverManager.getConnection(url+dbName,userName,password);
 
-			String Query = "SELECT * FROM video WHERE UserId = ? AND Status = ?";
+			String Query = "SELECT * FROM video WHERE Username = ? AND Status = ?";
 			PreparedStatement pstmt = conn.prepareStatement(Query);
-			pstmt.setInt(1, UserId);
+			pstmt.setString(1, Username);
 			pstmt.setString(2, status);
 			ResultSet res = pstmt.executeQuery();
 			while (res.next()) {
@@ -433,7 +433,7 @@ public class Java2MySql
 	 * @param videoId
 	 * @return String[] Video details.
 	 */
-	public static String[] getVideoDetails(int UserId, String videoId) {
+	public static String[] getVideoDetails(String username, String videoId) {
 		
 		init();
 		
@@ -445,9 +445,9 @@ public class Java2MySql
 			Class.forName(driver).newInstance();
 			Connection conn = DriverManager.getConnection(url+dbName,userName,password);
 
-			String Query = "SELECT * FROM video WHERE UserId = ? AND ID = ?";
+			String Query = "SELECT * FROM video WHERE Username = ? AND ID = ?";
 			PreparedStatement pstmt = conn.prepareStatement(Query);
-			pstmt.setInt(1, UserId);
+			pstmt.setString(1, username);
 			pstmt.setString(2, videoId);
 			ResultSet res = pstmt.executeQuery();
 			//while (res.next()) {

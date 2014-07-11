@@ -100,8 +100,8 @@ public class FileUpload
 		System.out.println("DB");
 		
 		String Codec = VideoInfo.videoInfo(uploadedFileLocation);
-		int UserId = Java2MySql.getUserId(User);
-		String ID = Java2MySql.VideoUpdate(savePath+newFile.getName(), Codec, ThumbnailFilename, Duration, UserId);
+		//int UserId = Java2MySql.getUserId(User);
+		String ID = Java2MySql.VideoUpdate(savePath+newFile.getName(), Codec, ThumbnailFilename, Duration, User);
 			
 		//String output = "<h1>ClViTra</h1> <p style=\"color:green\"> Upload Successful!</p>";
 		//output += VideosDisplay();

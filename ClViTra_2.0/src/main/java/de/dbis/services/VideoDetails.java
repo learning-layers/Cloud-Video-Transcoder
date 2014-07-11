@@ -49,9 +49,9 @@ public class VideoDetails {
 		   	//	+ "<p> Select a file : <input type=\"file\" name=\"file\" size=\"45\" /> </p> <input type=\"submit\" value=\"Upload It\" /> </form> ";
 		   //new Java2MySql();
 		   
-		   int UserId = Java2MySql.getUserId(username);
+		  // int UserId = Java2MySql.getUserId(username);
 		   
-		   String[] Details = Java2MySql.getVideoDetails(UserId, videoId);
+		   String[] Details = Java2MySql.getVideoDetails(username, videoId);
 		   
 		   //System.out.println(myList.size());
 		   JSONObject j =  new JSONObject();

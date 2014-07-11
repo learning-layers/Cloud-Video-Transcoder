@@ -93,8 +93,8 @@ public class OIDCTokens {
 		
 		URI tokenEndpointURL = null;
 		try {
-			//tokenEndpointURL = new URI("http://10.255.255.17:9085/openid-connect-server-webapp/token");
-			tokenEndpointURL = new URI("http://137.226.58.15:9085/openid-connect-server-webapp/token");
+			tokenEndpointURL = new URI("http://10.255.255.17:9085/openid-connect-server-webapp/token");
+			//tokenEndpointURL = new URI("http://137.226.58.15:9085/openid-connect-server-webapp/token");
 		} catch (URISyntaxException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
@@ -104,14 +104,14 @@ public class OIDCTokens {
 
 		// We authenticate with "client secret basic"
 		ClientID clientID = new ClientID("clvitra");
-		Secret clientSecret = new Secret("xxxxxxxxx");
+		Secret clientSecret = new Secret("xxxxxx");
 		ClientAuthentication clientAuth = new ClientSecretBasic(clientID, clientSecret);
 		TokenRequest accessTokenRequest=null;
 		try {
 			accessTokenRequest = new TokenRequest(
 				tokenEndpointURL,
 				clientAuth,
-				new AuthorizationCodeGrant(code, new URI("http://127.0.0.1:8080/ClViTra_2.0/FileUpload.html"), clientID));
+				new AuthorizationCodeGrant(code, new URI("http://137.226.58.27:9080/ClViTra_2.0/FileUpload.html"), clientID));
 		} catch (URISyntaxException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
