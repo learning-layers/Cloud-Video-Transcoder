@@ -1,4 +1,4 @@
-package de.dbis.services;
+package de.dbis.videoutils;
 
 import com.xuggle.xuggler.IContainer;
 import com.xuggle.xuggler.IStream;

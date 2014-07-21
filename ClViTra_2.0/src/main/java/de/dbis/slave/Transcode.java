@@ -7,7 +7,10 @@ import org.apache.commons.io.FilenameUtils;
 import com.xuggle.mediatool.IMediaReader;
 import com.xuggle.mediatool.ToolFactory;
 
+import de.dbis.db.Java2MySql;
+import de.dbis.i5cloud.ObjectStore;
 import de.dbis.services.*;
+import de.dbis.util.GetProperty;
 
 /**
  * 

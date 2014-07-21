@@ -3,7 +3,7 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
 
-import de.dbis.services.GetProperty;
+import de.dbis.util.GetProperty;
 
 /**
  * 

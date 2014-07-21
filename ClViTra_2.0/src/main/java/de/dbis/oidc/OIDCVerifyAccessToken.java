@@ -1,4 +1,4 @@
-package de.dbis.services;
+package de.dbis.oidc;
 
 import java.net.URI;
 import java.net.URISyntaxException;

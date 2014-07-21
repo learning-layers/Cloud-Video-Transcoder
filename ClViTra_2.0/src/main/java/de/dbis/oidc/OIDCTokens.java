@@ -1,4 +1,4 @@
-package de.dbis.services;
+package de.dbis.oidc;
 
 import java.io.IOException;
 import java.net.URI;
@@ -180,37 +180,6 @@ public class OIDCTokens {
 		//System.out.println("\tAccess token: " + accessToken.toJSONObject().toString());
 		//System.out.println("\tRefresh token: " + refreshToken);
 		//System.out.println("\n\n");
-
-
-		// *** *** *** Process ID token which contains user auth information *** *** *** //
-		/*if (idToken != null) {
-		
-			System.out.println("ID token [raw]: " + idToken.getParsedString());
-
-			System.out.println("ID token JWS header: " + idToken.getHeader());
-
-			// Validate the ID token by checking its HMAC;
-			// Note that PayPal HMAC generation is probably incorrect,
-			// there's also a bug in the "exp" claim type
-			try {
-				MACVerifier hmacVerifier = new MACVerifier(clientSecret.getValue().getBytes());
-
-				final boolean valid = idToken.verify(hmacVerifier);
-
-				System.out.println("ID token is valid: " + valid);
-
-				JSONObject jsonObject = idToken.getJWTClaimsSet().toJSONObject();
-
-				System.out.println("ID token [claims set]: \n" + new PrettyJson().format(jsonObject));
-
-				System.out.println("\n\n");
-
-			} catch (Exception e) {
-
-				System.out.println("Couldn't process ID token: " + e.getMessage());
-			}
-		}*/
-		
 		
 		Response.ResponseBuilder r = Response.ok(accessToken.toString());
 		return CORS.makeCORS(r, _corsHeaders);		

@@ -1,7 +1,7 @@
 /* ATLAS Group - Virtual Campfire - www.dbis.rwth-aachen.de
  * Copyright 2010-2012 Lehrstuhl Informatik V, RWTH Aachen, Germany. All Rights Reserved.
  */
-package de.dbis.services;
+package de.dbis.util;
 
 
 /*
@@ -26,30 +26,6 @@ import java.util.ResourceBundle;
  */
 public class GetProperty {
 
-      /**
-       * Gets the object.
-       *
-       * @param key the key
-       * @param fileName the file name
-       * @return the object
-       */
-      /*public static Object getObject(String key,String fileName) {          
-        ResourceBundle resourceBundle = ResourceBundle.getBundle(fileName, Locale.getDefault());
-        String objName = resourceBundle.getString(key);
-        
-        if (objName == null) {
-            throw new RuntimeException("Implementation not supplied for"
-                    + key+ " in"+ fileName+".properties");
-        }
-        try {
-            return Class.forName(objName).newInstance();
-        } catch (Exception e) {
-            throw new RuntimeException(
-                    "Factory unable to construct instance of "
-                            + objName );
-        }
-    }*/
-      
       /**
        * Gets the param.
        *

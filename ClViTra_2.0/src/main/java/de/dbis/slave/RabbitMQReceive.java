@@ -9,7 +9,9 @@ import com.rabbitmq.client.ConsumerCancelledException;
 import com.rabbitmq.client.QueueingConsumer;
 import com.rabbitmq.client.ShutdownSignalException;
 
+import de.dbis.db.Java2MySql;
 import de.dbis.services.*;
+import de.dbis.util.GetProperty;
 
 /**
  * 

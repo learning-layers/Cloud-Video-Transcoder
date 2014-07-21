@@ -1,4 +1,4 @@
-package de.dbis.services;
+package de.dbis.videoutils;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -14,6 +14,8 @@ import com.xuggle.mediatool.MediaListenerAdapter;
 import com.xuggle.mediatool.ToolFactory;
 import com.xuggle.mediatool.event.IVideoPictureEvent;
 import com.xuggle.xuggler.Global;
+
+import de.dbis.i5cloud.ObjectStore;
 
 /**
  *

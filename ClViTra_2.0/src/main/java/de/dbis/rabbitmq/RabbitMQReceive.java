@@ -1,4 +1,4 @@
-package de.dbis.services;
+package de.dbis.rabbitmq;
 import java.io.File;
 import java.io.IOException;
 
@@ -11,7 +11,8 @@ import com.rabbitmq.client.ConsumerCancelledException;
 import com.rabbitmq.client.QueueingConsumer;
 import com.rabbitmq.client.ShutdownSignalException;
 
-import de.dbis.services.Java2MySql;
+import de.dbis.db.Java2MySql;
+import de.dbis.util.GetProperty;
 import de.dbis.xmpp.PubsubSender;
 
 /**

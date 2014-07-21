@@ -7,7 +7,7 @@ import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.provider.ProviderManager;
 import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 
-import de.dbis.services.GetProperty;
+import de.dbis.util.GetProperty;
 
 /**
  * 

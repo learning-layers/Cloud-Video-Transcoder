@@ -1,7 +1,9 @@
-package de.dbis.services;
+package de.dbis.rabbitmq;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
+
+import de.dbis.util.GetProperty;
 
 /**
  * 

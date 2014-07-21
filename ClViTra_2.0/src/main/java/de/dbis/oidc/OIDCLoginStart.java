@@ -1,4 +1,4 @@
-package de.dbis.services;
+package de.dbis.oidc;
 
 import java.io.*;
 import java.net.*;

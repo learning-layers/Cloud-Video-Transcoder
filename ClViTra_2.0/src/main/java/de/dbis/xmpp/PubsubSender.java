@@ -9,8 +9,8 @@ import org.jivesoftware.smackx.pubsub.PayloadItem;
 import org.jivesoftware.smackx.pubsub.PubSubManager;
 import org.jivesoftware.smackx.pubsub.SimplePayload;
 
-import de.dbis.services.GetProperty;
-import de.dbis.services.Java2MySql;
+import de.dbis.db.Java2MySql;
+import de.dbis.util.GetProperty;
 
 /**
  * Sends the message to the pubsub node via XMPP message transfer. 

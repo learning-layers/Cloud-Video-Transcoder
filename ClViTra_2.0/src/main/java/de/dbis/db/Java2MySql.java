@@ -1,4 +1,4 @@
-package de.dbis.services;
+package de.dbis.db;
 
 import java.io.File;
 import java.sql.Connection;
@@ -9,6 +9,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import de.dbis.util.GetProperty;
 
 /**
  * 
@@ -115,40 +117,9 @@ public class Java2MySql
         return Return_code;
     }
 	
-	/**
-	 * Returns the corresponding UserId for a given username.
-	 * @param username
-	 * @return int UserID
-	 */
-	/*public static int getUserId(String username) {
-		
-		init();
-		int ID = 0;
-		try {
-			Class.forName(driver).newInstance();
-			Connection conn = DriverManager.getConnection(url+dbName,userName,password);
-			
-			String insertQuery = "SELECT * FROM  user WHERE username=?";
-			PreparedStatement pstmt = conn.prepareStatement(insertQuery);
-			pstmt.setString(1, username);
-			ResultSet res = pstmt.executeQuery();
-  	  
-			//if(res.getString("Status").compareTo("INITIALIZED")==0)
-			if (res.next())	
-				ID = res.getInt("ID");
-
-			conn.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return ID;
-	}*/
-	
 	public static void deleteVideo(String username, String videoName) {
 		
 		init();
-		//int userID = getUserId(username);
-		//String videoID;
 		try {
 			Class.forName(driver).newInstance();
 			Connection conn = DriverManager.getConnection(url+dbName,userName,password);
@@ -172,7 +143,6 @@ public class Java2MySql
 	public static Boolean Exists(String username, String videoName) {
 		
 		init();
-		//int userID = getUserId(username);
 		ResultSet res = null;
 		try {
 			Class.forName(driver).newInstance();
@@ -400,7 +370,6 @@ public class Java2MySql
 		init();
 		
 		List<String> myList = new ArrayList<String>();
-        //myList.add("java");
 		String Thumbnail, Name, URI;
         try {
 			Class.forName(driver).newInstance();
@@ -445,12 +414,12 @@ public class Java2MySql
 			Class.forName(driver).newInstance();
 			Connection conn = DriverManager.getConnection(url+dbName,userName,password);
 
+			System.out.println("Check");
 			String Query = "SELECT * FROM video WHERE Username = ? AND ID = ?";
 			PreparedStatement pstmt = conn.prepareStatement(Query);
 			pstmt.setString(1, username);
 			pstmt.setString(2, videoId);
 			ResultSet res = pstmt.executeQuery();
-			//while (res.next()) {
 			if (res.next()){
 				
 				URI = res.getString("URI");

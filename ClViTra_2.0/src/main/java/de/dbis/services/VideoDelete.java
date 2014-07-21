@@ -15,6 +15,7 @@ import javax.ws.rs.core.UriInfo;
 
 import org.springframework.stereotype.Component;
 
+import de.dbis.db.Java2MySql;
 import de.dbis.util.CORS;
 
 @Path("/delete")

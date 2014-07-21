@@ -24,7 +24,13 @@ import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
 import com.xuggle.xuggler.IContainer;
 
+import de.dbis.db.Java2MySql;
+import de.dbis.i5cloud.ObjectStore;
+import de.dbis.rabbitmq.*;
 import de.dbis.util.CORS;
+import de.dbis.util.GetProperty;
+import de.dbis.videoutils.Thumbnail;
+import de.dbis.videoutils.VideoInfo;
 
 /**
  * 
@@ -34,7 +40,7 @@ import de.dbis.util.CORS;
 
 @Path("/upload")
 @Component
-public class FileUpload
+public class VideoUpload
 {
 	@Context UriInfo uriInfo;
 	private String _corsHeaders;
@@ -73,7 +79,6 @@ public class FileUpload
 		newName = newName.replaceAll(" ", "_");
 		newName = User+"_"+newName;
 		
-		//System.out.println();
 		if(Java2MySql.Exists(User,newName)){
 			ResponseBuilder x = Response.status(406);
 			return CORS.makeCORS(x, _corsHeaders);
@@ -83,29 +88,21 @@ public class FileUpload
 		
 		uploadedFileLocation = uploadPath + newFile.getName();
 
-		//System.out.println("saving the file");
 		// saving the file
 		writeToFile(uploadedInputStream, uploadedFileLocation);
 			
-		//System.out.println("Generating Thumbnail");
 		// Generating Thumbnail
 		String ThumbnailFilename = Thumbnail.Generate_Thumbnail(uploadPath, newFile.getName());
 
-		//System.out.println("Duration");
 		//Get the duration of the video
 		long Duration = getDuration(uploadedFileLocation);
 			
-		//System.out.println("Extension");
 		//String ext = FilenameUtils.getExtension(newFile.getName());
 		System.out.println("DB");
 		
 		String Codec = VideoInfo.videoInfo(uploadedFileLocation);
-		//int UserId = Java2MySql.getUserId(User);
 		String ID = Java2MySql.VideoUpdate(savePath+newFile.getName(), Codec, ThumbnailFilename, Duration, User);
-			
-		//String output = "<h1>ClViTra</h1> <p style=\"color:green\"> Upload Successful!</p>";
-		//output += VideosDisplay();
-
+		
 		if(Codec.equals("h264"))
 		{
 			System.out.println("FileUpload -- ext==MP4");
@@ -126,11 +123,6 @@ public class FileUpload
 			}
 		}
 		
-		
-		//uploadCode = "<h1>ClViTra</h1> <p style=\"color:green\"> Upload Successful!</p>";
-		//uploadCode += GetProperty.getParam("uploadCode", INPUT_FILE_UploadCode);
-		
-		//ResponseBuilder x = Response.temporaryRedirect(location);
 		ResponseBuilder x = Response.status(200).entity(ID);
 		return CORS.makeCORS(x, _corsHeaders);
 	}
@@ -160,7 +152,6 @@ public class FileUpload
 	private long getDuration(String movie) {
 			
 		IContainer container = IContainer.make();
-		//IURLProtocolHandler movie = null;
 		if (container.open(movie, IContainer.Type.READ, null) < 0) {
 			throw new RuntimeException("Cannot open '" + movie + "'");
 		}

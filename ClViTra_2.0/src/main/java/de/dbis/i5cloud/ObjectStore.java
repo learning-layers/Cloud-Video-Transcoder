@@ -1,4 +1,4 @@
-package de.dbis.services;
+package de.dbis.i5cloud;
 
 import java.io.File;
 import java.util.HashMap;
@@ -13,6 +13,8 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
+
+import de.dbis.util.GetProperty;
 
 /**
  * 

@@ -28,10 +28,11 @@
 	        },
 	        success: function(value) {
 	        	username = value;
+	        	localStorage.setItem("clvitraUser",value);
 	        	getVideos("transcoded", function(value){
 	        		printVideos(value,"#transcoded_button",true);
 	        	})
-	        	$("#nameField").text(username)
+	        	$("#nameField").text(localStorage.clvitraUser)
 	    	},
 	    	error: function(e){console.log(e);}
 		});
@@ -50,10 +51,11 @@
 	        success: function(value) {
 	        	console.log("1.1");
 	        	username = value;
+	        	localStorage.setItem("clvitraUser",value);
 	        	getVideos("transcoded", function(value){
 	        		printVideos(value,"#transcoded_button",true);
 	        	})
-	        	$("#nameField").text(username)
+	        	$("#nameField").text(localStorage.clvitraUser)
 	    	},
 	    	statusCode: {
 	            // if user does not exist, return authentication failed.
@@ -141,10 +143,21 @@
 	
 	
 	
+	$( "#UploadFile" ).change(function(){
+		var vidname=$('#upload_form').prop("UploadFile").value;
+		if(vidname==""){
+			document.getElementById("upload_btn").disabled=true;
+		}
+		else{
+			document.getElementById("upload_btn").disabled=false;
+		}
+	});
 	
 	$( "#upload_form" ).submit(function( event ) {
+		document.getElementById("upload_btn").disabled=true;
 		var prog=$("<div></div>");
 		var vidname=$('#upload_form').prop("UploadFile").value;
+		 
 		vidname=vidname.split("\\");
 		vidname=vidname[vidname.length-1];
 		prog.appendTo("#vids").progressbar({ value: vidname });
@@ -159,9 +172,10 @@
 	        processData:false,
 	        contentType:false,
 	        beforeSend: function(xhr) {
-	            xhr.setRequestHeader("User", username);
+	            xhr.setRequestHeader("User", localStorage.clvitraUser);
 	        },
 	        success: function(value) {
+	        	
 	        }, error: function(e){console.log(e)},
 	        
 	        statusCode: {
@@ -191,7 +205,7 @@
 	
 	function getVideos(request, handler){
 		$.ajax({
-	        url: "/ClViTra_2.0/rest/videos/"+username+"/"+request,
+	        url: "/ClViTra_2.0/rest/videos/"+localStorage.clvitraUser+"/"+request,
 	        type: "GET",
 	        dataType:'json',
 	        //beforeSend: function(xhr) {
@@ -223,20 +237,20 @@
 		
 		$(".delete_btn").click(function (){
 			var videoName=$(this).attr("value"); 
-			console.log(username);
+			console.log(localStorage.clvitraUser);
 			console.log(videoName);
 			$.ajax({
 		        url: "/ClViTra_2.0/rest/delete",
 		        type: "GET",
 		        dataType:'json',
 		        beforeSend: function(xhr) {
-		            xhr.setRequestHeader("User", username);
+		            xhr.setRequestHeader("User", localStorage.clvitraUser);
 		            xhr.setRequestHeader("videoName", videoName);
 		        },
 		        success: function() {
 		        	//username = value;
-		        	getVideos("transcoded", function(username){
-		        		printVideos(username,"#transcoded_button",true);
+		        	getVideos("transcoded", function(value1){
+		        		printVideos(value1,"#transcoded_button",true);
 		        	})
 		        	//$("#nameField").text(username)
 		    	}, 
@@ -323,7 +337,7 @@
 	   	<input type="file" id="UploadFile" name="file"/>
 	   
 	   </div>
-	   <button type="submit" class="btn btn-default">Upload It</button>
+	   <button type="submit" id="upload_btn" disabled class="btn btn-default">Upload It</button>
 	   
 	</form> 
 	<div id="vids" style="width:30%"></div>
