@@ -24,6 +24,7 @@ import com.nimbusds.oauth2.sdk.id.*;
 import com.nimbusds.openid.connect.sdk.*;
 
 import de.dbis.util.CORS;
+import de.dbis.util.GetProperty;
 
 
 /**
@@ -45,7 +46,12 @@ public class OIDCLoginStart extends HttpServlet {
 
 	private URL composeAuthzRequestURL()
 		throws Exception {
+		String INPUT_FILE = "oidc";
 
+		String authorize, redirect, cID;
+		authorize = GetProperty.getParam("authorize", INPUT_FILE);
+		redirect = GetProperty.getParam("redirect", INPUT_FILE);
+		cID = GetProperty.getParam("clientid", INPUT_FILE);
 		// Set the requested response_type (code, token and / or 
 		// id_token):
 		// Use CODE for authorisation code flow
@@ -56,14 +62,12 @@ public class OIDCLoginStart extends HttpServlet {
 		Scope scope = new Scope("openid", "email", "profile");
 
 		// Identify the client app by its registered ID
-		ClientID clientID = new ClientID("clvitra");
+		ClientID clientID = new ClientID(cID);
 
 		// Set the redirect URL after successful OIDC login / 
 		// authorisation. This URL is typically registered in advance 
 		// with the OIDC server
-		//URI redirectURI = new URI("http://137.226.58.27:9080/ClViTra_2.0/FileUpload.html");
-		URI redirectURI = new URI("http://137.226.58.27:9080/ClViTra_2.0/FileUpload.html");
-		//URI redirectURI = new URI("http://127.0.0.1:8080/oidc-test-client/in");
+		URI redirectURI = new URI(redirect);
 		
 		// Generate random state value. It's used to link the
 		// authorisation response back to the original request, also to
@@ -83,7 +87,7 @@ public class OIDCLoginStart extends HttpServlet {
 
 
 		// Set the base URL of the OIDC server authorisation endpoint
-		URL authzEndpointURL = new URL("http://137.226.58.15:9085/openid-connect-server-webapp/authorize");
+		URL authzEndpointURL = new URL(authorize);
 
 
 		// Construct and output the final OIDC authorisation URL for

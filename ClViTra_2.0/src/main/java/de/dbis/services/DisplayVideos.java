@@ -52,7 +52,7 @@ public class DisplayVideos {
 
 		   List<String> myList = Java2MySql.getVideos(username, request);
 		   
-		   JSONObject j[] =  new JSONObject[myList.size()/3];//null; =
+		   JSONObject j[] =  new JSONObject[myList.size()/3];
 		   JSONObject j_final = new JSONObject();
 		   
 		   int a=0;

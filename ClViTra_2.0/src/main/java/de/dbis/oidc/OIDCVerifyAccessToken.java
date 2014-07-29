@@ -27,6 +27,7 @@ import com.nimbusds.openid.connect.sdk.UserInfoSuccessResponse;
 import com.nimbusds.openid.connect.sdk.claims.UserInfo;
 
 import de.dbis.util.CORS;
+import de.dbis.util.GetProperty;
 
 /**
  * 
@@ -57,6 +58,11 @@ public class OIDCVerifyAccessToken {
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response verifyAccessToken(@HeaderParam("AccessToken") String Header) throws JSONException{
 		
+		String INPUT_FILE = "oidc";
+
+		String userinfo;
+		userinfo = GetProperty.getParam("userinfo", INPUT_FILE);
+		
 		BearerAccessToken accessToken = null;
 		
 		if(Header != null)
@@ -73,8 +79,7 @@ public class OIDCVerifyAccessToken {
 
 		URI userinfoEndpointURL = null;
 		try {
-			userinfoEndpointURL = new URI("http://10.255.255.17:9085/openid-connect-server-webapp/userinfo");
-			//userinfoEndpointURL = new URI("http://137.226.58.15:9085/openid-connect-server-webapp/userinfo");
+			userinfoEndpointURL = new URI(userinfo);
 		} catch (URISyntaxException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

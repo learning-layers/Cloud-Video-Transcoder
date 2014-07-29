@@ -16,6 +16,7 @@ import javax.ws.rs.core.UriInfo;
 
 //import net.minidev.json.JSONObject;
 
+
 import org.json.*;
 import org.springframework.stereotype.Component;
 
@@ -46,6 +47,7 @@ import com.nimbusds.openid.connect.sdk.claims.UserInfo;
 import com.thetransactioncompany.json.pretty.PrettyJson;
 
 import de.dbis.util.CORS;
+import de.dbis.util.GetProperty;
 
 
 /**
@@ -78,6 +80,13 @@ public class OIDCTokens {
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response getAccessToken(@HeaderParam("Code") String Header) throws JSONException{
 		
+		String INPUT_FILE = "oidc";
+
+		String token, redirect, cID, cSecret;
+		token = GetProperty.getParam("token", INPUT_FILE);
+		redirect = GetProperty.getParam("redirect", INPUT_FILE);
+		cID = GetProperty.getParam("clientid", INPUT_FILE);
+		cSecret = GetProperty.getParam("clientsecret", INPUT_FILE);
 		System.out.println("In OIDCTokens");
 		
 		AuthorizationCode code = null;
@@ -93,8 +102,7 @@ public class OIDCTokens {
 		
 		URI tokenEndpointURL = null;
 		try {
-			tokenEndpointURL = new URI("http://10.255.255.17:9085/openid-connect-server-webapp/token");
-			//tokenEndpointURL = new URI("http://137.226.58.15:9085/openid-connect-server-webapp/token");
+			tokenEndpointURL = new URI(token);
 		} catch (URISyntaxException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
@@ -103,15 +111,15 @@ public class OIDCTokens {
 		System.out.println("Sending access token request to " + tokenEndpointURL + "\n\n");
 
 		// We authenticate with "client secret basic"
-		ClientID clientID = new ClientID("clvitra");
-		Secret clientSecret = new Secret("xxxxxx");
+		ClientID clientID = new ClientID(cID);
+		Secret clientSecret = new Secret(cSecret);
 		ClientAuthentication clientAuth = new ClientSecretBasic(clientID, clientSecret);
 		TokenRequest accessTokenRequest=null;
 		try {
 			accessTokenRequest = new TokenRequest(
 				tokenEndpointURL,
 				clientAuth,
-				new AuthorizationCodeGrant(code, new URI("http://137.226.58.27:9080/ClViTra_2.0/FileUpload.html"), clientID));
+				new AuthorizationCodeGrant(code, new URI(redirect), clientID));
 		} catch (URISyntaxException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
