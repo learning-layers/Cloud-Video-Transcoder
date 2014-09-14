@@ -107,6 +107,10 @@ public class OIDCLoginStart extends HttpServlet {
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response doGet() {
 
+		//System.out.println("neo starting!");
+		//Neo4j.init();
+		//System.out.println("neo ended!");
+		//Neo4j.addPoint("Kastanienweg Aachen");
 		URL authzURL;
 
 		try {

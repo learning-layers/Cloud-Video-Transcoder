@@ -216,6 +216,58 @@ public class Java2MySql
 	}
 	
 	/**
+	 * Updates or enter the database with the video details.
+	 * @param filename
+	 * @param ext
+	 * @param ThumbnailFilename
+	 * @param Duration
+	 * @param UserId
+	 * @return String Video ID
+	 */
+	public static String VideoUpdate(String filename, String ext, String ThumbnailFilename, long Duration, String Username, double latitude, double longitude) {
+        
+		init();
+		PreparedStatement pstmt = null;
+        int rowCount = 0;
+        UUID ID = null;
+        
+        try {
+        	Class.forName(driver).newInstance();
+      	  	Connection conn = DriverManager.getConnection(url+dbName,userName,password);
+      	  	ID = UUID.randomUUID();
+
+      	  	String insertQuery = "INSERT INTO video (ID, Name, Format, Status, Duration, Thumbnail, Username, Latitude, Longitude) VALUES (?,?,?,?,?,?,?,?,?)";
+      	  	
+      	  	pstmt = conn.prepareStatement(insertQuery);
+      	  	pstmt.setString(1, ID.toString());
+      	  	pstmt.setString(2, filename);
+      	  	pstmt.setString(3, ext);
+      	  	if(ext.equals("h264")){
+      	  		System.out.println("ext == MP4:  "+ext);
+      	  		pstmt.setString(4, "TRANSCODED");
+      	  	}
+      	  	else{
+      	  		System.out.println("ext != MP4/mp4:   "+ext);
+      	  		pstmt.setString(4, "INITIALIZED");
+      	  	}
+
+      	  	pstmt.setLong(5, Duration);
+      	  	pstmt.setString(6, ThumbnailFilename);
+      	  	pstmt.setString(7, Username);
+      	  	pstmt.setDouble(8, latitude);
+      	  	pstmt.setDouble(9, longitude);
+      	  	System.out.println(ThumbnailFilename);
+      	  	rowCount = pstmt.executeUpdate();
+      	  	
+      	  	conn.close();
+        } catch (Exception e) {
+        	e.printStackTrace();
+        }
+		return ID.toString();
+	}
+
+	
+	/**
 	 * Updates the database with the video details.
 	 * @param ID
 	 * @param outputFile
@@ -246,6 +298,11 @@ public class Java2MySql
         	e.printStackTrace();
         }
 		return rowCount;
+	}
+	
+	
+	public static void getVideosbyLocation(){
+		
 	}
 
 	/**

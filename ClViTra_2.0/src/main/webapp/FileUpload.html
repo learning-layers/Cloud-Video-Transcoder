@@ -172,7 +172,8 @@
 	        processData:false,
 	        contentType:false,
 	        beforeSend: function(xhr) {
-	            xhr.setRequestHeader("User", localStorage.clvitraUser);
+	            //xhr.setRequestHeader("User", localStorage.clvitraUser); 
+	            xhr.setRequestHeader("Token", localStorage.clvitraAccessToken);
 	        },
 	        success: function(value) {
 	        	

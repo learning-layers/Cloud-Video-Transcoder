@@ -17,7 +17,13 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.io.FilenameUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
 import com.sun.jersey.core.header.FormDataContentDisposition;
@@ -26,6 +32,7 @@ import com.xuggle.xuggler.IContainer;
 
 import de.dbis.db.Java2MySql;
 import de.dbis.i5cloud.ObjectStore;
+import de.dbis.oidc.Neo4j;
 import de.dbis.rabbitmq.*;
 import de.dbis.util.CORS;
 import de.dbis.util.GetProperty;
@@ -61,11 +68,15 @@ public class VideoUpload
 	
 	@POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response uploadFile(@HeaderParam("User") String User,
+	public Response uploadFile(@HeaderParam("Token") String token,
 			@FormDataParam("file") InputStream uploadedInputStream,
 			@FormDataParam("file") FormDataContentDisposition fileDetail) {
 			   
-		System.out.println("User: " + User);
+		System.out.println("Token: " + token);
+		
+		String User = verifyAccessToken(token);
+		
+		
 		String uploadPath, savePath; //uploadCode;
 		String INPUT_FILE = "tempFileLocation";
 		//String INPUT_FILE_UploadCode = "FileUpload";
@@ -101,7 +112,21 @@ public class VideoUpload
 		System.out.println("DB");
 		
 		String Codec = VideoInfo.videoInfo(uploadedFileLocation);
-		String ID = Java2MySql.VideoUpdate(savePath+newFile.getName(), Codec, ThumbnailFilename, Duration, User);
+		String ID;
+		ID = Java2MySql.VideoUpdate(savePath+newFile.getName(), Codec, ThumbnailFilename, Duration, User);
+		/*String location = "Kastanienweg Aachen"; 
+		Double latitude = 50.785097, longitude = 6.053766;
+		
+		if (latitude!=0 && longitude!=0)
+			ID = Java2MySql.VideoUpdate(savePath+newFile.getName(), Codec, ThumbnailFilename, Duration, User, latitude, longitude);
+		else
+			ID = Java2MySql.VideoUpdate(savePath+newFile.getName(), Codec, ThumbnailFilename, Duration, User);
+		
+		
+		//System.out.println("neo ended!");
+		Neo4j.addPoint(location);
+		
+		Neo4j.getNearVideos(latitude, longitude);*/
 		
 		if(Codec.equals("h264"))
 		{
@@ -156,5 +181,27 @@ public class VideoUpload
 			throw new RuntimeException("Cannot open '" + movie + "'");
 		}
 		return container.getDuration() / 1000000;
+	}
+	
+	private String verifyAccessToken(String Token){
+		
+		HttpClient client = new HttpClient();
+        HttpMethod method = new GetMethod("http://cloud27.dbis.rwth-aachen.de:9080/ClViTra_2.0/rest/verifyAccessToken");
+        method.addRequestHeader("AccessToken", Token);
+        String response=null;
+        
+        try {
+            client.executeMethod(method);
+ 
+            if (method.getStatusCode() == HttpStatus.SC_OK) {
+                response = method.getResponseBodyAsString();
+                
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            method.releaseConnection();
+        }
+        return response;
 	}
 }

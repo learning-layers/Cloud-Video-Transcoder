@@ -43,7 +43,7 @@ public class TestVideoDisplay {
 	public void initializedVideos() throws ClientProtocolException, IOException{
 	   // Given 
 	   HttpUriRequest request = new HttpGet("http://cloud27.dbis.rwth-aachen.de:9080/ClViTra_2.0/rest/videos/aarij/initialized");
-
+	   
 	   // When
 	   HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
 	   System.out.println(httpResponse.getStatusLine().getStatusCode());
