@@ -16,7 +16,7 @@ public class TestVideoDisplay {
 	@Test
 	public void transcodedVideos() throws ClientProtocolException, IOException{
 	   // Given 
-	   HttpUriRequest request = new HttpGet("http://cloud27.dbis.rwth-aachen.de:9080/ClViTra_2.0/rest/videos/adam/transcoded");
+	   HttpUriRequest request = new HttpGet("http://10.255.255.22:9080/ClViTra_2.0/rest/videos/aarij/transcoded");
 
 	   // When
 	   HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
@@ -29,7 +29,7 @@ public class TestVideoDisplay {
 	@Test
 	public void processingVideos() throws ClientProtocolException, IOException{
 	   // Given 
-	   HttpUriRequest request = new HttpGet("http://cloud27.dbis.rwth-aachen.de:9080/ClViTra_2.0/rest/videos/aarij/processing");
+	   HttpUriRequest request = new HttpGet("http://10.255.255.22:9080/ClViTra_2.0/rest/videos/aarij/processing");
 
 	   // When
 	   HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
@@ -42,7 +42,7 @@ public class TestVideoDisplay {
 	@Test
 	public void initializedVideos() throws ClientProtocolException, IOException{
 	   // Given 
-	   HttpUriRequest request = new HttpGet("http://cloud27.dbis.rwth-aachen.de:9080/ClViTra_2.0/rest/videos/aarij/initialized");
+	   HttpUriRequest request = new HttpGet("http://10.255.255.22:9080/ClViTra_2.0/rest/videos/aarij/initialized");
 	   
 	   // When
 	   HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
