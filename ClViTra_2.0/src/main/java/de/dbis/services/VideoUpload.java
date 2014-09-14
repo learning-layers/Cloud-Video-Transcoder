@@ -32,7 +32,7 @@ import com.xuggle.xuggler.IContainer;
 
 import de.dbis.db.Java2MySql;
 import de.dbis.i5cloud.ObjectStore;
-import de.dbis.oidc.Neo4j;
+//import de.dbis.oidc.Neo4j;
 import de.dbis.rabbitmq.*;
 import de.dbis.util.CORS;
 import de.dbis.util.GetProperty;
