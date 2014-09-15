@@ -54,15 +54,6 @@
         </snapshots>
     </repository>
 		
-	<repository>
-		<id>OpenIMAJ maven releases repository</id>
-		<url>http://maven.openimaj.org</url>
-	</repository>
-        <repository>
-		<id>OpenIMAJ maven snapshots repository</id>
-		<url>http://snapshots.openimaj.org</url>
-	</repository>
-		
 	</repositories>
 
 	<dependencies>
