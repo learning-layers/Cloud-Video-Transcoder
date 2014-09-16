@@ -21,7 +21,7 @@ import org.junit.Test;
 
 public class TestVideoUpload {
 	
-	@Test
+	//@Test
 	public void uploadAndDelete(){
 		HttpClient httpclient = new HttpClient();
 	    File file = new File( "C:\\trailer 400p.mp4" );
