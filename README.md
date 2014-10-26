@@ -1,4 +1,4 @@
 Cloud-Video-Transcoder
 ======================
 
-The i5Cloud Video Transcoder v2.0 project
+The Tethys (formely i5Cloud) Video Transcoder v2.0 project
