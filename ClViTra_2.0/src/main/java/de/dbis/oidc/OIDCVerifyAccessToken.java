@@ -26,6 +26,7 @@ import com.nimbusds.openid.connect.sdk.UserInfoResponse;
 import com.nimbusds.openid.connect.sdk.UserInfoSuccessResponse;
 import com.nimbusds.openid.connect.sdk.claims.UserInfo;
 
+import de.dbis.db.Java2MySql;
 import de.dbis.util.CORS;
 import de.dbis.util.GetProperty;
 
@@ -125,12 +126,17 @@ public class OIDCVerifyAccessToken {
 		UserInfo userInfo = ((UserInfoSuccessResponse)userInfoResponse).getUserInfo();
 		
 
-		System.out.println("UserInfo:");
+		//System.out.println("UserInfo: " + userInfo.getProfile().);
 		
 		String username = null;
 		try {
 			JSONObject jsonObject = new JSONObject(userInfo.toJSONObject());
+			System.out.println("UserInfo: " +jsonObject.toString());
 			username = jsonObject.getString("preferred_username");
+			if(!Java2MySql.approvedUser(username)){
+				Response.ResponseBuilder r = Response.status(401);
+				return CORS.makeCORS(r, _corsHeaders);
+			}
 			//System.out.println(new PrettyJson().parseAndFormat(userInfo.toJSONObject().toString()));
 
 		} catch (Exception e) {

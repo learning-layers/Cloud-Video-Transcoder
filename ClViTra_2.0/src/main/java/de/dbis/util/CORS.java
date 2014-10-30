@@ -17,7 +17,7 @@ public class CORS {
 	 * @return
 	 */
 	public static Response makeCORS(ResponseBuilder res, String returnMethod) {
-		Response.ResponseBuilder rb = res.header("Access-Control-Allow-Origin", "*").header("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS, DELETE");//.header("Access-Control-Allow-Headers", "X-Requested-With");
+		Response.ResponseBuilder rb = res.header("Access-Control-Allow-Origin", "*").header("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS, DELETE").header("Access-Control-Allow-Headers", "*");
 
 		if (!"".equals(returnMethod)) {
 			rb.header("Access-Control-Allow-Headers", returnMethod);

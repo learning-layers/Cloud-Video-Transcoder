@@ -44,6 +44,8 @@ import com.nimbusds.openid.connect.sdk.UserInfoRequest;
 import com.nimbusds.openid.connect.sdk.UserInfoResponse;
 import com.nimbusds.openid.connect.sdk.UserInfoSuccessResponse;
 import com.nimbusds.openid.connect.sdk.claims.UserInfo;
+import com.nimbusds.openid.connect.sdk.OIDCScopeValue;
+
 import com.thetransactioncompany.json.pretty.PrettyJson;
 
 import de.dbis.util.CORS;
@@ -144,6 +146,8 @@ public class OIDCTokens {
 
 		try {
 			httpResponse = httpRequest.send();
+			
+			System.out.println("http response: "+httpResponse.toString());
 
 		} catch (IOException e) {
 
@@ -163,7 +167,7 @@ public class OIDCTokens {
 			return CORS.makeCORS(r, _corsHeaders);
 		}
 		
-		System.out.println(tokenResponse);
+		System.out.println("token response: "+tokenResponse.toString());
 		
 		if (tokenResponse instanceof TokenErrorResponse) {
 
@@ -178,10 +182,15 @@ public class OIDCTokens {
 
 		OIDCAccessTokenResponse tokenSuccess = (OIDCAccessTokenResponse)tokenResponse;
 
+		//Scope = 34;
+		//OIDCScopeValue sv = (OIDCScopeValue)tokenResponse;
+		
 		BearerAccessToken accessToken = (BearerAccessToken)tokenSuccess.getAccessToken();
 		RefreshToken refreshToken = tokenSuccess.getRefreshToken();
 		SignedJWT idToken = (SignedJWT)tokenSuccess.getIDToken();
 
+		System.out.println("tokensuccess: "+tokenSuccess.toString());
+		
 		System.out.println("Token response:");
 		System.out.println(accessToken.toString());
 

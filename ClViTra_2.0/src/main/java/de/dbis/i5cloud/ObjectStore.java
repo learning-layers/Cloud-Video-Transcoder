@@ -30,6 +30,7 @@ public class ObjectStore {
 	 * @return String URL to the uploaded file.
 	 */
 	public String ObjectStoreStart(String filepath) {
+		System.out.println("TFilepath"+filepath);
 		
 		return new RetrieveTokenTask().OAuth(filepath);
 	}
@@ -46,6 +47,7 @@ public class ObjectStore {
 				HttpClient client = new DefaultHttpClient();
 				
 				oauth = GetProperty.getParam("oauth", INPUT_FILE);
+				System.out.println("oauth: "+oauth);
 				stringEntity = GetProperty.getParam("stringEntity", INPUT_FILE);
 
 				HttpPost post = new HttpPost(oauth);
@@ -56,8 +58,11 @@ public class ObjectStore {
 				post.setHeader("Content-type", "application/json");
 				
 				ResponseHandler<String> responseHandler = new BasicResponseHandler();
+				System.out.println("chk1");
 				String responseBody = client.execute(post, responseHandler);
-
+				System.out.println("chk2");
+				System.out.println("ResponseBody: "+responseBody);
+				
 				JSONObject jsResponse = new JSONObject(responseBody);
 		
 				// get token
@@ -68,14 +73,15 @@ public class ObjectStore {
 				HashMap<String, String> values = new HashMap<String, String>();
 
 				values.put("id", token);
+				System.out.println("OBJ STR TOKEN: "+token);
 				//values.put("publicURL", publicURL);
 				values.put("filepath", filepath);
 				
 				return uploadLastFile(values);
 		
 			} catch (Exception e) {
-				this.exception = e;
-				return "error!";
+				 this.exception = e;
+				 return e.toString();
 			}
 		}
 	}
@@ -99,6 +105,8 @@ public class ObjectStore {
 
 				HttpClient client = new DefaultHttpClient();
 				
+				File f = new File(params[1]);
+				System.out.println("File Exists: "+f.exists());
 				upload = GetProperty.getParam("upload", INPUT_FILE);
 				HttpPut put = new HttpPut(upload + new File(params[1]).getName());
 
@@ -117,7 +125,8 @@ public class ObjectStore {
 
 			} catch (Exception e) {
 				this.exception = e;
-				return "error!";
+				return e.toString();
+				//return "error!";
 			}
 		}
 	}

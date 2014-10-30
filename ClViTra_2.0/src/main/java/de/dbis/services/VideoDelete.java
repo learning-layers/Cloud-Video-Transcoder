@@ -1,6 +1,7 @@
 package de.dbis.services;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.OPTIONS;
@@ -30,9 +31,9 @@ public class VideoDelete {
 		_corsHeaders = requestH;
 		return CORS.makeCORS(Response.ok(), requestH);
 	}
-	@GET
+	@DELETE
 	@Produces("application/json")
-	public Response Delete(@HeaderParam("User") String username, @HeaderParam("videoName") String videoName){
+	public Response Delete(@HeaderParam("user") String username, @HeaderParam("videoname") String videoName){
 		
 		System.out.println(username);
 		System.out.println(videoName);

@@ -97,11 +97,11 @@ public class Thumbnail
         
 	   	File file = new File(outputFilename);
 	   	file.setWritable(true);
-		System.out.println("FILE DELETE: "+file.delete());
+		//System.out.println("FILE DELETE: "+file.delete());
 		
 		File file1 = new File(newThumbnailImage);
 	   	file1.setWritable(true);
-		System.out.println("FILE DELETE2: "+file1.delete());
+		//System.out.println("FILE DELETE2: "+file1.delete());
 		System.out.println("2");
 		return URI;
     }

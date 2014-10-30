@@ -105,6 +105,7 @@ public class VideoUpload
 		// Generating Thumbnail
 		String ThumbnailFilename = Thumbnail.Generate_Thumbnail(uploadPath, newFile.getName());
 
+		System.out.println("TURI: "+ThumbnailFilename);
 		//Get the duration of the video
 		long Duration = getDuration(uploadedFileLocation);
 			
@@ -133,10 +134,11 @@ public class VideoUpload
 			System.out.println("FileUpload -- ext==MP4");
 			ObjectStore ob = new ObjectStore();
 		   	String URI = ob.ObjectStoreStart(uploadPath + newFile.getName());
+		   	System.out.println("VURI: "+URI);
 		   	Java2MySql.VideoUpdate(ID, newFile.getName(),URI);
 		   	File inputfile = new File(uploadPath+newFile.getName());
 		   	inputfile.setWritable(true);
-    		boolean b = inputfile.delete();
+    		//boolean b = inputfile.delete();
 		}
 		else
 		{
@@ -186,7 +188,8 @@ public class VideoUpload
 	private String verifyAccessToken(String Token){
 		
 		HttpClient client = new HttpClient();
-        HttpMethod method = new GetMethod("http://cloud27.dbis.rwth-aachen.de:9080/ClViTra_2.0/rest/verifyAccessToken");
+        //HttpMethod method = new GetMethod("http://cloud27.dbis.rwth-aachen.de:9080/ClViTra_2.0/rest/verifyAccessToken");
+		HttpMethod method = new GetMethod("http://10.255.255.22:9080/ClViTra_2.0/rest/verifyAccessToken");
         method.addRequestHeader("AccessToken", Token);
         String response=null;
         

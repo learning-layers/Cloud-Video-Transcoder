@@ -117,6 +117,31 @@ public class Java2MySql
         return Return_code;
     }
 	
+	public static Boolean approvedUser(String username){
+		
+		init();
+		ResultSet res = null;
+		try {
+			Class.forName(driver).newInstance();
+			Connection conn = DriverManager.getConnection(url+dbName,userName,password);
+			
+			String insertQuery = "SELECT * FROM Approved_User WHERE username = ?";
+			PreparedStatement pstmt = conn.prepareStatement(insertQuery);
+			pstmt.setString(1, username);
+			res = pstmt.executeQuery();
+
+			if (!res.next()) {
+				System.out.println("User Not Found!");
+				return false;
+			}
+
+			conn.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return true;
+	}
+	
 	public static void deleteVideo(String username, String videoName) {
 		
 		init();

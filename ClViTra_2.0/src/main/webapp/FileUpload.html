@@ -1,15 +1,68 @@
 <html>
 <head>
+  
 	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 	<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/black-tie/jquery-ui.css" />
-
+    <script type="text/javascript" src="js/ajax.js"></script>
+  
+  <!-- 
+ 	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+ 	<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+ 	
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+	<script src="js/bootstrap.min.js"></script>
+    
+    <script src="js/jquery-ui-1.10.4.custom.min.js"></script>
+    <link rel="stylesheet" href="css/jquery-ui-layers-theme/jquery-ui-1.10.4.custom.css" />
+      -->
+ <!--
+ <script src="js/jquery.ui.touch-punch.min.js"></script>   
+ <script src="js/bootstrap.js"></script>
+ <script src="js/jquery-ui-1.10.4.custom.js"></script>
+ <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    
+ -->
 	<script>
 	$( document ).ready(function() {
 	
+		
+	var httpRequest = null;
+	function SendRequest () {
+	    	var videoName = this.getAttribute("value");
+	    	//var videoName=$(this).attr("value");
+	        if (!httpRequest) {
+	            httpRequest = CreateHTTPRequestObject ();   // defined in ajax.js
+	        }
+	        if (httpRequest) {          
+	                // The requested file must be in the same domain that the page is served from.
+	            var url = "http://api.learning-layers.eu:8280/delete";
+	            httpRequest.open ("GET", url, true);    // async
+	            httpRequest.setRequestHeader("User", localStorage.clvitraUser);
+				httpRequest.setRequestHeader("videoName", videoName);
+	            httpRequest.onreadystatechange = OnStateChange;
+	            httpRequest.send (null);
+	        }
+	}
+	    //window.SendRequest = SendRequest;
+
+	function OnStateChange () {
+	        if (httpRequest.readyState == 0 || httpRequest.readyState == 4) {
+	            if (IsRequestSuccessful (httpRequest)) {    // defined in ajax.js
+	            	console.log("Request complete.");
+	            }
+	            else {
+	            	console.log("Operation failed.");
+	            }
+	        }
+	}
+	//window.OnStateChange=OnStateChange;
+
+		
+		
 	var url = document.URL
 	var theArray = url.split("&");
 	
@@ -33,6 +86,12 @@
 	        		printVideos(value,"#transcoded_button",true);
 	        	})
 	        	$("#nameField").text(localStorage.clvitraUser)
+	    	},
+	    	statusCode: {
+	            // if user does not exist, return authentication failed.
+	            401: function(){
+            		window.location = "/ClViTra_2.0/redirect.html";
+	            }
 	    	},
 	    	error: function(e){console.log(e);}
 		});
@@ -59,6 +118,9 @@
 	    	},
 	    	statusCode: {
 	            // if user does not exist, return authentication failed.
+	            401: function(){
+            		window.location = "/ClViTra_2.0/redirect.html";
+	            },
 	            404: function() {
 	            	console.log("1.2");
 	            	$.ajax({
@@ -76,7 +138,7 @@
 	        	    	statusCode: {
 	        	            404: function() {
 	        	            	console.log("1.4");
-	        	            	window.location("/ClViTra_2.0/")
+	        	            	window.location = "/ClViTra_2.0/";
 	        	            }
 	        	    	},
 	        	    	error: function(e){console.log(e);}
@@ -166,7 +228,8 @@
 		event.preventDefault();
 		var form_data = new FormData($("#upload_form")[0]);
   		$.ajax({
-	        url: "/ClViTra_2.0/rest/upload",
+	        //url: "/ClViTra_2.0/rest/upload",
+	        url: "http://api.learning-layers.eu:8280/services/upload",
 	        type: "POST",
 	        data: form_data,
 	        processData:false,
@@ -206,7 +269,8 @@
 	
 	function getVideos(request, handler){
 		$.ajax({
-	        url: "/ClViTra_2.0/rest/videos/"+localStorage.clvitraUser+"/"+request,
+	        //url: "/ClViTra_2.0/rest/videos/"+localStorage.clvitraUser+"/"+request,
+	        url: "http://api.learning-layers.eu:8280/clvitra/"+localStorage.clvitraUser+"/"+request,
 	        type: "GET",
 	        dataType:'json',
 	        //beforeSend: function(xhr) {
@@ -215,7 +279,7 @@
 	        success: handler
 	    });
 	}
-	
+		
 	function printVideos(videos, self, show_URL){
 		$("#videolist").text("");
 		if(show_URL){
@@ -224,9 +288,6 @@
 				
 			
 			});
-			
-			
-			
 		}
 		else{
 			videos.Videos.forEach(function(v){
@@ -240,14 +301,19 @@
 			var videoName=$(this).attr("value"); 
 			console.log(localStorage.clvitraUser);
 			console.log(videoName);
+			
 			$.ajax({
-		        url: "/ClViTra_2.0/rest/delete",
-		        type: "GET",
-		        dataType:'json',
-		        beforeSend: function(xhr) {
-		            xhr.setRequestHeader("User", localStorage.clvitraUser);
-		            xhr.setRequestHeader("videoName", videoName);
+		        //url: "/ClViTra_2.0/rest/delete",
+		        url: "http://api.learning-layers.eu:8280/clvitra/delete",
+		        type: "DELETE",
+		        //dataType:'json',
+		        headers: { "user": localStorage.clvitraUser,
+		        	"videoname": videoName
 		        },
+		        //beforeSend: function(xhr) {
+		           // xhr.setRequestHeader("User", localStorage.clvitraUser);
+		            //xhr.setRequestHeader("videoName", videoName);
+		        //},
 		        success: function() {
 		        	//username = value;
 		        	getVideos("transcoded", function(value1){
