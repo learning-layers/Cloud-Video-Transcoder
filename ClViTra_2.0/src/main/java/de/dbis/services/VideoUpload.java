@@ -91,8 +91,9 @@ public class VideoUpload
 		String newName = fileDetail.getFileName();
 		newName = newName.replaceAll(" ", "_");
 		newName = User+"_"+newName;
+		System.out.println("NEWNAME: "+newName);
 		
-		if(Java2MySql.Exists(User,newName)){
+		if(Java2MySql.Exists(User,FilenameUtils.removeExtension(newName))){
 			ResponseBuilder x = Response.status(406);
 			return CORS.makeCORS(x, _corsHeaders);
 		}
@@ -202,7 +203,7 @@ public class VideoUpload
         //HttpMethod method = new GetMethod("http://cloud27.dbis.rwth-aachen.de:9080/ClViTra_2.0/rest/verifyAccessToken");
 		HttpMethod method = new GetMethod("http://127.0.0.1:8080/ClViTra_2.0/rest/verifyAccessToken");
 		//HttpMethod method = new GetMethod("http://10.255.255.22:9080/ClViTra_2.0/rest/verifyAccessToken");
-        method.addRequestHeader("AccessToken", Token);
+        method.addRequestHeader("authorization_bearer", Token);
         String response=null;
         
         try {

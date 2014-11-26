@@ -175,7 +175,7 @@ public class Java2MySql
 			
 			String insertQuery = "SELECT * FROM video WHERE Name=? AND Username = ?";
 			PreparedStatement pstmt = conn.prepareStatement(insertQuery);
-			pstmt.setString(1, videoName);
+			pstmt.setString(1, videoName+".mp4");
 			pstmt.setString(2, username);
 			res = pstmt.executeQuery();
 
