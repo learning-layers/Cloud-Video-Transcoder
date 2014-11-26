@@ -8,6 +8,7 @@ import javax.ws.rs.OPTIONS;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -22,7 +23,7 @@ import de.dbis.util.CORS;
 /**
  * Returns video information and status.
  */
-@Path("/videoDetail/{user}/{videoId}")
+@Path("/videoDetail")// /{user}/{clientType}/{videoURI}")
 @Component
 public class VideoDetails {
 	
@@ -44,21 +45,23 @@ public class VideoDetails {
 	 */
 	@GET
 	@Produces("application/json")
-	public Response Details(@PathParam("user") String username, @PathParam("videoId") String videoId) throws JSONException{
+	public Response Details(@QueryParam("user") String username, @QueryParam("clientType") String clientType, @QueryParam("videoURI") String videoURI)
+			//@PathParam("user") String username, @PathParam("clientType") String clientType, @PathParam("videoURI") String videoURI) 
+					throws JSONException{
 		   String Name, URI, Thumbnail, Status;
 
-		   String[] Details = Java2MySql.getVideoDetails(username, videoId);
+		   String[] Details = Java2MySql.getVideoDetails(username, videoURI, clientType);
 		   
 		   JSONObject j =  new JSONObject();
 		   
 		   if(!"Not Found".equals(Details[0])){
 			   
 			   Name = Details[0];
-			   URI = Details[1];
-			   Thumbnail = Details[2];
-			   Status = Details[3];
+			   //URI = Details[1];
+			   Thumbnail = Details[1];
+			   Status = Details[2];
 			   j.put("Video_Name", Name);
-			   j.put("Video_URL", URI);
+			   //j.put("Video_URL", URI);
 			   j.put("Thumbnail_URL", Thumbnail);
 			   j.put("Status", Status);
 			   

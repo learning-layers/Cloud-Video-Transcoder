@@ -12,6 +12,7 @@ import com.rabbitmq.client.QueueingConsumer;
 import com.rabbitmq.client.ShutdownSignalException;
 
 import de.dbis.db.Java2MySql;
+import de.dbis.mpeg7.sevianno;
 import de.dbis.util.GetProperty;
 import de.dbis.xmpp.PubsubSender;
 
@@ -64,18 +65,25 @@ public class RabbitMQReceive implements Runnable{
 	            String URI = Split[2];
 	            String ext = Split[3];
 	            String status = Split[4];
+	            
 	            Java2MySql.VideoUpdate(ID, outputFile.getPath(), URI);
 	            
+	            String[] Details = Java2MySql.getVideoDetails(ID);
+	            String title = Details[0];
+	            String thumbnailUri = Details[2];
+	            String uploader = Details[4];
+	            
+	            sevianno.addMediaDescription(URI, thumbnailUri, title, uploader);
 	            File file = new File(outputFile.getPath());
 	            String Filewoext = FilenameUtils.removeExtension(file.getName());
-	    		//file.setWritable(true);
-	    		//boolean a = file.delete();
+	    		file.setWritable(true);
+	    		boolean a = file.delete();
 	    		
 	    		File inputfile = new File(path+Filewoext+"."+ext);
 	    		inputfile.setWritable(true);
 	    		boolean b = inputfile.delete();
 	    		
-	    		//System.out.println("FILE DELETE MP4 ("+ outputFile.getPath() + ") : " + a);
+	    		System.out.println("FILE DELETE MP4 ("+ outputFile.getPath() + ") : " + a);
 	    		System.out.println("FILE DELETE INPUT ("+ path+Filewoext+"."+ext + ") : " + b);
 	    		
 	            //PubsubSender.xmpp_send(ID, outputFile.getName(),URI);

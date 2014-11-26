@@ -24,7 +24,7 @@ import de.dbis.util.CORS;
  * Retrieves the list of Videos from the server for a specific category for the logged in user.
  *
  */
-@Path("/videos/{id}/{request}")
+@Path("/videos")
 @Component
 public class DisplayVideos {
 	
@@ -46,6 +46,7 @@ public class DisplayVideos {
 	 * @throws JSONException
 	 */
 	@GET
+	@Path("/{id}/{request}")
 	@Produces("application/json")
 	public Response VideosDisplay(@PathParam("id") String username, @PathParam("request") String request) throws JSONException{
 		   String Name, URI, Thumbnail;
@@ -72,4 +73,33 @@ public class DisplayVideos {
 		   Response.ResponseBuilder r = Response.ok(j_final.toString());
 		   return CORS.makeCORS(r, _corsHeaders);
 	 }	
+	
+	@GET
+	@Path("/{id}")
+	@Produces("application/json")
+	public Response VideosDisplay(@PathParam("id") String username) throws JSONException{
+		   String Name, URI, Thumbnail;
+
+		   List<String> myList = Java2MySql.getVideos(username);
+		   
+		   JSONObject j[] =  new JSONObject[myList.size()/3];
+		   JSONObject j_final = new JSONObject();
+		   
+		   int a=0;
+		   while (!myList.isEmpty()) {
+			   
+			   j[a] = new JSONObject();
+			   Name = myList.remove(0);
+			   URI = myList.remove(0);
+			   Thumbnail = myList.remove(0);
+			   j[a].put("Video_Name", Name);
+			   j[a].put("Video_URL", URI);
+			   j[a].put("Thumbnail_URL", Thumbnail);
+			   
+			   a++;
+		   }
+		   j_final.put("Videos", j);
+		   Response.ResponseBuilder r = Response.ok(j_final.toString());
+		   return CORS.makeCORS(r, _corsHeaders);
+	 }
 }

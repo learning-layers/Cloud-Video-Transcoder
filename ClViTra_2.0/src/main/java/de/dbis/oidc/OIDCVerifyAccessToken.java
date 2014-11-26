@@ -57,7 +57,7 @@ public class OIDCVerifyAccessToken {
 	 */
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
-	public Response verifyAccessToken(@HeaderParam("AccessToken") String Header) throws JSONException{
+	public Response verifyAccessToken(@HeaderParam("authorization_bearer") String Header) throws JSONException{
 		
 		String INPUT_FILE = "oidc";
 
@@ -133,10 +133,10 @@ public class OIDCVerifyAccessToken {
 			JSONObject jsonObject = new JSONObject(userInfo.toJSONObject());
 			System.out.println("UserInfo: " +jsonObject.toString());
 			username = jsonObject.getString("preferred_username");
-			if(!Java2MySql.approvedUser(username)){
+			/*if(!Java2MySql.approvedUser(username)){
 				Response.ResponseBuilder r = Response.status(401);
 				return CORS.makeCORS(r, _corsHeaders);
-			}
+			}*/
 			//System.out.println(new PrettyJson().parseAndFormat(userInfo.toJSONObject().toString()));
 
 		} catch (Exception e) {

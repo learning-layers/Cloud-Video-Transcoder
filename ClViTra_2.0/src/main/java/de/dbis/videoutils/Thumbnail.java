@@ -4,6 +4,8 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -46,8 +48,9 @@ public class Thumbnail
      * @param Filename Name of the file.
      * @return String URL to uploaded Thumbnail.
      */
-    public static String Generate_Thumbnail(String FileLocation, String Filename)
+    public static String[] Generate_Thumbnail(String FileLocation, String Filename)
     {
+    	String thumbnails[]=new String[2];
     	mVideoStreamIndex = -1;
     	mLastPtsWrite = Global.NO_PTS;
     	    	
@@ -97,13 +100,16 @@ public class Thumbnail
         
 	   	File file = new File(outputFilename);
 	   	file.setWritable(true);
-		//System.out.println("FILE DELETE: "+file.delete());
+		System.out.println("FILE DELETE: "+file.delete());
 		
 		File file1 = new File(newThumbnailImage);
 	   	file1.setWritable(true);
-		//System.out.println("FILE DELETE2: "+file1.delete());
+		System.out.println("FILE DELETE2: "+file1.delete());
 		System.out.println("2");
-		return URI;
+		thumbnails[0]=URI;
+		thumbnails[1]=URI_smallThumbnail;
+		
+		return thumbnails;
     }
     
     public static String thumbnailResize(String outputName, String image, int width, int height){

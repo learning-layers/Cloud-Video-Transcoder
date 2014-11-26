@@ -200,7 +200,7 @@ public class Java2MySql
 	 * @param UserId
 	 * @return String Video ID
 	 */
-	public static String VideoUpdate(String filename, String ext, String ThumbnailFilename, long Duration, String Username) {
+	public static String VideoUpdate(String filename, String ext, String Thumbnail_big, String Thumbnail_small, long Duration, String Username) {
         
 		init();
 		PreparedStatement pstmt = null;
@@ -212,7 +212,7 @@ public class Java2MySql
       	  	Connection conn = DriverManager.getConnection(url+dbName,userName,password);
       	  	ID = UUID.randomUUID();
 
-      	  	String insertQuery = "INSERT INTO video (ID, Name, Format, Status, Duration, Thumbnail, Username) VALUES (?,?,?,?,?,?,?)";
+      	  	String insertQuery = "INSERT INTO video (ID, Name, Format, Status, Duration, Thumbnail, Username, Thumbnail_small) VALUES (?,?,?,?,?,?,?,?)";
       	  	
       	  	pstmt = conn.prepareStatement(insertQuery);
       	  	pstmt.setString(1, ID.toString());
@@ -228,9 +228,10 @@ public class Java2MySql
       	  	}
 
       	  	pstmt.setLong(5, Duration);
-      	  	pstmt.setString(6, ThumbnailFilename);
+      	  	pstmt.setString(6, Thumbnail_big);
       	  	pstmt.setString(7, Username);
-      	  	System.out.println(ThumbnailFilename);
+      	  pstmt.setString(8, Thumbnail_small);
+      	  	System.out.println(Thumbnail_big);
       	  	rowCount = pstmt.executeUpdate();
       	  	
       	  	conn.close();
@@ -249,7 +250,7 @@ public class Java2MySql
 	 * @param UserId
 	 * @return String Video ID
 	 */
-	public static String VideoUpdate(String filename, String ext, String ThumbnailFilename, long Duration, String Username, double latitude, double longitude) {
+	/*public static String VideoUpdate(String filename, String ext, String ThumbnailFilename, long Duration, String Username, double latitude, double longitude) {
         
 		init();
 		PreparedStatement pstmt = null;
@@ -289,7 +290,7 @@ public class Java2MySql
         	e.printStackTrace();
         }
 		return ID.toString();
-	}
+	} */
 
 	
 	/**
@@ -478,40 +479,76 @@ public class Java2MySql
         return myList;
 	}
 
+	
+public static List<String> getVideos(String Username) {
+		
+		init();
+		
+		List<String> myList = new ArrayList<String>();
+		String Thumbnail, Name, URI;
+        try {
+			Class.forName(driver).newInstance();
+			Connection conn = DriverManager.getConnection(url+dbName,userName,password);
+
+			String Query = "SELECT * FROM video WHERE Username = ?";
+			PreparedStatement pstmt = conn.prepareStatement(Query);
+			pstmt.setString(1, Username);
+			ResultSet res = pstmt.executeQuery();
+			while (res.next()) {
+				URI = res.getString("URI");
+				Thumbnail = res.getString("Thumbnail");
+				Name = res.getString("Name");
+				myList.add(Name);
+				myList.add(URI);
+				myList.add(Thumbnail);
+			}
+
+			conn.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        return myList;
+	}
+	
+	
+	
+	
 	/**
 	 * Returns the Video URL, Thumbnail URL, Name, and Status for the given video ID uploaded by the given User.
 	 * @param UserId
 	 * @param videoId
 	 * @return String[] Video details.
 	 */
-	public static String[] getVideoDetails(String username, String videoId) {
+	public static String[] getVideoDetails(String username, String videoURI, String clientType) {
 		
 		init();
 		
 		//ArrayList<String> Details = new ArrayList<String>();
-		String Details[]=new String[4];
+		String Details[]=new String[3];
         //myList.add("java");
-		String Thumbnail, Name, URI, Status;
+		String Thumbnail, Name, Status;
         try {
 			Class.forName(driver).newInstance();
 			Connection conn = DriverManager.getConnection(url+dbName,userName,password);
 
 			System.out.println("Check");
-			String Query = "SELECT * FROM video WHERE Username = ? AND ID = ?";
+			String Query = "SELECT * FROM video WHERE Username = ? AND URI = ?";
 			PreparedStatement pstmt = conn.prepareStatement(Query);
 			pstmt.setString(1, username);
-			pstmt.setString(2, videoId);
+			pstmt.setString(2, videoURI);
 			ResultSet res = pstmt.executeQuery();
 			if (res.next()){
 				
-				URI = res.getString("URI");
-				Thumbnail = res.getString("Thumbnail");
+				//URI = res.getString("URI");
+				if(clientType.equals("mobile"))
+					Thumbnail = res.getString("Thumbnail_small");
+				else
+					Thumbnail = res.getString("Thumbnail");
 				Name = res.getString("Name");
 				Status = res.getString("Status");
 				Details[0]=Name;
-				Details[1]=URI;
-				Details[2]=Thumbnail;
-				Details[3]=Status;
+				Details[1]=Thumbnail;
+				Details[2]=Status;
 			}
 			else{
 				Details[0]="Not Found";
@@ -524,6 +561,47 @@ public class Java2MySql
         return Details;
 	}
 
+	
+public static String[] getVideoDetails(String videoId) {
+		
+		init();
+		
+		//ArrayList<String> Details = new ArrayList<String>();
+		String Details[]=new String[5];
+        //myList.add("java");
+		String thumbnail, name, uri, status, username;
+        try {
+			Class.forName(driver).newInstance();
+			Connection conn = DriverManager.getConnection(url+dbName,userName,password);
+
+			System.out.println("Check");
+			String Query = "SELECT * FROM video WHERE ID = ?";
+			PreparedStatement pstmt = conn.prepareStatement(Query);
+			pstmt.setString(1, videoId);
+			ResultSet res = pstmt.executeQuery();
+			if (res.next()){
+				
+				uri = res.getString("URI");
+				thumbnail = res.getString("Thumbnail");
+				name = res.getString("Name");
+				status = res.getString("Status");
+				username = res.getString("Username");
+				Details[0]=name;
+				Details[1]=uri;
+				Details[2]=thumbnail;
+				Details[3]=status;
+				Details[4]=username;
+			}
+			else{
+				Details[0]="Not Found";
+			}
+
+			conn.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        return Details;
+	}
 	
 	
 }

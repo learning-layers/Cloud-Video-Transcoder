@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.HeaderParam;
@@ -32,6 +33,7 @@ import com.xuggle.xuggler.IContainer;
 
 import de.dbis.db.Java2MySql;
 import de.dbis.i5cloud.ObjectStore;
+import de.dbis.mpeg7.sevianno;
 //import de.dbis.oidc.Neo4j;
 import de.dbis.rabbitmq.*;
 import de.dbis.util.CORS;
@@ -68,7 +70,7 @@ public class VideoUpload
 	
 	@POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response uploadFile(@HeaderParam("Token") String token,
+	public Response uploadFile(@HeaderParam("authorization_bearer") String token,
 			@FormDataParam("file") InputStream uploadedInputStream,
 			@FormDataParam("file") FormDataContentDisposition fileDetail) {
 			   
@@ -103,9 +105,9 @@ public class VideoUpload
 		writeToFile(uploadedInputStream, uploadedFileLocation);
 			
 		// Generating Thumbnail
-		String ThumbnailFilename = Thumbnail.Generate_Thumbnail(uploadPath, newFile.getName());
+		String thumbnails[] = Thumbnail.Generate_Thumbnail(uploadPath, newFile.getName());
 
-		System.out.println("TURI: "+ThumbnailFilename);
+		System.out.println("TURI: "+thumbnails[0]);
 		//Get the duration of the video
 		long Duration = getDuration(uploadedFileLocation);
 			
@@ -114,7 +116,7 @@ public class VideoUpload
 		
 		String Codec = VideoInfo.videoInfo(uploadedFileLocation);
 		String ID;
-		ID = Java2MySql.VideoUpdate(savePath+newFile.getName(), Codec, ThumbnailFilename, Duration, User);
+		ID = Java2MySql.VideoUpdate(savePath+newFile.getName(), Codec, thumbnails[0], thumbnails[1], Duration, User);
 		/*String location = "Kastanienweg Aachen"; 
 		Double latitude = 50.785097, longitude = 6.053766;
 		
@@ -138,7 +140,16 @@ public class VideoUpload
 		   	Java2MySql.VideoUpdate(ID, newFile.getName(),URI);
 		   	File inputfile = new File(uploadPath+newFile.getName());
 		   	inputfile.setWritable(true);
-    		//boolean b = inputfile.delete();
+		   	System.out.println("FILE: "+uploadPath+newFile.getName());
+    		boolean b = inputfile.delete();
+    		System.out.println("MP4 delete: "+b);
+		   	
+		   	String[] Details = Java2MySql.getVideoDetails(ID);
+            String title = Details[0];
+            String thumbnailUri = Details[2];
+            String uploader = Details[4];
+            
+            sevianno.addMediaDescription(URI, thumbnailUri, title, uploader);
 		}
 		else
 		{
@@ -189,7 +200,8 @@ public class VideoUpload
 		
 		HttpClient client = new HttpClient();
         //HttpMethod method = new GetMethod("http://cloud27.dbis.rwth-aachen.de:9080/ClViTra_2.0/rest/verifyAccessToken");
-		HttpMethod method = new GetMethod("http://10.255.255.22:9080/ClViTra_2.0/rest/verifyAccessToken");
+		HttpMethod method = new GetMethod("http://127.0.0.1:8080/ClViTra_2.0/rest/verifyAccessToken");
+		//HttpMethod method = new GetMethod("http://10.255.255.22:9080/ClViTra_2.0/rest/verifyAccessToken");
         method.addRequestHeader("AccessToken", Token);
         String response=null;
         
