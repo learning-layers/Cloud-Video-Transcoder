@@ -29,6 +29,10 @@ import org.springframework.stereotype.Component;
 
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiResponse;
+import com.wordnik.swagger.annotations.ApiResponses;
 import com.xuggle.xuggler.IContainer;
 
 import de.dbis.db.Java2MySql;
@@ -46,7 +50,7 @@ import de.dbis.videoutils.VideoInfo;
  * Uploads the File to server.
  * Uses 'tempFileLocation.properties' file for configuration.
  */
-
+@Api(value = "/upload", description = "Upload Video")
 @Path("/upload")
 @Component
 public class VideoUpload
@@ -69,11 +73,17 @@ public class VideoUpload
 	 */
 	
 	@POST
+	@ApiOperation(value = "Upload Video", response = VideoUpload.class)
+	@ApiResponses(value = {
+	  @ApiResponse(code = 200, message = "Success"),
+	  @ApiResponse(code = 406, message = "Video already exists"),
+	})
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response uploadFile(@HeaderParam("authorization_bearer") String token,
+	public Response uploadFile(@HeaderParam("Authorization") String token,
 			@FormDataParam("file") InputStream uploadedInputStream,
 			@FormDataParam("file") FormDataContentDisposition fileDetail) {
 			   
+		token = token.replace("Bearer ","");
 		System.out.println("Token: " + token);
 		
 		String User = verifyAccessToken(token);
@@ -200,10 +210,10 @@ public class VideoUpload
 	private String verifyAccessToken(String Token){
 		
 		HttpClient client = new HttpClient();
-        //HttpMethod method = new GetMethod("http://cloud27.dbis.rwth-aachen.de:9080/ClViTra_2.0/rest/verifyAccessToken");
-		HttpMethod method = new GetMethod("http://127.0.0.1:8080/ClViTra_2.0/rest/verifyAccessToken");
-		//HttpMethod method = new GetMethod("http://10.255.255.22:9080/ClViTra_2.0/rest/verifyAccessToken");
-        method.addRequestHeader("authorization_bearer", Token);
+        //HttpMethod method = new GetMethod("http://cloud27.dbis.rwth-aachen.de:9080/clvitra/rest/verifyAccessToken");
+		//HttpMethod method = new GetMethod("http://127.0.0.1:8080/clvitra/rest/verifyAccessToken");
+		HttpMethod method = new GetMethod("http://10.255.255.10:8080/clvitra/rest/oidc/verifyAccessToken");
+        method.addRequestHeader("Authorization", "Bearer "+Token);
         String response=null;
         
         try {

@@ -16,6 +16,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiResponse;
+import com.wordnik.swagger.annotations.ApiResponses;
+
 import de.dbis.db.Java2MySql;
 import de.dbis.util.CORS;
 
@@ -25,6 +30,7 @@ import de.dbis.util.CORS;
  *
  */
 @Path("/videos")
+@Api(value = "/videos", description = "API for Videos")
 @Component
 public class DisplayVideos {
 	
@@ -46,6 +52,10 @@ public class DisplayVideos {
 	 * @throws JSONException
 	 */
 	@GET
+	@ApiOperation(value = "Returns all the videos for a user with given status", response = DisplayVideos.class)
+	@ApiResponses(value = {
+	  @ApiResponse(code = 200, message = "Success"),
+	})
 	@Path("/{id}/{request}")
 	@Produces("application/json")
 	public Response VideosDisplay(@PathParam("id") String username, @PathParam("request") String request) throws JSONException{
@@ -75,6 +85,10 @@ public class DisplayVideos {
 	 }	
 	
 	@GET
+	@ApiOperation(value = "Returns all the videos for a user", response = DisplayVideos.class)
+	@ApiResponses(value = {
+	  @ApiResponse(code = 200, message = "Success"),
+	})
 	@Path("/{id}")
 	@Produces("application/json")
 	public Response VideosDisplay(@PathParam("id") String username) throws JSONException{

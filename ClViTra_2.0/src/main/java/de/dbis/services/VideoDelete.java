@@ -16,9 +16,15 @@ import javax.ws.rs.core.UriInfo;
 
 import org.springframework.stereotype.Component;
 
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiResponse;
+import com.wordnik.swagger.annotations.ApiResponses;
+
 import de.dbis.db.Java2MySql;
 import de.dbis.util.CORS;
 
+@Api(value = "/delete", description = "Delete the video")
 @Path("/delete")
 @Component
 public class VideoDelete {
@@ -32,6 +38,10 @@ public class VideoDelete {
 		return CORS.makeCORS(Response.ok(), requestH);
 	}
 	@DELETE
+	@ApiOperation(value = "Delete the video", response = VideoDelete.class)
+	@ApiResponses(value = {
+	  @ApiResponse(code = 200, message = "Success"),
+	})
 	@Produces("application/json")
 	public Response Delete(@HeaderParam("user") String username, @HeaderParam("videoname") String videoName){
 		

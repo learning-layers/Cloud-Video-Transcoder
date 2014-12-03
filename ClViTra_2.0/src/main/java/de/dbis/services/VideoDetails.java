@@ -19,10 +19,12 @@ import org.springframework.stereotype.Component;
 
 import de.dbis.db.Java2MySql;
 import de.dbis.util.CORS;
+import com.wordnik.swagger.annotations.*;
 
 /**
  * Returns video information and status.
  */
+@Api(value = "/videoDetail", description = "Get the Video details")
 @Path("/videoDetail")// /{user}/{clientType}/{videoURI}")
 @Component
 public class VideoDetails {
@@ -44,6 +46,11 @@ public class VideoDetails {
 	 * @throws JSONException
 	 */
 	@GET
+	@ApiOperation(value = "Provide details by video URL", response = VideoDetails.class)
+	@ApiResponses(value = {
+	  @ApiResponse(code = 200, message = "Success"),
+	  @ApiResponse(code = 404, message = "Video with given URL not found") 
+	})
 	@Produces("application/json")
 	public Response Details(@QueryParam("user") String username, @QueryParam("clientType") String clientType, @QueryParam("videoURI") String videoURI)
 			//@PathParam("user") String username, @PathParam("clientType") String clientType, @PathParam("videoURI") String videoURI) 

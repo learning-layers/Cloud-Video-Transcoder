@@ -9,9 +9,18 @@
 		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
 		<init-param>
 			<param-name>com.sun.jersey.config.property.packages</param-name>
-			<param-value>de.dbis</param-value>
+			<param-value>de.dbis; com.wordnik.swagger.sample.util;com.wordnik.swagger.jersey.listing</param-value>
 			
 		</init-param>
+		
+		<init-param>
+      		<param-name>jersey.config.server.provider.classnames</param-name>
+      		<param-value>
+        		com.wordnik.swagger.jersey.listing.ApiListingResourceJSON,
+        		com.wordnik.swagger.jersey.listing.JerseyApiDeclarationProvider,
+        		com.wordnik.swagger.jersey.listing.JerseyResourceListingProvider
+      		</param-value>
+    	</init-param>
 		<init-param>
         	<param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
         	<param-value>true</param-value>
@@ -22,6 +31,34 @@
 	<!--  <listener>
     	<listener-class>com.ClViTra.rest.Config</listener-class>
 	</listener>-->
+	
+	
+	<servlet>
+  <servlet-name>JerseyJaxrsConfig</servlet-name>
+<!--   <servlet-class>com.wordnik.swagger.jersey.config.JerseyJaxrsConfig</servlet-class> -->
+  <servlet-class> com.wordnik.swagger.jaxrs.config.DefaultJaxrsConfig</servlet-class>
+  <init-param>
+    <param-name>api.version</param-name>
+    <param-value>1.0.0</param-value>
+  </init-param>
+  <init-param>
+    <param-name>swagger.api.basepath</param-name>
+    <param-value>https://cloud16.dbis.rwth-aachen.de/clvitra/rest</param-value>
+  </init-param>
+  <init-param>
+      <param-name>swagger.filter</param-name>
+      <param-value>de.dbis.util.InternalSwaggerFilter</param-value>
+    </init-param>
+  <load-on-startup>1</load-on-startup>
+</servlet>
+	<filter>
+  <filter-name>CorsFilter</filter-name>
+  <filter-class>de.dbis.util.CORSFilter</filter-class>
+</filter>
+<filter-mapping>
+  <filter-name>CorsFilter</filter-name>
+  <url-pattern>/rest/*</url-pattern>
+</filter-mapping>
 	
 	<servlet-mapping>
 		<servlet-name>jersey-serlvet</servlet-name>

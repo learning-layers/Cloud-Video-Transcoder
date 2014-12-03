@@ -1,12 +1,12 @@
 <html>
 <head>
   
-	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-	<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
-    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/black-tie/jquery-ui.css" />
+	<script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+	<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	<script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/black-tie/jquery-ui.css" />
     <script type="text/javascript" src="js/ajax.js"></script>
   
   <!-- 
@@ -40,7 +40,8 @@
 	        if (httpRequest) {          
 	                // The requested file must be in the same domain that the page is served from.
 	            //var url = "http://api.learning-layers.eu:8280/delete";
-				var url = "/ClViTra_2.0/rest/delete";	                
+	            var url = "https://cloud16.dbis.rwth-aachen.de/clvitra/delete";
+				//var url = "/clvitra/rest/delete";	                
 	            httpRequest.open ("GET", url, true);    // async
 	            httpRequest.setRequestHeader("User", localStorage.clvitraUser);
 				httpRequest.setRequestHeader("videoName", videoName);
@@ -74,11 +75,12 @@
     
     function verifyAccessToken(){
     	$.ajax({
-	        url: "/ClViTra_2.0/rest/verifyAccessToken",
+	        //url: "/clvitra/rest/oidc/verifyAccessToken",
+	        url: "https://cloud16.dbis.rwth-aachen.de/clvitra/rest/oidc/verifyAccessToken",
 	        type: "GET",
 	        dataType:'text',
 	        beforeSend: function(xhr) {
-	            xhr.setRequestHeader("authorization_bearer", localStorage.clvitraAccessToken);
+	            xhr.setRequestHeader("Authorization", "Bearer "+localStorage.clvitraAccessToken);
 	        },
 	        success: function(value) {
 	        	username = value;
@@ -91,7 +93,7 @@
 	    	statusCode: {
 	            // if user does not exist, return authentication failed.
 	            //401: function(){
-            		//window.location = "/ClViTra_2.0/redirect.html";
+            		//window.location = "/clvitra/redirect.html";
 	            //}
 	    	},
 	    	error: function(e){console.log(e);}
@@ -102,11 +104,11 @@
     if(localStorage.clvitraAccessToken!=null) {
     	console.log("1");
 		$.ajax({
-	        url: "/ClViTra_2.0/rest/verifyAccessToken",
+	        url: "https://cloud16.dbis.rwth-aachen.de/clvitra/rest/oidc/verifyAccessToken",
 	        type: "GET",
 	        dataType:'text',
 	        beforeSend: function(xhr) {
-	            xhr.setRequestHeader("authorization_bearer", localStorage.clvitraAccessToken);
+	            xhr.setRequestHeader("Authorization", "Bearer "+localStorage.clvitraAccessToken);
 	        },
 	        success: function(value) {
 	        	console.log("1.1");
@@ -120,12 +122,12 @@
 	    	statusCode: {
 	            // if user does not exist, return authentication failed.
 	            //401: function(){
-            		//window.location = "/ClViTra_2.0/redirect.html";
+            		//window.location = "/clvitra/redirect.html";
 	            //},
 	            404: function() {
 	            	console.log("1.2");
 	            	$.ajax({
-	        	        url: "/ClViTra_2.0/rest/getAccessToken",
+	        	        url: "https://cloud16.dbis.rwth-aachen.de/clvitra/rest/oidc/getAccessToken",
 	        	        type: "GET",
 	        	        dataType:'text',
 	        	        beforeSend: function(xhr) {
@@ -139,7 +141,7 @@
 	        	    	statusCode: {
 	        	            404: function() {
 	        	            	console.log("1.4");
-	        	            	window.location = "/ClViTra_2.0/";
+	        	            	window.location = "https://cloud16.dbis.rwth-aachen.de/clvitra/";
 	        	            }
 	        	    	},
 	        	    	error: function(e){console.log(e);}
@@ -153,7 +155,7 @@
     else if(localStorage.clvitraAccessToken==null) {
     	console.log("2");
 		$.ajax({
-	        url: "/ClViTra_2.0/rest/getAccessToken",
+	        url: "https://cloud16.dbis.rwth-aachen.de/clvitra/rest/oidc/getAccessToken",
 	        type: "GET",
 	        dataType:'text',
 	        beforeSend: function(xhr) {
@@ -167,7 +169,7 @@
 	    	statusCode: {
 	            404: function() {
 	            	console.log("2.2");
-	            	window.location="/ClViTra_2.0/";
+	            	window.location="https://cloud16.dbis.rwth-aachen.de/clvitra/";
 	            }
 	    	},
 	    	error: function(e){console.log(e);}
@@ -229,7 +231,7 @@
 		event.preventDefault();
 		var form_data = new FormData($("#upload_form")[0]);
   		$.ajax({
-	        url: "/ClViTra_2.0/rest/upload",
+	        url: "https://cloud16.dbis.rwth-aachen.de/clvitra/rest/upload",
 	        //url: "http://api.learning-layers.eu:8280/services/upload",
 	        type: "POST",
 	        data: form_data,
@@ -237,7 +239,7 @@
 	        contentType:false,
 	        beforeSend: function(xhr) {
 	            //xhr.setRequestHeader("User", localStorage.clvitraUser); 
-	            xhr.setRequestHeader("authorization_bearer", localStorage.clvitraAccessToken);
+	            xhr.setRequestHeader("Authorization", "Bearer "+localStorage.clvitraAccessToken);
 	        },
 	        success: function(value) {
 	        	
@@ -270,7 +272,7 @@
 	
 	function getVideos(request, handler){
 		$.ajax({
-	        url: "/ClViTra_2.0/rest/videos/"+localStorage.clvitraUser+"/"+request,
+	        url: "https://cloud16.dbis.rwth-aachen.de/clvitra/rest/videos/"+localStorage.clvitraUser+"/"+request,
 	        //url: "http://api.learning-layers.eu:8280/clvitra/"+localStorage.clvitraUser+"/"+request,
 	        type: "GET",
 	        dataType:'json',
@@ -304,7 +306,7 @@
 			console.log(videoName);
 			
 			$.ajax({
-		        url: "/ClViTra_2.0/rest/delete",
+		        url: "https://cloud16.dbis.rwth-aachen.de/clvitra/rest/delete",
 		        //url: "http://api.learning-layers.eu:8280/clvitra/delete",
 		        type: "DELETE",
 		        //dataType:'json',
@@ -353,7 +355,7 @@
 	
 	$("#Logoutbtn").click(function( event ) {
 		localStorage.removeItem("clvitraAccessToken");
-	    window.location="/ClViTra_2.0/";
+	    window.location="https://cloud16.dbis.rwth-aachen.de/clvitra/";
 	});
 	
 	});
@@ -396,7 +398,7 @@
       
     </nav>
 	
-	<form role="form" id="upload_form" action="/ClViTra_2.0/rest/upload" method="post" enctype="multipart/form-data">
+	<form role="form" id="upload_form" action="https://cloud16.dbis.rwth-aachen.de/clvitra/rest/upload" method="post" enctype="multipart/form-data">
  
 	   <div class="form-group">
 	  	 <label for="UploadFile">

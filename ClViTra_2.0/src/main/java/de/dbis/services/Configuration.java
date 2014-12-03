@@ -7,6 +7,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.sun.jersey.multipart.FormDataParam;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiResponse;
+import com.wordnik.swagger.annotations.ApiResponses;
 
 import de.dbis.slave.RabbitMQReceive;
 
@@ -15,7 +19,7 @@ import de.dbis.slave.RabbitMQReceive;
  * Configures the machine to work as a Master or Slave.
  *
  */
-
+@Api(value = "/config", description = "Set the system as Master or Slave")
 @Path("/config")
 public class Configuration {
 	
@@ -25,6 +29,10 @@ public class Configuration {
 	 * @return javax.ws.rs.core.Response
 	 */
 	@POST
+	@ApiOperation(value = "Set the system as Master or Slave", response = Configuration.class)
+	@ApiResponses(value = {
+	  @ApiResponse(code = 200, message = "Success"),
+	})
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public Response MasterSlaveConfig(@FormDataParam("func") String func)
 	{
