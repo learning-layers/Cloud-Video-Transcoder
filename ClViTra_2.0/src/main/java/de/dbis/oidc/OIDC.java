@@ -37,7 +37,6 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
 
-import de.dbis.services.VideoDetails;
 import de.dbis.util.CORS;
 import de.dbis.util.GetProperty;
 
@@ -113,124 +112,131 @@ public class OIDC extends HttpServlet {
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response getAccessToken(@HeaderParam("Code") String Header) throws JSONException{
 		
-		String INPUT_FILE = "oidc";
-
-		String token, redirect, cID, cSecret;
-		token = GetProperty.getParam("token", INPUT_FILE);
-		redirect = GetProperty.getParam("redirect", INPUT_FILE);
-		cID = GetProperty.getParam("clientid", INPUT_FILE);
-		cSecret = GetProperty.getParam("clientsecret", INPUT_FILE);
-		System.out.println("In OIDCTokens");
-		
-		AuthorizationCode code = null;
-		if(Header != null)
-			code = new AuthorizationCode(Header);
-		
-		//System.out.println(code);
-		// *** *** *** Make a token endpoint request *** *** *** //
-
-		// Compose an access token request, authenticating the client
-		// app and exchanging the authorisation code for an ID token
-		// and access token
-		
-		URI tokenEndpointURL = null;
-		try {
-			tokenEndpointURL = new URI(token);
-		} catch (URISyntaxException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
-
-		System.out.println("Sending access token request to " + tokenEndpointURL + "\n\n");
-
-		// We authenticate with "client secret basic"
-		ClientID clientID = new ClientID(cID);
-		Secret clientSecret = new Secret(cSecret);
-		ClientAuthentication clientAuth = new ClientSecretBasic(clientID, clientSecret);
-		TokenRequest accessTokenRequest=null;
-		try {
-			accessTokenRequest = new TokenRequest(
-				tokenEndpointURL,
-				clientAuth,
-				new AuthorizationCodeGrant(code, new URI(redirect), clientID));
-		} catch (URISyntaxException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
-		
-		HTTPRequest httpRequest;
-
-		try {
-			httpRequest = accessTokenRequest.toHTTPRequest();
-			String modifiedQuery = httpRequest.getQuery().split("&client_id")[0];
-			httpRequest.setQuery(modifiedQuery);
-
-
-		} catch (SerializeException e) {
-
-			System.out.println("Couldn't create access token request: " + e.getMessage());
-			Response.ResponseBuilder r = Response.status(404);
-			return CORS.makeCORS(r, _corsHeaders);
-		}
-
-		HTTPResponse httpResponse;
-
-		try {
-			httpResponse = httpRequest.send();
+		if(Header!=null){
+			String INPUT_FILE = "oidc";
+	
+			String token, redirect, cID, cSecret;
+			token = GetProperty.getParam("token", INPUT_FILE);
+			redirect = GetProperty.getParam("redirect", INPUT_FILE);
+			cID = GetProperty.getParam("clientid", INPUT_FILE);
+			cSecret = GetProperty.getParam("clientsecret", INPUT_FILE);
+			System.out.println("In OIDCTokens");
 			
-			System.out.println("http response: "+httpResponse.toString());
-
-		} catch (IOException e) {
-
-			// The URL request failed
-			Response.ResponseBuilder r = Response.status(404);
-			return CORS.makeCORS(r, _corsHeaders);
-		}
-
-		TokenResponse tokenResponse;
-
-		try {
-			tokenResponse = OIDCTokenResponseParser.parse(httpResponse);
-
-		} catch (Exception e) {
-			System.out.println("Couldn't parse token response: " + e.getMessage());
-			Response.ResponseBuilder r = Response.status(404);
-			return CORS.makeCORS(r, _corsHeaders);
-		}
-		
-		System.out.println("token response: "+tokenResponse.toString());
-		
-		if (tokenResponse instanceof TokenErrorResponse) {
-
-			// The token response indicates an error, print it out
-			// and return immediately
-			TokenErrorResponse tokenError = (TokenErrorResponse)tokenResponse;
-			System.out.println("Token error: " + tokenError.getErrorObject());
-			Response.ResponseBuilder r = Response.status(404);
-			return CORS.makeCORS(r, _corsHeaders);
-		}
-
-
-		OIDCAccessTokenResponse tokenSuccess = (OIDCAccessTokenResponse)tokenResponse;
-
-		//Scope = 34;
-		//OIDCScopeValue sv = (OIDCScopeValue)tokenResponse;
-		
-		BearerAccessToken accessToken = (BearerAccessToken)tokenSuccess.getAccessToken();
-		RefreshToken refreshToken = tokenSuccess.getRefreshToken();
-		SignedJWT idToken = (SignedJWT)tokenSuccess.getIDToken();
-
-		System.out.println("tokensuccess: "+tokenSuccess.toString());
-		
-		System.out.println("Token response:");
-		System.out.println(accessToken.toString());
-
-		//System.out.println("\tAccess token: " + accessToken.toJSONObject().toString());
-		//System.out.println("\tRefresh token: " + refreshToken);
-		//System.out.println("\n\n");
-		
-		Response.ResponseBuilder r = Response.ok(accessToken.toString());
-		return CORS.makeCORS(r, _corsHeaders);		
+			AuthorizationCode code = null;
+			if(Header != null)
+				code = new AuthorizationCode(Header);
+			
+			//System.out.println(code);
+			// *** *** *** Make a token endpoint request *** *** *** //
+	
+			// Compose an access token request, authenticating the client
+			// app and exchanging the authorisation code for an ID token
+			// and access token
+			
+			URI tokenEndpointURL = null;
+			try {
+				tokenEndpointURL = new URI(token);
+			} catch (URISyntaxException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+	
+			System.out.println("Sending access token request to " + tokenEndpointURL + "\n\n");
+	
+			// We authenticate with "client secret basic"
+			ClientID clientID = new ClientID(cID);
+			Secret clientSecret = new Secret(cSecret);
+			ClientAuthentication clientAuth = new ClientSecretBasic(clientID, clientSecret);
+			TokenRequest accessTokenRequest=null;
+			try {
+				accessTokenRequest = new TokenRequest(
+					tokenEndpointURL,
+					clientAuth,
+					new AuthorizationCodeGrant(code, new URI(redirect), clientID));
+			} catch (URISyntaxException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			
+			HTTPRequest httpRequest;
+	
+			try {
+				httpRequest = accessTokenRequest.toHTTPRequest();
+				String modifiedQuery = httpRequest.getQuery().split("&client_id")[0];
+				httpRequest.setQuery(modifiedQuery);
+	
+	
+			} catch (SerializeException e) {
+	
+				System.out.println("Couldn't create access token request: " + e.getMessage());
+				Response.ResponseBuilder r = Response.status(404);
+				return CORS.makeCORS(r, _corsHeaders);
+			}
+	
+			HTTPResponse httpResponse;
+	
+			try {
+				httpResponse = httpRequest.send();
+				
+				System.out.println("http response: "+httpResponse.toString());
+	
+			} catch (IOException e) {
+	
+				// The URL request failed
+				Response.ResponseBuilder r = Response.status(404);
+				return CORS.makeCORS(r, _corsHeaders);
+			}
+	
+			TokenResponse tokenResponse;
+	
+			try {
+				tokenResponse = OIDCTokenResponseParser.parse(httpResponse);
+	
+			} catch (Exception e) {
+				System.out.println("Couldn't parse token response: " + e.getMessage());
+				Response.ResponseBuilder r = Response.status(404);
+				return CORS.makeCORS(r, _corsHeaders);
+			}
+			
+			System.out.println("token response: "+tokenResponse.toString());
+			
+			if (tokenResponse instanceof TokenErrorResponse) {
+	
+				// The token response indicates an error, print it out
+				// and return immediately
+				TokenErrorResponse tokenError = (TokenErrorResponse)tokenResponse;
+				System.out.println("Token error: " + tokenError.getErrorObject());
+				Response.ResponseBuilder r = Response.status(404);
+				return CORS.makeCORS(r, _corsHeaders);
+			}
+	
+	
+			OIDCAccessTokenResponse tokenSuccess = (OIDCAccessTokenResponse)tokenResponse;
+	
+			//Scope = 34;
+			//OIDCScopeValue sv = (OIDCScopeValue)tokenResponse;
+			
+			BearerAccessToken accessToken = (BearerAccessToken)tokenSuccess.getAccessToken();
+			RefreshToken refreshToken = tokenSuccess.getRefreshToken();
+			SignedJWT idToken = (SignedJWT)tokenSuccess.getIDToken();
+	
+			System.out.println("tokensuccess: "+tokenSuccess.toString());
+			
+			System.out.println("Token response:");
+			System.out.println(accessToken.toString());
+	
+			//System.out.println("\tAccess token: " + accessToken.toJSONObject().toString());
+			//System.out.println("\tRefresh token: " + refreshToken);
+			//System.out.println("\n\n");
+			
+			Response.ResponseBuilder r = Response.ok(accessToken.toString());
+			return CORS.makeCORS(r, _corsHeaders);	
+		} 
+		else{
+		   	Response.ResponseBuilder r = Response.status(401);
+	   		return CORS.makeCORS(r, _corsHeaders);
+	   }
+			
 	}
 	
 	/**
@@ -249,96 +255,101 @@ public class OIDC extends HttpServlet {
 	@Path("/verifyAccessToken")
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response verifyAccessToken(@HeaderParam("Authorization") String Header) throws JSONException{
-		
-		String INPUT_FILE = "oidc";
 
-		Header = Header.replace("Bearer ","");
-		String userinfo;
-		userinfo = GetProperty.getParam("userinfo", INPUT_FILE);
-		
-		BearerAccessToken accessToken = null;
-		
-		if(Header != null)
+		if(Header!=null){
+			String INPUT_FILE = "oidc";
+	
+			Header = Header.replace("Bearer ","");
+			String userinfo;
+			userinfo = GetProperty.getParam("userinfo", INPUT_FILE);
+			
+			BearerAccessToken accessToken = null;
+			
 			accessToken = new BearerAccessToken(Header);
-		
-		
-		System.out.println("Verify, accessToken:  "+accessToken);
-		// *** *** *** Make a UserInfo endpoint request *** *** *** //
-
-		// Note: The PayPal IdP uses an older OIDC draft version and
-		// is at present not compatible with the Nimbus OIDC SDK so
-		// we cannot use its helper call. We can however make a direct
-		// call and simply display the raw data.
-
-		URI userinfoEndpointURL = null;
-		try {
-			userinfoEndpointURL = new URI(userinfo);
-		} catch (URISyntaxException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		// Append the access token to form actual request
-		UserInfoRequest userInfoRequest = new UserInfoRequest(userinfoEndpointURL, accessToken);
-		
-		HTTPResponse httpResponse;
-		
-		try {
-			httpResponse = userInfoRequest.toHTTPRequest().send();
-
-		} catch (Exception e) {
-
-			// The URL request failed
-			System.out.println("Couldn't send HTTP request to UserInfo endpoint: " + e.getMessage());
-			Response.ResponseBuilder r = Response.status(404);
-			return CORS.makeCORS(r, _corsHeaders);
-		}
-		
-		UserInfoResponse userInfoResponse;
-		
-		try {
-			userInfoResponse = UserInfoResponse.parse(httpResponse);
 			
-		} catch (ParseException e) {
 			
-			System.out.println("Couldn't parse UserInfo response: " + e.getMessage());
-			Response.ResponseBuilder r = Response.status(404);
-			return CORS.makeCORS(r, _corsHeaders);
-		}
-		
-		
-		if (userInfoResponse instanceof UserInfoErrorResponse) {
+			System.out.println("Verify, accessToken:  "+accessToken);
+			// *** *** *** Make a UserInfo endpoint request *** *** *** //
+	
+			// Note: The PayPal IdP uses an older OIDC draft version and
+			// is at present not compatible with the Nimbus OIDC SDK so
+			// we cannot use its helper call. We can however make a direct
+			// call and simply display the raw data.
+	
+			URI userinfoEndpointURL = null;
+			try {
+				userinfoEndpointURL = new URI(userinfo);
+			} catch (URISyntaxException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+	
+			// Append the access token to form actual request
+			UserInfoRequest userInfoRequest = new UserInfoRequest(userinfoEndpointURL, accessToken);
 			
-			System.out.println("UserInfo request failed");
-			Response.ResponseBuilder r = Response.status(404);
-			return CORS.makeCORS(r, _corsHeaders);
-		}
-		
-		
-		UserInfo userInfo = ((UserInfoSuccessResponse)userInfoResponse).getUserInfo();
-		
-
-		//System.out.println("UserInfo: " + userInfo.getProfile().);
-		
-		String username = null;
-		try {
-			JSONObject jsonObject = new JSONObject(userInfo.toJSONObject());
-			System.out.println("UserInfo: " +jsonObject.toString());
-			username = jsonObject.getString("preferred_username");
-			/*if(!Java2MySql.approvedUser(username)){
-				Response.ResponseBuilder r = Response.status(401);
+			HTTPResponse httpResponse;
+			
+			try {
+				httpResponse = userInfoRequest.toHTTPRequest().send();
+	
+			} catch (Exception e) {
+	
+				// The URL request failed
+				System.out.println("Couldn't send HTTP request to UserInfo endpoint: " + e.getMessage());
+				Response.ResponseBuilder r = Response.status(404);
 				return CORS.makeCORS(r, _corsHeaders);
-			}*/
-			//System.out.println(new PrettyJson().parseAndFormat(userInfo.toJSONObject().toString()));
-
-		} catch (Exception e) {
-
-			System.out.println("Couldn't parse UserInfo JSON object: " + e.getMessage());
+			}
+			
+			UserInfoResponse userInfoResponse;
+			
+			try {
+				userInfoResponse = UserInfoResponse.parse(httpResponse);
+				
+			} catch (ParseException e) {
+				
+				System.out.println("Couldn't parse UserInfo response: " + e.getMessage());
+				Response.ResponseBuilder r = Response.status(404);
+				return CORS.makeCORS(r, _corsHeaders);
+			}
+			
+			
+			if (userInfoResponse instanceof UserInfoErrorResponse) {
+				
+				System.out.println("UserInfo request failed");
+				Response.ResponseBuilder r = Response.status(404);
+				return CORS.makeCORS(r, _corsHeaders);
+			}
+			
+			
+			UserInfo userInfo = ((UserInfoSuccessResponse)userInfoResponse).getUserInfo();
+			
+	
+			//System.out.println("UserInfo: " + userInfo.getProfile().);
+			
+			String username = null;
+			try {
+				JSONObject jsonObject = new JSONObject(userInfo.toJSONObject());
+				System.out.println("UserInfo: " +jsonObject.toString());
+				username = jsonObject.getString("preferred_username");
+				/*if(!Java2MySql.approvedUser(username)){
+					Response.ResponseBuilder r = Response.status(401);
+					return CORS.makeCORS(r, _corsHeaders);
+				}*/
+				//System.out.println(new PrettyJson().parseAndFormat(userInfo.toJSONObject().toString()));
+	
+			} catch (Exception e) {
+	
+				System.out.println("Couldn't parse UserInfo JSON object: " + e.getMessage());
+			}
+			
+			
+			Response.ResponseBuilder r = Response.ok(username);
+			return CORS.makeCORS(r, _corsHeaders);
 		}
-		
-		
-		Response.ResponseBuilder r = Response.ok(username);
-		return CORS.makeCORS(r, _corsHeaders);
+		else{
+		   	Response.ResponseBuilder r = Response.status(401);
+	   		return CORS.makeCORS(r, _corsHeaders);
+	   }
 	}
 	
 	private URL composeAuthzRequestURL()

@@ -162,7 +162,7 @@ public class Java2MySql
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//return ID;
+		//return res;
 	}
 	
 	public static Boolean Exists(String username, String videoName) {

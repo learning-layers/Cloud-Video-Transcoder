@@ -43,7 +43,7 @@
   </init-param>
   <init-param>
     <param-name>swagger.api.basepath</param-name>
-    <param-value>https://cloud16.dbis.rwth-aachen.de/clvitra/rest</param-value>
+    <param-value>https://api.learning-layers.eu/clvitra/rest</param-value>
   </init-param>
   <init-param>
       <param-name>swagger.filter</param-name>
