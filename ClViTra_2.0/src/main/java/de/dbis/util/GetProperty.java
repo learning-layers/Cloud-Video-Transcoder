@@ -34,21 +34,7 @@ public class GetProperty {
        * @return the param
        */
       public static String getParam(String key,String fileName) {
-    	  /*FileInputStream prop;
-    	  ResourceBundle resourceBundle = null;
-    	  //File try12 = new File("hello.txt");
-    	  try {
-    		  prop = new FileInputStream ("resources/"+fileName+".properties");
-    		  resourceBundle = new PropertyResourceBundle(prop);
-    	  } catch (FileNotFoundException e) {
-    		  // TODO Auto-generated catch block
-    		  e.printStackTrace();
-    	  }
-    	  catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-    	  }*/
-    	  
+    	      	  
           ResourceBundle resourceBundle = ResourceBundle .getBundle(fileName);
           String paramVal = resourceBundle.getString(key);
           
@@ -58,6 +44,5 @@ public class GetProperty {
           }
           return paramVal;
       }
-      
 
 }

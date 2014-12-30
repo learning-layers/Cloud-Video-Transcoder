@@ -50,73 +50,6 @@ public class Java2MySql
 
 	}
 
-	/**
-	 * DEPRICATED after Open ID Connect integration.
-	 * Responsible for doing the login verification. 
-	 * @param u_username
-	 * @param u_password
-	 * @return int code
-	 */
-	public static int LoginVerification(String u_username, String u_password) {
-		
-		init();
-        boolean authentication = false;
-        boolean user_available = false;
-        int Return_code;
-          
-        try {
-        	Class.forName(driver).newInstance();
-        	Connection conn = DriverManager.getConnection(url+dbName,userName,password);
-           
-        	Statement st = conn.createStatement();
-        	ResultSet res = st.executeQuery("SELECT * FROM  user");
-        	while (res.next() && user_available==false) {
-        		
-        		// Checking for user availability in the database.
-        		if(res.getString("username").compareTo(u_username)==0) {
-        			
-        			// Marking user as available.
-        			user_available = true;
-        			
-        			// Converting the entered password into MD5 hash to become eligible to be compared with stored password. 
-        			java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
-        			byte[] array = md.digest(u_password.getBytes());
-        			StringBuffer converted_pwd = new StringBuffer();
-                  
-        			for (int i = 0; i < array.length; ++i) {
-        				converted_pwd.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1,3));
-        			}
-        			  
-        			// Comparing the entered password with the stored password.
-        			if(res.getString("password").compareTo(converted_pwd.toString())==0) {
-        				
-        				//Marking password to be correct
-        				authentication = true;		  
-        			}
-        		}
-        	}
-        	conn.close();
-        } catch (Exception e) {
-        	  e.printStackTrace();
-        }
-          
-    	//Login Successful!         
-        if (user_available && authentication) {
-        	Return_code = 0;
-        }
-          
-    	//Wrong Password!
-        else if (user_available && !authentication) {
-        	Return_code = 1;
-        }
-          
-        //User not registered!
-        else {
-        	Return_code = 2;
-        }
-        return Return_code;
-    }
-	
 	public static Boolean approvedUser(String username){
 		
 		init();
@@ -156,13 +89,11 @@ public class Java2MySql
 			Boolean res = pstmt.execute();
   	  
 			System.out.println("DELETE VIDEO: "+res);
-			//if(res.getString("Status").compareTo("INITIALIZED")==0)
 
 			conn.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//return res;
 	}
 	
 	public static Boolean Exists(String username, String videoName) {
@@ -241,57 +172,7 @@ public class Java2MySql
 		return ID.toString();
 	}
 	
-	/**
-	 * Updates or enter the database with the video details.
-	 * @param filename
-	 * @param ext
-	 * @param ThumbnailFilename
-	 * @param Duration
-	 * @param UserId
-	 * @return String Video ID
-	 */
-	/*public static String VideoUpdate(String filename, String ext, String ThumbnailFilename, long Duration, String Username, double latitude, double longitude) {
-        
-		init();
-		PreparedStatement pstmt = null;
-        int rowCount = 0;
-        UUID ID = null;
-        
-        try {
-        	Class.forName(driver).newInstance();
-      	  	Connection conn = DriverManager.getConnection(url+dbName,userName,password);
-      	  	ID = UUID.randomUUID();
-
-      	  	String insertQuery = "INSERT INTO video (ID, Name, Format, Status, Duration, Thumbnail, Username, Latitude, Longitude) VALUES (?,?,?,?,?,?,?,?,?)";
-      	  	
-      	  	pstmt = conn.prepareStatement(insertQuery);
-      	  	pstmt.setString(1, ID.toString());
-      	  	pstmt.setString(2, filename);
-      	  	pstmt.setString(3, ext);
-      	  	if(ext.equals("h264")){
-      	  		System.out.println("ext == MP4:  "+ext);
-      	  		pstmt.setString(4, "TRANSCODED");
-      	  	}
-      	  	else{
-      	  		System.out.println("ext != MP4/mp4:   "+ext);
-      	  		pstmt.setString(4, "INITIALIZED");
-      	  	}
-
-      	  	pstmt.setLong(5, Duration);
-      	  	pstmt.setString(6, ThumbnailFilename);
-      	  	pstmt.setString(7, Username);
-      	  	pstmt.setDouble(8, latitude);
-      	  	pstmt.setDouble(9, longitude);
-      	  	System.out.println(ThumbnailFilename);
-      	  	rowCount = pstmt.executeUpdate();
-      	  	
-      	  	conn.close();
-        } catch (Exception e) {
-        	e.printStackTrace();
-        }
-		return ID.toString();
-	} */
-
+	
 	
 	/**
 	 * Updates the database with the video details.
@@ -348,7 +229,6 @@ public class Java2MySql
 			pstmt.setString(1, "INITIALIZED");
 			ResultSet res = pstmt.executeQuery();
   	  
-			//if(res.getString("Status").compareTo("INITIALIZED")==0)
 			if (res.next())	
 				ID = res.getString("ID");
 
@@ -522,10 +402,8 @@ public static List<String> getVideos(String Username) {
 	public static String[] getVideoDetails(String username, String videoURI, String clientType) {
 		
 		init();
-		
-		//ArrayList<String> Details = new ArrayList<String>();
+
 		String Details[]=new String[3];
-        //myList.add("java");
 		String Thumbnail, Name, Status;
         try {
 			Class.forName(driver).newInstance();
@@ -539,7 +417,6 @@ public static List<String> getVideos(String Username) {
 			ResultSet res = pstmt.executeQuery();
 			if (res.next()){
 				
-				//URI = res.getString("URI");
 				if(clientType.equals("mobile"))
 					Thumbnail = res.getString("Thumbnail_small");
 				else
@@ -565,10 +442,8 @@ public static List<String> getVideos(String Username) {
 public static String[] getVideoDetails(String videoId) {
 		
 		init();
-		
-		//ArrayList<String> Details = new ArrayList<String>();
+
 		String Details[]=new String[5];
-        //myList.add("java");
 		String thumbnail, name, uri, status, username;
         try {
 			Class.forName(driver).newInstance();

@@ -74,12 +74,7 @@ public class OIDC extends HttpServlet {
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response doGet() {
 
-		//System.out.println("neo starting!");
-		//Neo4j.init();
-		//System.out.println("neo ended!");
-		//Neo4j.addPoint("Kastanienweg Aachen");
 		URL authzURL;
-
 		try {
 			authzURL = composeAuthzRequestURL();
 
@@ -106,7 +101,8 @@ public class OIDC extends HttpServlet {
 	@ApiOperation(value = "Returns the access token for OIDC auth", response = OIDC.class)
 	@ApiResponses(value = {
 	  @ApiResponse(code = 200, message = "Success"),
-	  @ApiResponse(code = 404, message = "Couldn't retreive the access token")
+	  @ApiResponse(code = 404, message = "Couldn't retreive the access token."),
+	  @ApiResponse(code = 401, message = "Auth Code missing in the request header.")
 	})
 	@Path("/getAccessToken")
 	@Produces(MediaType.TEXT_PLAIN)
@@ -169,7 +165,7 @@ public class OIDC extends HttpServlet {
 			} catch (SerializeException e) {
 	
 				System.out.println("Couldn't create access token request: " + e.getMessage());
-				Response.ResponseBuilder r = Response.status(404);
+				Response.ResponseBuilder r = Response.status(HttpServletResponse.SC_NOT_FOUND);
 				return CORS.makeCORS(r, _corsHeaders);
 			}
 	
@@ -183,7 +179,7 @@ public class OIDC extends HttpServlet {
 			} catch (IOException e) {
 	
 				// The URL request failed
-				Response.ResponseBuilder r = Response.status(404);
+				Response.ResponseBuilder r = Response.status(HttpServletResponse.SC_NOT_FOUND);
 				return CORS.makeCORS(r, _corsHeaders);
 			}
 	
@@ -194,7 +190,7 @@ public class OIDC extends HttpServlet {
 	
 			} catch (Exception e) {
 				System.out.println("Couldn't parse token response: " + e.getMessage());
-				Response.ResponseBuilder r = Response.status(404);
+				Response.ResponseBuilder r = Response.status(HttpServletResponse.SC_NOT_FOUND);
 				return CORS.makeCORS(r, _corsHeaders);
 			}
 			
@@ -206,16 +202,13 @@ public class OIDC extends HttpServlet {
 				// and return immediately
 				TokenErrorResponse tokenError = (TokenErrorResponse)tokenResponse;
 				System.out.println("Token error: " + tokenError.getErrorObject());
-				Response.ResponseBuilder r = Response.status(404);
+				Response.ResponseBuilder r = Response.status(HttpServletResponse.SC_NOT_FOUND);
 				return CORS.makeCORS(r, _corsHeaders);
 			}
 	
 	
 			OIDCAccessTokenResponse tokenSuccess = (OIDCAccessTokenResponse)tokenResponse;
 	
-			//Scope = 34;
-			//OIDCScopeValue sv = (OIDCScopeValue)tokenResponse;
-			
 			BearerAccessToken accessToken = (BearerAccessToken)tokenSuccess.getAccessToken();
 			RefreshToken refreshToken = tokenSuccess.getRefreshToken();
 			SignedJWT idToken = (SignedJWT)tokenSuccess.getIDToken();
@@ -233,7 +226,7 @@ public class OIDC extends HttpServlet {
 			return CORS.makeCORS(r, _corsHeaders);	
 		} 
 		else{
-		   	Response.ResponseBuilder r = Response.status(401);
+		   	Response.ResponseBuilder r = Response.status(HttpServletResponse.SC_UNAUTHORIZED);
 	   		return CORS.makeCORS(r, _corsHeaders);
 	   }
 			
@@ -249,8 +242,10 @@ public class OIDC extends HttpServlet {
 	@GET
 	@ApiOperation(value = "Verifies the access token for OIDC auth", response = OIDC.class)
 	@ApiResponses(value = {
-	  @ApiResponse(code = 200, message = "Success"),
-	  @ApiResponse(code = 404, message = "Couldn't verify the access token")
+	  @ApiResponse(code = 200, message = "Success."),
+	  @ApiResponse(code = 404, message = "Couldn't verify the access token."),
+	  @ApiResponse(code = 401, message = "Authorization bearer missing from the request header.")
+	  
 	})
 	@Path("/verifyAccessToken")
 	@Produces(MediaType.TEXT_PLAIN)
@@ -296,7 +291,7 @@ public class OIDC extends HttpServlet {
 	
 				// The URL request failed
 				System.out.println("Couldn't send HTTP request to UserInfo endpoint: " + e.getMessage());
-				Response.ResponseBuilder r = Response.status(404);
+				Response.ResponseBuilder r = Response.status(HttpServletResponse.SC_NOT_FOUND);
 				return CORS.makeCORS(r, _corsHeaders);
 			}
 			
@@ -308,7 +303,7 @@ public class OIDC extends HttpServlet {
 			} catch (ParseException e) {
 				
 				System.out.println("Couldn't parse UserInfo response: " + e.getMessage());
-				Response.ResponseBuilder r = Response.status(404);
+				Response.ResponseBuilder r = Response.status(HttpServletResponse.SC_NOT_FOUND);
 				return CORS.makeCORS(r, _corsHeaders);
 			}
 			
@@ -316,7 +311,7 @@ public class OIDC extends HttpServlet {
 			if (userInfoResponse instanceof UserInfoErrorResponse) {
 				
 				System.out.println("UserInfo request failed");
-				Response.ResponseBuilder r = Response.status(404);
+				Response.ResponseBuilder r = Response.status(HttpServletResponse.SC_NOT_FOUND);
 				return CORS.makeCORS(r, _corsHeaders);
 			}
 			
@@ -347,7 +342,7 @@ public class OIDC extends HttpServlet {
 			return CORS.makeCORS(r, _corsHeaders);
 		}
 		else{
-		   	Response.ResponseBuilder r = Response.status(401);
+		   	Response.ResponseBuilder r = Response.status(HttpServletResponse.SC_UNAUTHORIZED);
 	   		return CORS.makeCORS(r, _corsHeaders);
 	   }
 	}

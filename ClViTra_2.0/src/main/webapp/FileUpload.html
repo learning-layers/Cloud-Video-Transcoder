@@ -31,25 +31,6 @@
 	
 		
 	var httpRequest = null;
-	/*function SendRequest () {
-	    	var videoName = this.getAttribute("value");
-	    	//var videoName=$(this).attr("value");
-	        if (!httpRequest) {
-	            httpRequest = CreateHTTPRequestObject ();   // defined in ajax.js
-	        }
-	        if (httpRequest) {          
-	                // The requested file must be in the same domain that the page is served from.
-	            //var url = "http://api.learning-layers.eu:8280/delete";
-	            var url = "https://api.learning-layers.eu/clvitra/videos";
-				//var url = "/clvitra/rest/delete";	                
-	            httpRequest.open ("GET", url, true);    // async
-	            httpRequest.setRequestHeader("User", localStorage.clvitraUser);
-				httpRequest.setRequestHeader("videoName", videoName);
-	            httpRequest.onreadystatechange = OnStateChange;
-	            httpRequest.send (null);
-	        }
-	}*/
-	    //window.SendRequest = SendRequest;
 
 	function OnStateChange () {
 	        if (httpRequest.readyState == 0 || httpRequest.readyState == 4) {
@@ -62,8 +43,6 @@
 	        }
 	}
 	//window.OnStateChange=OnStateChange;
-
-		
 		
 	var url = document.URL
 	var theArray = url.split("&");
@@ -75,8 +54,8 @@
     
     function verifyAccessToken(){
     	$.ajax({
-	        //url: "/clvitra/rest/oidc/verifyAccessToken",
-	        url: "https://api.learning-layers.eu/clvitra/rest/oidc/verifyAccessToken",
+	        url: "/clvitra/rest/oidc/verifyAccessToken",
+	        //url: "https://api.learning-layers.eu/clvitra/rest/oidc/verifyAccessToken",
 	        type: "GET",
 	        dataType:'text',
 	        beforeSend: function(xhr) {
@@ -91,10 +70,15 @@
 	        	$("#nameField").text(localStorage.clvitraUser)
 	    	},
 	    	statusCode: {
-	            // if user does not exist, return authentication failed.
-	            //401: function(){
-            		//window.location = "/clvitra/redirect.html";
-	            //}
+	    		401: function() {
+   	            	alert("ERROR! Please login again.");
+   	            	window.location = "https://api.learning-layers.eu/clvitra/";
+	        	},
+	        	404: function() {
+   	            	alert("ERROR! Please login again.");
+   	            	window.location = "https://api.learning-layers.eu/clvitra/";
+	        	}
+	    		
 	    	},
 	    	error: function(e){console.log(e);}
 		});
@@ -104,7 +88,8 @@
     if(localStorage.clvitraAccessToken!=null) {
     	console.log("1");
 		$.ajax({
-	        url: "https://api.learning-layers.eu/clvitra/rest/oidc/verifyAccessToken",
+	        //url: "https://api.learning-layers.eu/clvitra/rest/oidc/verifyAccessToken",
+	        url: "/clvitra/rest/oidc/verifyAccessToken",
 	        type: "GET",
 	        dataType:'text',
 	        beforeSend: function(xhr) {
@@ -120,14 +105,16 @@
 	        	$("#nameField").text(localStorage.clvitraUser)
 	    	},
 	    	statusCode: {
-	            // if user does not exist, return authentication failed.
-	            //401: function(){
-            		//window.location = "/clvitra/redirect.html";
-	            //},
+	            401: function() {
+   	            	console.log("1.1.1");
+   	            	alert("ERROR! Please login again.");
+   	            	window.location = "https://api.learning-layers.eu/clvitra/";
+	        	},
 	            404: function() {
 	            	console.log("1.2");
 	            	$.ajax({
-	        	        url: "https://api.learning-layers.eu/clvitra/rest/oidc/getAccessToken",
+	        	        //url: "https://api.learning-layers.eu/clvitra/rest/oidc/getAccessToken",
+	        	        url: "/clvitra/rest/oidc/getAccessToken",
 	        	        type: "GET",
 	        	        dataType:'text',
 	        	        beforeSend: function(xhr) {
@@ -139,8 +126,14 @@
 	        	        	verifyAccessToken();
 	        	    	},
 	        	    	statusCode: {
-	        	            404: function() {
-	        	            	console.log("1.4");
+	        	    		401: function() {
+	           	            	console.log("1.4");
+	           	            	alert("ERROR! Please login again.");
+	           	            	window.location = "https://api.learning-layers.eu/clvitra/";
+	        	        	},
+	        	    		404: function() {
+	        	            	console.log("1.5");
+	        	            	alert("ERROR! Please login again.");
 	        	            	window.location = "https://api.learning-layers.eu/clvitra/";
 	        	            }
 	        	    	},
@@ -155,7 +148,8 @@
     else if(localStorage.clvitraAccessToken==null) {
     	console.log("2");
 		$.ajax({
-	        url: "https://api.learning-layers.eu/clvitra/rest/oidc/getAccessToken",
+	        //url: "https://api.learning-layers.eu/clvitra/rest/oidc/getAccessToken",
+	        url: "/clvitra/rest/oidc/getAccessToken",
 	        type: "GET",
 	        dataType:'text',
 	        beforeSend: function(xhr) {
@@ -167,19 +161,20 @@
 	        	verifyAccessToken();
 	    	},
 	    	statusCode: {
-	            404: function() {
-	            	console.log("2.2");
-	            	window.location="https://api.learning-layers.eu/clvitra/";
+	    		401: function() {
+   	            	console.log("2.2");
+   	            	alert("ERROR! Please login again.");
+   	            	window.location = "https://api.learning-layers.eu/clvitra/";
+	        	},
+	    		404: function() {
+	            	console.log("2.3");
+	            	alert("ERROR! Please login again.");
+	            	window.location = "https://api.learning-layers.eu/clvitra/";
 	            }
 	    	},
 	    	error: function(e){console.log(e);}
 		});
     }
-	
-	
-	//if(localStorage.annLogin==null) {
-		//window.location="Login.html";
-	//}
 	
 	(function($, window, undefined) {
 	    //is onprogress supported by browser?
@@ -232,13 +227,11 @@
 		var form_data = new FormData($("#upload_form")[0]);
   		$.ajax({
 	        url: "https://api.learning-layers.eu/clvitra/rest/videos",
-	        //url: "http://api.learning-layers.eu:8280/services/upload",
 	        type: "POST",
 	        data: form_data,
 	        processData:false,
 	        contentType:false,
 	        beforeSend: function(xhr) {
-	            //xhr.setRequestHeader("User", localStorage.clvitraUser); 
 	            xhr.setRequestHeader("Authorization", "Bearer "+localStorage.clvitraAccessToken);
 	        },
 	        success: function(value) {
@@ -246,9 +239,13 @@
 	        }, error: function(e){console.log(e)},
 	        
 	        statusCode: {
-	            406: function() {
-	            	alert("Video already exists!");
-	            }
+	            409: function() {
+	            	alert("Video name already exists! Please rename and try uploading again.");
+	            },
+		        401: function() {
+		            	alert("UNAUTHORIZED! Please login again.");
+		            	window.location = "https://api.learning-layers.eu/clvitra/";
+	        	}
 	    	},
 	      	progress: function(e) {
                if(e.lengthComputable) {
@@ -272,8 +269,8 @@
 	
 	function getVideos(request, handler){
 		$.ajax({
-	        url: "https://api.learning-layers.eu/clvitra/rest/videos/"+request,
-	        //url: "http://api.learning-layers.eu:8280/clvitra/"+localStorage.clvitraUser+"/"+request,
+	        //url: "https://api.learning-layers.eu/clvitra/rest/videos/"+request,
+	        url: "/clvitra/rest/videos/"+request,
 	        type: "GET",
 	        dataType:'json',
 	        beforeSend: function(xhr) {
@@ -281,7 +278,7 @@
 	        },
 	        statusCode: {
 	            401: function() {
-	    			alert("Unauthorized!");
+	            	alert("UNAUTHORIZED! Please login again.");
 	    			window.location="https://api.learning-layers.eu/clvitra/";
             	}
 	    	},
@@ -300,7 +297,7 @@
 		}
 		else{
 			videos.Videos.forEach(function(v){
-				$("#videolist").append('<tr><td><img class="img-thumbnail" style="height:50px" src="'+v.Thumbnail_URL+'"></img></td><td>'+v.Video_Name+'</td></tr>')
+				$("#videolist").append('<tr><td><img class="img-thumbnail" style="height:50px" src="'+v.Thumbnail_URL+'"></img></td><td>'+v.Video_Name+'</td><td><button class="btn delete_btn" value="'+v.Video_Name+'">Delete</button></td></tr>')
 			});
 		}
 		$(".btn-info").removeClass("btn-info");
@@ -312,13 +309,9 @@
 			console.log(videoName);
 			
 			$.ajax({
-		        url: "https://api.learning-layers.eu/clvitra/rest/videos/"+videoName,
-		        //url: "http://api.learning-layers.eu:8280/clvitra/delete",
+		        //url: "https://api.learning-layers.eu/clvitra/rest/videos/"+videoName,
+		        url: "/clvitra/rest/videos/delete?videoname="+videoName,
 		        type: "DELETE",
-		        //dataType:'json',
-		        /*headers: { "user": localStorage.clvitraUser,
-		        	"videoname": videoName
-		        },*/
 		        beforeSend: function(xhr) {
 		            xhr.setRequestHeader("Authorization", "Bearer "+localStorage.clvitraAccessToken);
 		        },
@@ -332,11 +325,8 @@
 		    	}, 
 					        
 		        statusCode: {
-		            404: function() {
-		            	console.log("404");
-		            },
-		    		401: function() {
-		    			alert("Unauthorized!");
+		            401: function() {
+		    			alert("UNAUTHORIZED! Please login again.");
 		    			window.location="https://api.learning-layers.eu/clvitra/";
 	            	}
 		    	}
@@ -370,13 +360,8 @@
 	
 	});
 	
-	
-	
-	
 	</script>
 </head>
-
-
 
 <body>
 

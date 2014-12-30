@@ -78,11 +78,6 @@ public class Thumbnail
                 mediaReader.readPacket();
             }
             System.out.println("1.4");
-            /*
-            while (mediaReader.readPacket() == null)
-                ;
-            */
-            //mediaReader.readPacket();
             stopTime = System.currentTimeMillis();
         }
         catch(Exception ex)
@@ -93,7 +88,8 @@ public class Thumbnail
         //System.out.println("Total Time: " + (stopTime-startTime));
         ObjectStore ob = new ObjectStore();
         String URI = ob.ObjectStoreStart(outputFilename);
-        String newThumbnailImage = thumbnailResize(inputFilename, outputFilename, 400, 600);
+        //String newThumbnailImage = thumbnailResize(inputFilename, outputFilename, 400, 600);
+        String newThumbnailImage = thumbnailResize(inputFilename, outputFilename, 128, 128);
         
         String URI_smallThumbnail = ob.ObjectStoreStart(newThumbnailImage);
         System.out.println("NEW: "+URI_smallThumbnail);

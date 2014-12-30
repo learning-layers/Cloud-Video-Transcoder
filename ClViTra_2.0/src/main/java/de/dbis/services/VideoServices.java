@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -111,12 +112,12 @@ public class VideoServices {
 				   return CORS.makeCORS(r, _corsHeaders);
 			   }
 			   else{
-				   	Response.ResponseBuilder r = Response.status(401);
+				   	Response.ResponseBuilder r = Response.status(HttpServletResponse.SC_UNAUTHORIZED);
 			   		return CORS.makeCORS(r, _corsHeaders);
 			   }
 		   }
 		   else{
-			   	Response.ResponseBuilder r = Response.status(401);
+			   	Response.ResponseBuilder r = Response.status(HttpServletResponse.SC_UNAUTHORIZED);
 		   		return CORS.makeCORS(r, _corsHeaders);
 		   }
 	 }
@@ -170,12 +171,12 @@ public class VideoServices {
 				   return CORS.makeCORS(r, _corsHeaders);
 			   }
 			   else{
-				   	Response.ResponseBuilder r = Response.status(401);
+				   	Response.ResponseBuilder r = Response.status(HttpServletResponse.SC_UNAUTHORIZED);
 			   		return CORS.makeCORS(r, _corsHeaders);
 			   }
 		   }
 		   else{
-			   	Response.ResponseBuilder r = Response.status(401);
+			   	Response.ResponseBuilder r = Response.status(HttpServletResponse.SC_UNAUTHORIZED);
 		   		return CORS.makeCORS(r, _corsHeaders);
 		   }
 	 }
@@ -183,14 +184,14 @@ public class VideoServices {
 	
 	
 	@DELETE
-	@Path("/{videoname}")
+	@Path("/delete")
 	@ApiOperation(value = "Delete the video", response = VideoServices.class)
 	@ApiResponses(value = {
 	  @ApiResponse(code = 200, message = "Success"),
 	  @ApiResponse(code = 401, message = "Unauthorized")
 	})
 	@Produces("application/json")
-	public Response Delete(@HeaderParam("Authorization") String token, @PathParam("videoname") String videoName){
+	public Response Delete(@HeaderParam("Authorization") String token,  @QueryParam("videoname") String videoName){
 		
 		if(token!=null){
 			token = token.replace("Bearer ","");
@@ -205,12 +206,12 @@ public class VideoServices {
 				return CORS.makeCORS(r, _corsHeaders);
 			}
 			else{
-			   	Response.ResponseBuilder r = Response.status(401);
+			   	Response.ResponseBuilder r = Response.status(HttpServletResponse.SC_UNAUTHORIZED);
 		   		return CORS.makeCORS(r, _corsHeaders);
 		   }
 		}
 		else{
-		   	Response.ResponseBuilder r = Response.status(401);
+		   	Response.ResponseBuilder r = Response.status(HttpServletResponse.SC_UNAUTHORIZED);
 	   		return CORS.makeCORS(r, _corsHeaders);
 	   }
 	}
@@ -265,24 +266,24 @@ public class VideoServices {
 					   else{
 						   
 						   j.put("Status", Details[0]);
-						   Response.ResponseBuilder r = Response.status(404);
+						   Response.ResponseBuilder r = Response.status(HttpServletResponse.SC_NOT_FOUND);
 						   return CORS.makeCORS(r, _corsHeaders);
 					   }
 					   Response.ResponseBuilder r = Response.ok(j.toString());
 					   return CORS.makeCORS(r, _corsHeaders);
 				   }
 				   else{
-					   	Response.ResponseBuilder r = Response.status(404);
+					   	Response.ResponseBuilder r = Response.status(HttpServletResponse.SC_NOT_FOUND);
 				   		return CORS.makeCORS(r, _corsHeaders);
 				   }
 			   }
 			   else{
-				   	Response.ResponseBuilder r = Response.status(401);
+				   	Response.ResponseBuilder r = Response.status(HttpServletResponse.SC_UNAUTHORIZED);
 			   		return CORS.makeCORS(r, _corsHeaders);
 			   }
 		   }
 		   else{
-			   	Response.ResponseBuilder r = Response.status(401);
+			   	Response.ResponseBuilder r = Response.status(HttpServletResponse.SC_UNAUTHORIZED);
 		   		return CORS.makeCORS(r, _corsHeaders);
 		   }
 	}
@@ -321,7 +322,7 @@ public class VideoServices {
 				System.out.println("NEWNAME: "+newName);
 				
 				if(Java2MySql.Exists(username,FilenameUtils.removeExtension(newName))){
-					ResponseBuilder x = Response.status(406);
+					ResponseBuilder x = Response.status(HttpServletResponse.SC_CONFLICT).entity("File name already exists.");
 					return CORS.makeCORS(x, _corsHeaders);
 				}
 				File newFile = new File(uploadPath +newName);
@@ -345,20 +346,7 @@ public class VideoServices {
 				String Codec = VideoInfo.videoInfo(uploadedFileLocation);
 				String ID;
 				ID = Java2MySql.VideoUpdate(savePath+newFile.getName(), Codec, thumbnails[0], thumbnails[1], Duration, username);
-				/*String location = "Kastanienweg Aachen"; 
-				Double latitude = 50.785097, longitude = 6.053766;
-				
-				if (latitude!=0 && longitude!=0)
-					ID = Java2MySql.VideoUpdate(savePath+newFile.getName(), Codec, ThumbnailFilename, Duration, User, latitude, longitude);
-				else
-					ID = Java2MySql.VideoUpdate(savePath+newFile.getName(), Codec, ThumbnailFilename, Duration, User);
-				
-				
-				//System.out.println("neo ended!");
-				Neo4j.addPoint(location);
-				
-				Neo4j.getNearVideos(latitude, longitude);*/
-				
+								
 				if(Codec.equals("h264"))
 				{
 					System.out.println("FileUpload -- ext==MP4");
@@ -389,16 +377,16 @@ public class VideoServices {
 					}
 				}
 				
-				ResponseBuilder x = Response.status(200).entity(ID);
+				ResponseBuilder x = Response.status(HttpServletResponse.SC_OK).entity(ID);
 				return CORS.makeCORS(x, _corsHeaders);
 			}
 			else{
-			   	Response.ResponseBuilder r = Response.status(401);
+			   	Response.ResponseBuilder r = Response.status(HttpServletResponse.SC_UNAUTHORIZED);
 		   		return CORS.makeCORS(r, _corsHeaders);
 		   }
 		}
 		else{
-		   	Response.ResponseBuilder r = Response.status(401);
+		   	Response.ResponseBuilder r = Response.status(HttpServletResponse.SC_UNAUTHORIZED);
 	   		return CORS.makeCORS(r, _corsHeaders);
 	   }
 		
@@ -438,12 +426,11 @@ public class VideoServices {
 	
 	private String verifyAccessToken(String Token){
 		
-		//String verifyAccessTokenURL;
-		//String INPUT_FILE = "tempFileLocation";
+		String verifyAccessTokenURL;
+		String INPUT_FILE = "oidc"; 
+		String localaccesstoken = GetProperty.getParam("localaccesstoken", INPUT_FILE);
 		HttpClient client = new HttpClient();
-        //HttpMethod method = new GetMethod("http://cloud27.dbis.rwth-aachen.de:9080/clvitra/rest/verifyAccessToken");
-		//HttpMethod method = new GetMethod("http://127.0.0.1:8080/clvitra/rest/verifyAccessToken");
-		HttpMethod method = new GetMethod("http://10.255.255.10:8080/clvitra/rest/oidc/verifyAccessToken");
+		HttpMethod method = new GetMethod(localaccesstoken);
         method.addRequestHeader("Authorization", "Bearer "+Token);
         String response=null;
         

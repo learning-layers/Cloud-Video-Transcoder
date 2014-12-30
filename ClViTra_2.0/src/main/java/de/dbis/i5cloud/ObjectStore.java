@@ -74,7 +74,6 @@ public class ObjectStore {
 
 				values.put("id", token);
 				System.out.println("OBJ STR TOKEN: "+token);
-				//values.put("publicURL", publicURL);
 				values.put("filepath", filepath);
 				
 				return uploadLastFile(values);
@@ -87,7 +86,7 @@ public class ObjectStore {
 	}
 	
 	private String uploadLastFile(HashMap<String, String> credentials) {
-		//String publicURL = credentials.get("publicURL");
+
 		String token = credentials.get("id");
 		String filepath = credentials.get("filepath");
 		return new UploadFileTask().Upload(token, filepath);
@@ -126,7 +125,6 @@ public class ObjectStore {
 			} catch (Exception e) {
 				this.exception = e;
 				return e.toString();
-				//return "error!";
 			}
 		}
 	}

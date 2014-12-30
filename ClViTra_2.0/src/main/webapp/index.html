@@ -44,7 +44,8 @@
 		$("#Loginbtn").click(function( event ) {
 			//alert("hello");
 			$.ajax({
-		        url: "https://api.learning-layers.eu/clvitra/rest/oidc/auth",
+		        //url: "https://api.learning-layers.eu/clvitra/rest/oidc/auth",
+		        url: "/clvitra/rest/oidc/auth",
 		        type: "GET",
 		        dataType:'text',
 		        success: function(value) {
