@@ -9,6 +9,7 @@ import com.xuggle.mediatool.ToolFactory;
 
 import de.dbis.db.Java2MySql;
 import de.dbis.i5cloud.ObjectStore;
+import de.dbis.i5cloud.UserStore;
 import de.dbis.services.*;
 import de.dbis.util.GetProperty;
 
@@ -29,15 +30,16 @@ public class Transcode implements Runnable {
 	 * Starts the transcoding for the given video ID.
 	 * @param ID video ID
 	 */
-	public Transcode(String ID) {
+	public Transcode(String IDandToken) {
 		
+		String[] IDandTokenList = IDandToken.split("?");
 		String path;
 		String INPUT_FILE = "tempFileLocation";
 		
-        if (ID!=null) {
+        if (IDandTokenList[0]!=null) {
         	path = GetProperty.getParam("location", INPUT_FILE);
 
-        	String VideoName = Java2MySql.getVideoName(ID);
+        	String VideoName = Java2MySql.getVideoName(IDandTokenList[0]);
         	File inputFile = new File(VideoName);
         	String VideoNameWithoutExt = FilenameUtils.removeExtension(inputFile.getName()); 
         			//VideoName.substring(0, VideoName.length()- 4);
@@ -46,12 +48,18 @@ public class Transcode implements Runnable {
             	
             	ObjectStore ob = new ObjectStore();
     		   	String URI = ob.ObjectStoreStart(outputFile.getPath());
+    		   	
+    		   	//upload to user storage
+			   	UserStore us = new UserStore();
+			   	String bearer_token = "Bearer "+IDandTokenList[1];
+			   	us.uploadToUserStore(bearer_token, outputFile.getPath());
+    		   	
     		   	outputFile.setWritable(true);
     			boolean a = outputFile.delete();
     			System.out.println("FILE DELETE SLAVE: "+a);
     		   	
     		   	
-    		   	Return_value= ID+"%"+outputFile.getPath()+"%"+URI+"%"+FilenameUtils.getExtension(inputFile.getName())+"%success";
+    		   	Return_value= IDandTokenList[0]+"%"+outputFile.getPath()+"%"+URI+"%"+FilenameUtils.getExtension(inputFile.getName())+"%success";
             }
         }
         try {

@@ -54,12 +54,13 @@ public class RabbitMQReceive implements Runnable {
     		
     		while (true) {
     			QueueingConsumer.Delivery delivery = consumer.nextDelivery();
-    			String ID = new String(delivery.getBody());
+    			String IDandToken = new String(delivery.getBody());
+    			//String[] IDandTokenList = IDandToken.split("?");
 
-    			System.out.println(ID);
+    			System.out.println(IDandToken);
     			System.out.println("test0");
-    			Java2MySql.Processing(ID);
-    			Transcode.transcode(ID);
+    			Java2MySql.Processing(IDandToken);
+    			Transcode.transcode(IDandToken);
     		}
     	} catch (IOException e) {
 		// 	TODO Auto-generated catch block

@@ -23,7 +23,7 @@ public class RabbitMQSend {
 	 * @param ID VideoID of the video to be sent for transcoding
 	 * @throws Exception
 	 */
-	public static void send(String ID) throws Exception {
+	public static void send(String IDandToken) throws Exception {
 		
 		server = GetProperty.getParam("server", INPUT_FILE);
 		ConnectionFactory factory = new ConnectionFactory();
@@ -31,7 +31,7 @@ public class RabbitMQSend {
 		Connection connection = factory.newConnection();
 		Channel channel = connection.createChannel();
 		channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-		channel.basicPublish("", QUEUE_NAME, null, ID.getBytes());
+		channel.basicPublish("", QUEUE_NAME, null, IDandToken.getBytes());
 
 		channel.close();
 		connection.close();

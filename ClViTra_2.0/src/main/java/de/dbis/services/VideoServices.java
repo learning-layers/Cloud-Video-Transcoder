@@ -43,6 +43,7 @@ import com.xuggle.xuggler.IContainer;
 
 import de.dbis.db.Java2MySql;
 import de.dbis.i5cloud.ObjectStore;
+import de.dbis.i5cloud.UserStore;
 import de.dbis.mpeg7.sevianno;
 import de.dbis.rabbitmq.RabbitMQReceive;
 import de.dbis.rabbitmq.RabbitMQSend;
@@ -346,7 +347,8 @@ public class VideoServices {
 				String Codec = VideoInfo.videoInfo(uploadedFileLocation);
 				String ID;
 				ID = Java2MySql.VideoUpdate(savePath+newFile.getName(), Codec, thumbnails[0], thumbnails[1], Duration, username);
-								
+				
+				String bearer_token=null;
 				if(Codec.equals("h264"))
 				{
 					System.out.println("FileUpload -- ext==MP4");
@@ -354,6 +356,12 @@ public class VideoServices {
 				   	String URI = ob.ObjectStoreStart(uploadPath + newFile.getName());
 				   	System.out.println("VURI: "+URI);
 				   	Java2MySql.VideoUpdate(ID, newFile.getName(),URI);
+				   	
+				   	//upload to user storage
+				   	UserStore us = new UserStore();
+				   	bearer_token = "Bearer "+token;
+				   	us.uploadToUserStore(bearer_token, uploadPath + newFile.getName());
+				   	
 				   	File inputfile = new File(uploadPath+newFile.getName());
 				   	inputfile.setWritable(true);
 				   	System.out.println("FILE: "+uploadPath+newFile.getName());
@@ -370,7 +378,7 @@ public class VideoServices {
 				else
 				{
 					try {
-						RabbitMQSend.send(ID);
+						RabbitMQSend.send(ID+"?"+bearer_token);
 						RabbitMQReceive.recv();
 					} catch (Exception e) {
 						e.printStackTrace();
