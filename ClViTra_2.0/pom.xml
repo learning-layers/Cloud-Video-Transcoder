@@ -262,7 +262,7 @@
     		<artifactId>http-connector-client</artifactId>
     		<scope>system</scope>
     		<version>1.0</version>
-    		<systemPath>${basedir}\lib\de\dbis\http-connector-client\http-connector-client-1.0.jar</systemPath>
+    		<systemPath>${basedir}/lib/de/dbis/http-connector-client/http-connector-client-1.0.jar</systemPath>
   		</dependency>
   		
 </dependencies>
