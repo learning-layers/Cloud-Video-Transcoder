@@ -17,7 +17,7 @@ import de.dbis.util.GetProperty;
 public class TestVideoDetails {
 
 	
-	@Test
+	//@Test
 	public void videoAvailable() throws ClientProtocolException, IOException{
 	   // Given cloud27.dbis.rwth-aachen.de
 	   HttpUriRequest request = new HttpGet("http://10.255.255.10:8080/clvitra/rest/videos/details?clientType=app&videoURI=http://137.226.58.2:8888/v1/AUTH_451035e5f9504a878946697522070c43/public/aarij_Performance2.mp4");
