@@ -1,5 +1,5 @@
 FROM ubuntu:14.04
-MAINTAINER Aarij Siddiqui <siddiqui Ã„T dbis.rwth-aachen.de>
+MAINTAINER Aarij Siddiqui <siddiqui ÄT dbis.rwth-aachen.de>
 # Let the container know that there is no tty
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -19,10 +19,9 @@ RUN ln -fs /usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java /etc/alternatives/java
 
 WORKDIR /home/docker/
 
-# Install Tomcat Server
+# Install Tomcat Server & deploy the service
 CMD mkdir /home/docker/tomcat && \
 	mkdir /home/docker/tempdircopy && \
-	#wget http://layers.dbis.rwth-aachen.de/jenkins/job/Cloud-Video-Transcoder/lastSuccessfulBuild/artifact/ClViTra_2.0/target/clvitra.war -O  #/home/docker/clvitra && \
 	wget http://mirror.netcologne.de/apache.org/tomcat/tomcat-8/v8.0.18/bin/apache-tomcat-8.0.18.tar.gz -O  /home/docker/tempdircopy/apache-tomcat-8.0.18.tar.gz && \
 	tar -zxvf /home/docker/tempdircopy/apache-tomcat-8.0.18.tar.gz -C /home/docker/tempdircopy && \
 		# Copy the tomcat to the right location
