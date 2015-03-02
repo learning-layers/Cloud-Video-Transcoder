@@ -235,7 +235,7 @@ public class VideoServices {
 	@Produces("application/json")
 	public Response Details(@HeaderParam("Authorization") String token, @QueryParam("clientType") String clientType, @QueryParam("videoURI") String videoURI) 
 					throws JSONException{
-		   String Name, Thumbnail, Status;
+		   String Name, Thumbnail, Status, Time;
 
 		   if(token!=null){
 			   token = token.replace("Bearer ","");
@@ -258,10 +258,12 @@ public class VideoServices {
 						   //URI = Details[1];
 						   Thumbnail = Details[1];
 						   Status = Details[2];
+						   Time = Details[3];
 						   j.put("Video_Name", Name);
 						   //j.put("Video_URL", URI);
 						   j.put("Thumbnail_URL", Thumbnail);
 						   j.put("Status", Status);
+						   j.put("Transcoding_Time", Time);
 						   
 					   }
 					   else{
@@ -311,7 +313,7 @@ public class VideoServices {
 				String uploadPath, savePath; //uploadCode;
 				String INPUT_FILE = "tempFileLocation";
 				//String INPUT_FILE_UploadCode = "FileUpload";
-					
+				
 				uploadPath = GetProperty.getParam("location", INPUT_FILE);
 				savePath = GetProperty.getParam("savePath", INPUT_FILE);
 							
@@ -355,12 +357,12 @@ public class VideoServices {
 					ObjectStore ob = new ObjectStore();
 				   	String URI = ob.ObjectStoreStart(uploadPath + newFile.getName());
 				   	System.out.println("VURI: "+URI);
-				   	Java2MySql.VideoUpdate(ID, newFile.getName(),URI);
+				   	Java2MySql.VideoUpdate(ID, newFile.getName(),URI, "0", "0","0");
 				   	
 				   	//upload to user storage
-				   	UserStore us = new UserStore();
-				   	bearer_token = "Bearer "+token;
-				   	us.uploadToUserStore(bearer_token, uploadPath + newFile.getName());
+				   	//UserStore us = new UserStore();
+				   	//bearer_token = "Bearer "+token;
+				   	//System.out.println("USER STORE: "+us.uploadToUserStore(bearer_token, uploadPath + newFile.getName()));
 				   	
 				   	File inputfile = new File(uploadPath+newFile.getName());
 				   	inputfile.setWritable(true);
@@ -378,6 +380,7 @@ public class VideoServices {
 				else
 				{
 					try {
+						System.out.println("SENT TO SLAVE: "+bearer_token);
 						RabbitMQSend.send(ID+"?"+bearer_token);
 						RabbitMQReceive.recv();
 					} catch (Exception e) {

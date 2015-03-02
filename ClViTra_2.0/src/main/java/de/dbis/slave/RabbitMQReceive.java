@@ -59,7 +59,9 @@ public class RabbitMQReceive implements Runnable {
 
     			System.out.println(IDandToken);
     			System.out.println("test0");
-    			Java2MySql.Processing(IDandToken);
+    			
+    			String[] IDandTokenList = IDandToken.split("\\?");
+    			Java2MySql.Processing(IDandTokenList[0]);
     			Transcode.transcode(IDandToken);
     		}
     	} catch (IOException e) {

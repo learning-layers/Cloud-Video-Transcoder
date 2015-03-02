@@ -181,7 +181,7 @@ public class Java2MySql
 	 * @param URI
 	 * @return
 	 */
-	public static int VideoUpdate(String ID, String outputFile, String URI) {
+	public static int VideoUpdate(String ID, String outputFile, String URI, String hours, String mins, String secs) {
         
 		init();
 		PreparedStatement pstmt = null;
@@ -190,14 +190,15 @@ public class Java2MySql
         try {
         	Class.forName(driver).newInstance();
       	  	Connection conn = DriverManager.getConnection(url+dbName,userName,password);
-      	  	String insertQuery = "UPDATE  video SET  Status = ?, Name = ?, Format = ?, URI = ? WHERE  ID = ?";
+      	  	String insertQuery = "UPDATE  video SET  Status = ?, Name = ?, Format = ?, URI = ?, TIME = ? WHERE  ID = ?";
       	  	
       	  	pstmt = conn.prepareStatement(insertQuery);
       	  	pstmt.setString(1, "TRANSCODED");
       	  	pstmt.setString(2, new File(outputFile).getName());
       	  	pstmt.setString(3, "MP4");
       	  	pstmt.setString(4, URI);
-      	  	pstmt.setString(5, ID);
+      	  	pstmt.setString(5, hours+":"+mins+":"+secs);
+      	  	pstmt.setString(6, ID);
       	  	rowCount = pstmt.executeUpdate();
       	  	
       	  	conn.close();
@@ -403,8 +404,8 @@ public static List<String> getVideos(String Username) {
 		
 		init();
 
-		String Details[]=new String[3];
-		String Thumbnail, Name, Status;
+		String Details[]=new String[4];
+		String Thumbnail, Name, Status, Time;
         try {
 			Class.forName(driver).newInstance();
 			Connection conn = DriverManager.getConnection(url+dbName,userName,password);
@@ -423,9 +424,11 @@ public static List<String> getVideos(String Username) {
 					Thumbnail = res.getString("Thumbnail");
 				Name = res.getString("Name");
 				Status = res.getString("Status");
+				Time = res.getString("TIME");
 				Details[0]=Name;
 				Details[1]=Thumbnail;
 				Details[2]=Status;
+				Details[3]=Time;
 			}
 			else{
 				Details[0]="Not Found";

@@ -2,6 +2,7 @@ package de.dbis.oidc;
 
 import java.io.*;
 import java.net.*;
+import java.util.Date;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -38,6 +39,7 @@ import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
 
 import de.dbis.util.CORS;
+import de.dbis.util.DateTimeUtils;
 import de.dbis.util.GetProperty;
 
 
@@ -76,8 +78,12 @@ public class OIDC extends HttpServlet {
 
 		URL authzURL;
 		try {
+			//Date startDate = DateTimeUtils.currentTime();
+			//Thread.sleep(4000);
 			authzURL = composeAuthzRequestURL();
 
+			//Date endDate = DateTimeUtils.currentTime();
+        	//DateTimeUtils.printDifference(startDate, endDate);
 		} catch (Exception e) {
 
 			System.out.println("<p>Couldn't compose OIDC authorisation request URL: " + e.getMessage() + "</p>");

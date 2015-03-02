@@ -54,8 +54,7 @@
     
     function verifyAccessToken(){
     	$.ajax({
-	        url: "/clvitra/rest/oidc/verifyAccessToken",
-	        //url: "https://api.learning-layers.eu/clvitra/rest/oidc/verifyAccessToken",
+	        url: "https://api.learning-layers.eu/clvitra/rest/oidc/verifyAccessToken",
 	        type: "GET",
 	        dataType:'text',
 	        beforeSend: function(xhr) {
@@ -88,8 +87,7 @@
     if(localStorage.clvitraAccessToken!=null) {
     	console.log("1");
 		$.ajax({
-	        //url: "https://api.learning-layers.eu/clvitra/rest/oidc/verifyAccessToken",
-	        url: "/clvitra/rest/oidc/verifyAccessToken",
+	        url: "https://api.learning-layers.eu/clvitra/rest/oidc/verifyAccessToken",
 	        type: "GET",
 	        dataType:'text',
 	        beforeSend: function(xhr) {
@@ -113,8 +111,7 @@
 	            404: function() {
 	            	console.log("1.2");
 	            	$.ajax({
-	        	        //url: "https://api.learning-layers.eu/clvitra/rest/oidc/getAccessToken",
-	        	        url: "/clvitra/rest/oidc/getAccessToken",
+	        	        url: "https://api.learning-layers.eu/clvitra/rest/oidc/getAccessToken",
 	        	        type: "GET",
 	        	        dataType:'text',
 	        	        beforeSend: function(xhr) {
@@ -148,8 +145,7 @@
     else if(localStorage.clvitraAccessToken==null) {
     	console.log("2");
 		$.ajax({
-	        //url: "https://api.learning-layers.eu/clvitra/rest/oidc/getAccessToken",
-	        url: "/clvitra/rest/oidc/getAccessToken",
+	        url: "https://api.learning-layers.eu/clvitra/rest/oidc/getAccessToken",
 	        type: "GET",
 	        dataType:'text',
 	        beforeSend: function(xhr) {
@@ -269,8 +265,7 @@
 	
 	function getVideos(request, handler){
 		$.ajax({
-	        //url: "https://api.learning-layers.eu/clvitra/rest/videos/"+request,
-	        url: "/clvitra/rest/videos/"+request,
+	        url: "https://api.learning-layers.eu/clvitra/rest/videos/"+request,
 	        type: "GET",
 	        dataType:'json',
 	        beforeSend: function(xhr) {
@@ -309,8 +304,7 @@
 			console.log(videoName);
 			
 			$.ajax({
-		        //url: "https://api.learning-layers.eu/clvitra/rest/videos/"+videoName,
-		        url: "/clvitra/rest/videos/delete?videoname="+videoName,
+		        url: "https://api.learning-layers.eu/clvitra/rest/videos/delete?videoname="+videoName,
 		        type: "DELETE",
 		        beforeSend: function(xhr) {
 		            xhr.setRequestHeader("Authorization", "Bearer "+localStorage.clvitraAccessToken);
@@ -414,11 +408,7 @@
 	<table class="table table-hover" id='videolist'></table>	
 	<script>
 	
-	
-	
-	
 	</script>
-	
 	
 </body>
 </html>

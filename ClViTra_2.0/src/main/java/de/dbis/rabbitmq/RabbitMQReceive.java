@@ -64,9 +64,12 @@ public class RabbitMQReceive implements Runnable{
 	            File outputFile = new File(Split[1]);
 	            String URI = Split[2];
 	            String ext = Split[3];
-	            String status = Split[4];
+	            String hours = Split[4];
+	            String mins = Split[5];
+	            String secs = Split[6];
+	            String status = Split[7];
 	            
-	            Java2MySql.VideoUpdate(ID, outputFile.getPath(), URI);
+	            Java2MySql.VideoUpdate(ID, outputFile.getPath(), URI, hours, mins, secs);
 	            
 	            String[] Details = Java2MySql.getVideoDetails(ID);
 	            String title = Details[0];

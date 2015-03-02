@@ -1,6 +1,7 @@
 package de.dbis.slave;
 
 import java.io.File;
+import java.util.Date;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -11,6 +12,7 @@ import de.dbis.db.Java2MySql;
 import de.dbis.i5cloud.ObjectStore;
 import de.dbis.i5cloud.UserStore;
 import de.dbis.services.*;
+import de.dbis.util.DateTimeUtils;
 import de.dbis.util.GetProperty;
 
 /**
@@ -32,7 +34,7 @@ public class Transcode implements Runnable {
 	 */
 	public Transcode(String IDandToken) {
 		
-		String[] IDandTokenList = IDandToken.split("?");
+		String[] IDandTokenList = IDandToken.split("\\?");
 		String path;
 		String INPUT_FILE = "tempFileLocation";
 		
@@ -44,22 +46,28 @@ public class Transcode implements Runnable {
         	String VideoNameWithoutExt = FilenameUtils.removeExtension(inputFile.getName()); 
         			//VideoName.substring(0, VideoName.length()- 4);
         	File outputFile = new File(path + VideoNameWithoutExt+".mp4");
+        	
+        	Date startDate = DateTimeUtils.currentTime();
             if (transcoder(inputFile, outputFile)) {
             	
+            	Date endDate = DateTimeUtils.currentTime();
+            	
+            	String[] timeDiff = DateTimeUtils.printDifference(startDate, endDate);
             	ObjectStore ob = new ObjectStore();
     		   	String URI = ob.ObjectStoreStart(outputFile.getPath());
     		   	
     		   	//upload to user storage
-			   	UserStore us = new UserStore();
-			   	String bearer_token = "Bearer "+IDandTokenList[1];
-			   	us.uploadToUserStore(bearer_token, outputFile.getPath());
+			   	//UserStore us = new UserStore();
+			   	//String bearer_token = "Bearer "+IDandTokenList[1];
+			   	//us.uploadToUserStore(bearer_token, outputFile.getPath());
     		   	
     		   	outputFile.setWritable(true);
     			boolean a = outputFile.delete();
     			System.out.println("FILE DELETE SLAVE: "+a);
     		   	
     		   	
-    		   	Return_value= IDandTokenList[0]+"%"+outputFile.getPath()+"%"+URI+"%"+FilenameUtils.getExtension(inputFile.getName())+"%success";
+    		   	Return_value= IDandTokenList[0]+"%"+outputFile.getPath()+"%"+URI+"%"+FilenameUtils.getExtension(inputFile.getName())+
+    		   			"%"+timeDiff[0]+"%"+timeDiff[1]+"%"+timeDiff[2]+"%success";
             }
         }
         try {
