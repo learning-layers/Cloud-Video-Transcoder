@@ -7,6 +7,7 @@
 		<script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
 	    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/black-tie/jquery-ui.css" />
+	    <script src="config.js"></script>
     </head>
     <body>
     
@@ -44,7 +45,7 @@
 		$("#Loginbtn").click(function( event ) {
 			//alert("hello");
 			$.ajax({
-		        url: "https://api.learning-layers.eu/clvitra/rest/oidc/auth",
+		        url: base.uri+"/clvitra/rest/oidc/auth",
 		        //url: "http://127.0.0.1:8080/clvitra/rest/oidc/auth",
 		        type: "GET",
 		        dataType:'text',

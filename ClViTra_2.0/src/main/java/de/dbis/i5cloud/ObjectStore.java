@@ -41,12 +41,15 @@ public class ObjectStore {
 
 		protected String OAuth(String filepath) {
 			try {
-				String oauth, stringEntity;
+				String oauth, stringEntity, base;
 				String INPUT_FILE = "objectStore";
+				String BASE_INPUT_FILE = "base";
 
 				HttpClient client = new DefaultHttpClient();
 				
-				oauth = GetProperty.getParam("oauth", INPUT_FILE);
+				base = GetProperty.getParam("uri", BASE_INPUT_FILE);
+				oauth = base + GetProperty.getParam("oauth", INPUT_FILE);
+				
 				System.out.println("oauth: "+oauth);
 				stringEntity = GetProperty.getParam("stringEntity", INPUT_FILE);
 
@@ -99,14 +102,16 @@ public class ObjectStore {
 		protected String Upload(String... params) {
 			try {
 				
-				String upload;
+				String upload, base;
 				String INPUT_FILE = "objectStore";
-
+				String BASE_INPUT_FILE = "base";
+				
 				HttpClient client = new DefaultHttpClient();
 				
 				File f = new File(params[1]);
 				System.out.println("File Exists: "+f.exists());
-				upload = GetProperty.getParam("upload", INPUT_FILE);
+				base = GetProperty.getParam("uri", BASE_INPUT_FILE);
+				upload = base + GetProperty.getParam("upload", INPUT_FILE);
 				HttpPut put = new HttpPut(upload + new File(params[1]).getName());
 
 				FileEntity fe = new FileEntity(new File(params[1]), "video/mp4");

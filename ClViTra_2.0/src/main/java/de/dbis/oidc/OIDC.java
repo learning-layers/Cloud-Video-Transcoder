@@ -116,10 +116,12 @@ public class OIDC extends HttpServlet {
 		
 		if(Header!=null){
 			String INPUT_FILE = "oidc";
+			String BASE_INPUT_FILE = "base";
 	
-			String token, redirect, cID, cSecret;
-			token = GetProperty.getParam("token", INPUT_FILE);
-			redirect = GetProperty.getParam("redirect", INPUT_FILE);
+			String token, redirect, cID, cSecret, base;
+			base = GetProperty.getParam("uri", BASE_INPUT_FILE);
+			token = base + GetProperty.getParam("token", INPUT_FILE);
+			redirect = base + GetProperty.getParam("redirect", INPUT_FILE);
 			cID = GetProperty.getParam("clientid", INPUT_FILE);
 			cSecret = GetProperty.getParam("clientsecret", INPUT_FILE);
 			System.out.println("In OIDCTokens");
@@ -259,10 +261,12 @@ public class OIDC extends HttpServlet {
 
 		if(Header!=null){
 			String INPUT_FILE = "oidc";
+			String BASE_INPUT_FILE = "base";
 	
 			Header = Header.replace("Bearer ","");
-			String userinfo;
-			userinfo = GetProperty.getParam("userinfo", INPUT_FILE);
+			String userinfo, base;
+			base = GetProperty.getParam("uri", BASE_INPUT_FILE);
+			userinfo = base + GetProperty.getParam("userinfo", INPUT_FILE);
 			
 			BearerAccessToken accessToken = null;
 			
@@ -356,10 +360,12 @@ public class OIDC extends HttpServlet {
 	private URL composeAuthzRequestURL()
 		throws Exception {
 		String INPUT_FILE = "oidc";
+		String BASE_INPUT_FILE = "base";
 
-		String authorize, redirect, cID;
-		authorize = GetProperty.getParam("authorize", INPUT_FILE);
-		redirect = GetProperty.getParam("redirect", INPUT_FILE);
+		String authorize, redirect, cID, base;
+		base = GetProperty.getParam("uri", BASE_INPUT_FILE);
+		authorize = base + GetProperty.getParam("authorize", INPUT_FILE);
+		redirect = base + GetProperty.getParam("redirect", INPUT_FILE);
 		cID = GetProperty.getParam("clientid", INPUT_FILE);
 		// Set the requested response_type (code, token and / or 
 		// id_token):

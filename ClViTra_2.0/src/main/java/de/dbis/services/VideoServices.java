@@ -310,10 +310,12 @@ public class VideoServices {
 			String username = verifyAccessToken(token);
 			
 			if(username!=null){
-				String uploadPath, savePath; //uploadCode;
+				String uploadPath, savePath, base; //uploadCode;
 				String INPUT_FILE = "tempFileLocation";
+				//String BASE_INPUT_FILE = "base";
 				//String INPUT_FILE_UploadCode = "FileUpload";
 				
+				//base = GetProperty.getParam("uri", BASE_INPUT_FILE);
 				uploadPath = GetProperty.getParam("location", INPUT_FILE);
 				savePath = GetProperty.getParam("savePath", INPUT_FILE);
 							

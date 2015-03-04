@@ -21,8 +21,10 @@ import de.dbis.util.GetProperty;
 public class Java2MySql
 {
 	private final static String INPUT_FILE = "dbconnection";
+	private final static String BASE_INPUT_FILE = "base";
 	private static String url;
-	private static String hostName;
+	private static String base;
+	private static String port;
 	private static String dbName;
 	private static String driver;
 	private static String userName;
@@ -37,7 +39,8 @@ public class Java2MySql
 
 		driver = GetProperty.getParam("driverName", INPUT_FILE);
 		databaseServer = GetProperty.getParam("databaseServer", INPUT_FILE);
-		hostName = GetProperty.getParam("hostName", INPUT_FILE);
+		base = GetProperty.getParam("uri", BASE_INPUT_FILE);
+		port = GetProperty.getParam("port", INPUT_FILE);
 		dbName = GetProperty.getParam("database", INPUT_FILE);
 		userName = GetProperty.getParam("username", INPUT_FILE);
 		password = GetProperty.getParam("password", INPUT_FILE);
@@ -46,7 +49,7 @@ public class Java2MySql
 		charSet = GetProperty.getParam("charSet", INPUT_FILE);
 		collation = GetProperty.getParam("collation", INPUT_FILE);
 		
-		url = "jdbc:" + databaseServer + "://" + hostName + "/";
+		url = "jdbc:" + databaseServer + "://" + base +":"+ port + "/";
 
 	}
 
