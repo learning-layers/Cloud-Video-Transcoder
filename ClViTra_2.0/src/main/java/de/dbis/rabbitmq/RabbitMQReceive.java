@@ -28,8 +28,8 @@ public class RabbitMQReceive implements Runnable{
 
     private final static String QUEUE_NAME = "Send";
     private static String server, path;
-	private final static String INPUT_FILE = "RabbitMQ";
-	private final static String INPUT_FILE_PATH = "tempFileLocation";
+	private final static String INPUT_FILE = "/etc/clvitra/RabbitMQ";
+	private final static String INPUT_FILE_PATH = "/etc/clvitra/tempFileLocation";
 
     public static void recv() {
     	

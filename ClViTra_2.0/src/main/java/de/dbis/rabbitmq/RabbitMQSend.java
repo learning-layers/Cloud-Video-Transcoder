@@ -16,7 +16,7 @@ public class RabbitMQSend {
 
 	private final static String QUEUE_NAME = "Receive";
 	private static String server;
-	private final static String INPUT_FILE = "RabbitMQ";
+	private final static String INPUT_FILE = "/etc/clvitra/RabbitMQ";
 
 	/**
 	 * Sends the video to the RabbitMQ server for transcoding.

@@ -311,7 +311,7 @@ public class VideoServices {
 			
 			if(username!=null){
 				String uploadPath, savePath, base; //uploadCode;
-				String INPUT_FILE = "tempFileLocation";
+				String INPUT_FILE = "/etc/clvitra/tempFileLocation";
 				//String BASE_INPUT_FILE = "base";
 				//String INPUT_FILE_UploadCode = "FileUpload";
 				
@@ -440,7 +440,7 @@ public class VideoServices {
 	private String verifyAccessToken(String Token){
 		
 		String verifyAccessTokenURL;
-		String INPUT_FILE = "oidc"; 
+		String INPUT_FILE = "/etc/clvitra/oidc"; 
 		String localaccesstoken = GetProperty.getParam("localaccesstoken", INPUT_FILE);
 		HttpClient client = new HttpClient();
 		HttpMethod method = new GetMethod(localaccesstoken);
