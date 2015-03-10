@@ -1,4 +1,4 @@
 base = {
   // This can have nested stuff, arrays, etc.
-  uri: 'baseurl' 
+  uri: '%LAYERS_API_URI%' 
 }
