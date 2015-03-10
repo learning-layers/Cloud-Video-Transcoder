@@ -45,7 +45,8 @@
 		$("#Loginbtn").click(function( event ) {
 			//alert("hello");
 			$.ajax({
-		        url: base.uri+"/clvitra/rest/oidc/auth",
+		        //url: base.uri+"/clvitra/rest/oidc/auth",
+		        url: "/rest/oidc/auth",
 		        //url: "http://127.0.0.1:8080/clvitra/rest/oidc/auth",
 		        type: "GET",
 		        dataType:'text',
