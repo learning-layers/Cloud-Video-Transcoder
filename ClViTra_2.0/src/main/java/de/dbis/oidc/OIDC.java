@@ -367,6 +367,8 @@ public class OIDC extends HttpServlet {
 		authorize = base + GetProperty.getParam("authorize", INPUT_FILE);
 		redirect = base + GetProperty.getParam("redirect", INPUT_FILE);
 		cID = GetProperty.getParam("clientid", INPUT_FILE);
+		System.out.println("authorize: "+authorize);
+		System.out.println("redirect: "+redirect);
 		// Set the requested response_type (code, token and / or 
 		// id_token):
 		// Use CODE for authorisation code flow
@@ -408,6 +410,7 @@ public class OIDC extends HttpServlet {
 		// Construct and output the final OIDC authorisation URL for
 		// redirect
 		URL authzURL = new URL(authzEndpointURL + "?" + queryString);
+		System.out.println("URL: "+authzURL.toString());
 
 		return authzURL;
 	}
