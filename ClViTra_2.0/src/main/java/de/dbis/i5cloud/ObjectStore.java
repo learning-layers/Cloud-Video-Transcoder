@@ -47,8 +47,9 @@ public class ObjectStore {
 
 				HttpClient client = new DefaultHttpClient();
 				
-				base = GetProperty.getParam("uri", BASE_INPUT_FILE);
-				oauth = base + GetProperty.getParam("oauth", INPUT_FILE);
+				//base = GetProperty.getParam("uri", BASE_INPUT_FILE);
+				//oauth = base + GetProperty.getParam("oauth", INPUT_FILE);
+				oauth = GetProperty.getParam("oauth", INPUT_FILE);
 				
 				System.out.println("oauth: "+oauth);
 				stringEntity = GetProperty.getParam("stringEntity", INPUT_FILE);

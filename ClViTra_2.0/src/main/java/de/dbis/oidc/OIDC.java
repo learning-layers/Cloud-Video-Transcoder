@@ -119,9 +119,11 @@ public class OIDC extends HttpServlet {
 			String BASE_INPUT_FILE = "/etc/clvitra/base";
 	
 			String token, redirect, cID, cSecret, base;
-			base = GetProperty.getParam("uri", BASE_INPUT_FILE);
-			token = base + GetProperty.getParam("token", INPUT_FILE);
-			redirect = base + GetProperty.getParam("redirect", INPUT_FILE);
+			//base = GetProperty.getParam("uri", BASE_INPUT_FILE);
+			//token = base + GetProperty.getParam("token", INPUT_FILE);
+			//redirect = base + GetProperty.getParam("redirect", INPUT_FILE);
+			token = GetProperty.getParam("token", INPUT_FILE);
+			redirect = GetProperty.getParam("redirect", INPUT_FILE);
 			cID = GetProperty.getParam("clientid", INPUT_FILE);
 			cSecret = GetProperty.getParam("clientsecret", INPUT_FILE);
 			System.out.println("In OIDCTokens");
@@ -265,8 +267,9 @@ public class OIDC extends HttpServlet {
 	
 			Header = Header.replace("Bearer ","");
 			String userinfo, base;
-			base = GetProperty.getParam("uri", BASE_INPUT_FILE);
-			userinfo = base + GetProperty.getParam("userinfo", INPUT_FILE);
+			//base = GetProperty.getParam("uri", BASE_INPUT_FILE);
+			//userinfo = base + GetProperty.getParam("userinfo", INPUT_FILE);
+			userinfo = GetProperty.getParam("userinfo", INPUT_FILE);
 			
 			BearerAccessToken accessToken = null;
 			
@@ -363,9 +366,12 @@ public class OIDC extends HttpServlet {
 		String BASE_INPUT_FILE = "/etc/clvitra/base";
 
 		String authorize, redirect, cID, base;
-		base = GetProperty.getParam("uri", BASE_INPUT_FILE);
-		authorize = base + GetProperty.getParam("authorize", INPUT_FILE);
-		redirect = base + GetProperty.getParam("redirect", INPUT_FILE);
+		//base = GetProperty.getParam("uri", BASE_INPUT_FILE);
+		//authorize = base + GetProperty.getParam("authorize", INPUT_FILE);
+		//redirect = base + GetProperty.getParam("redirect", INPUT_FILE);
+		
+		authorize = GetProperty.getParam("authorize", INPUT_FILE);
+		redirect = GetProperty.getParam("redirect", INPUT_FILE);
 		cID = GetProperty.getParam("clientid", INPUT_FILE);
 		System.out.println("authorize: "+authorize);
 		System.out.println("redirect: "+redirect);

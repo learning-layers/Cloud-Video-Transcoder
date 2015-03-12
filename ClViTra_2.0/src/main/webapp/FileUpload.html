@@ -8,7 +8,6 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/black-tie/jquery-ui.css" />
     <script type="text/javascript" src="js/ajax.js"></script>
-    <script src="config.js"></script>
   
   <!-- 
  	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
@@ -55,7 +54,7 @@
     
     function verifyAccessToken(){
     	$.ajax({
-	        url: base.uri+"/clvitra/rest/oidc/verifyAccessToken",
+	        url: "/clvitra/rest/oidc/verifyAccessToken",
 	        type: "GET",
 	        dataType:'text',
 	        beforeSend: function(xhr) {
@@ -72,11 +71,11 @@
 	    	statusCode: {
 	    		401: function() {
    	            	alert("ERROR! Please login again.");
-   	            	window.location = base.uri+"/clvitra/";
+   	            	window.location = "/clvitra/";
 	        	},
 	        	404: function() {
    	            	alert("ERROR! Please login again.");
-   	            	window.location = base.uri+"/clvitra/";
+   	            	window.location = "/clvitra/";
 	        	}
 	    		
 	    	},
@@ -88,7 +87,7 @@
     if(localStorage.clvitraAccessToken!=null) {
     	console.log("1");
 		$.ajax({
-	        url: base.uri+"/clvitra/rest/oidc/verifyAccessToken",
+	        url: "/clvitra/rest/oidc/verifyAccessToken",
 	        type: "GET",
 	        dataType:'text',
 	        beforeSend: function(xhr) {
@@ -107,12 +106,12 @@
 	            401: function() {
    	            	console.log("1.1.1");
    	            	alert("ERROR! Please login again.");
-   	            	window.location = base.uri+"/clvitra/";
+   	            	window.location = "/clvitra/";
 	        	},
 	            404: function() {
 	            	console.log("1.2");
 	            	$.ajax({
-	        	        url: base.uri+"/clvitra/rest/oidc/getAccessToken",
+	        	        url: "/clvitra/rest/oidc/getAccessToken",
 	        	        type: "GET",
 	        	        dataType:'text',
 	        	        beforeSend: function(xhr) {
@@ -127,12 +126,12 @@
 	        	    		401: function() {
 	           	            	console.log("1.4");
 	           	            	alert("ERROR! Please login again.");
-	           	            	window.location = base.uri+"/clvitra/";
+	           	            	window.location = "/clvitra/";
 	        	        	},
 	        	    		404: function() {
 	        	            	console.log("1.5");
 	        	            	alert("ERROR! Please login again.");
-	        	            	window.location = base.uri+"/clvitra/";
+	        	            	window.location = "/clvitra/";
 	        	            }
 	        	    	},
 	        	    	error: function(e){console.log(e);}
@@ -146,7 +145,7 @@
     else if(localStorage.clvitraAccessToken==null) {
     	console.log("2");
 		$.ajax({
-	        url: base.uri+"/clvitra/rest/oidc/getAccessToken",
+	        url: "/clvitra/rest/oidc/getAccessToken",
 	        type: "GET",
 	        dataType:'text',
 	        beforeSend: function(xhr) {
@@ -161,12 +160,12 @@
 	    		401: function() {
    	            	console.log("2.2");
    	            	alert("ERROR! Please login again.");
-   	            	window.location = base.uri+"/clvitra/";
+   	            	window.location = "/clvitra/";
 	        	},
 	    		404: function() {
 	            	console.log("2.3");
 	            	alert("ERROR! Please login again.");
-	            	window.location = base.uri+"/clvitra/";
+	            	window.location = "/clvitra/";
 	            }
 	    	},
 	    	error: function(e){console.log(e);}
@@ -223,7 +222,7 @@
 		event.preventDefault();
 		var form_data = new FormData($("#upload_form")[0]);
   		$.ajax({
-	        url: base.uri+"/clvitra/rest/videos",
+	        url: "/clvitra/rest/videos",
 	        type: "POST",
 	        data: form_data,
 	        processData:false,
@@ -241,7 +240,7 @@
 	            },
 		        401: function() {
 		            	alert("UNAUTHORIZED! Please login again.");
-		            	window.location = base.uri+"/clvitra/";
+		            	window.location = "/clvitra/";
 	        	}
 	    	},
 	      	progress: function(e) {
@@ -266,7 +265,7 @@
 	
 	function getVideos(request, handler){
 		$.ajax({
-	        url: base.uri+"/clvitra/rest/videos/"+request,
+	        url: "/clvitra/rest/videos/"+request,
 	        type: "GET",
 	        dataType:'json',
 	        beforeSend: function(xhr) {
@@ -275,7 +274,7 @@
 	        statusCode: {
 	            401: function() {
 	            	alert("UNAUTHORIZED! Please login again.");
-	    			window.location=base.uri+"/clvitra/";
+	    			window.location="/clvitra/";
             	}
 	    	},
 	        success: handler
@@ -305,7 +304,7 @@
 			console.log(videoName);
 			
 			$.ajax({
-		        url: base.uri+"/clvitra/rest/videos/delete?videoname="+videoName,
+		        url: "/clvitra/rest/videos/delete?videoname="+videoName,
 		        type: "DELETE",
 		        beforeSend: function(xhr) {
 		            xhr.setRequestHeader("Authorization", "Bearer "+localStorage.clvitraAccessToken);
@@ -322,7 +321,7 @@
 		        statusCode: {
 		            401: function() {
 		    			alert("UNAUTHORIZED! Please login again.");
-		    			window.location=base.uri+"/clvitra/";
+		    			window.location="/clvitra/";
 	            	}
 		    	}
 		    });
@@ -350,7 +349,7 @@
 	
 	$("#Logoutbtn").click(function( event ) {
 		localStorage.removeItem("clvitraAccessToken");
-	    window.location=base.uri+"/clvitra/";
+	    window.location="/clvitra/";
 	});
 	
 	});
