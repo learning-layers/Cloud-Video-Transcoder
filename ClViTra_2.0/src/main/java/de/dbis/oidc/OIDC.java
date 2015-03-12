@@ -115,8 +115,8 @@ public class OIDC extends HttpServlet {
 	public Response getAccessToken(@HeaderParam("Code") String Header) throws JSONException{
 		
 		if(Header!=null){
-			String INPUT_FILE = "/etc/clvitra/oidc";
-			String BASE_INPUT_FILE = "/etc/clvitra/base";
+			String INPUT_FILE = "/etc/clvitra/oidc.properties";
+			String BASE_INPUT_FILE = "/etc/clvitra/base.properties";
 	
 			String token, redirect, cID, cSecret, base;
 			//base = GetProperty.getParam("uri", BASE_INPUT_FILE);
@@ -262,8 +262,8 @@ public class OIDC extends HttpServlet {
 	public Response verifyAccessToken(@HeaderParam("Authorization") String Header) throws JSONException{
 
 		if(Header!=null){
-			String INPUT_FILE = "/etc/clvitra/oidc";
-			String BASE_INPUT_FILE = "/etc/clvitra/base";
+			String INPUT_FILE = "/etc/clvitra/oidc.properties";
+			String BASE_INPUT_FILE = "/etc/clvitra/base.properties";
 	
 			Header = Header.replace("Bearer ","");
 			String userinfo, base;
@@ -362,8 +362,8 @@ public class OIDC extends HttpServlet {
 	
 	private URL composeAuthzRequestURL()
 		throws Exception {
-		String INPUT_FILE = "/etc/clvitra/oidc";
-		String BASE_INPUT_FILE = "/etc/clvitra/base";
+		String INPUT_FILE = "/etc/clvitra/oidc.properties";
+		String BASE_INPUT_FILE = "/etc/clvitra/base.properties";
 
 		String authorize, redirect, cID, base;
 		//base = GetProperty.getParam("uri", BASE_INPUT_FILE);
