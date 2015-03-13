@@ -20,8 +20,8 @@ import de.dbis.util.GetProperty;
  */
 public class Java2MySql
 {
-	private final static String INPUT_FILE = "/etc/clvitra/dbconnection";
-	private final static String BASE_INPUT_FILE = "/etc/clvitra/base";
+	private final static String INPUT_FILE = "dbconnection";
+	private final static String BASE_INPUT_FILE = "base";
 	private static String url;
 	private static String base;
 	private static String port;

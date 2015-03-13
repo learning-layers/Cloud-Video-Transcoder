@@ -42,8 +42,8 @@ public class ObjectStore {
 		protected String OAuth(String filepath) {
 			try {
 				String oauth, stringEntity, base;
-				String INPUT_FILE = "/etc/clvitra/objectStore";
-				String BASE_INPUT_FILE = "/etc/clvitra/base";
+				String INPUT_FILE = "objectStore";
+				String BASE_INPUT_FILE = "base";
 
 				HttpClient client = new DefaultHttpClient();
 				
@@ -104,8 +104,8 @@ public class ObjectStore {
 			try {
 				
 				String upload, base;
-				String INPUT_FILE = "/etc/clvitra/objectStore";
-				String BASE_INPUT_FILE = "/etc/clvitra/base";
+				String INPUT_FILE = "objectStore";
+				String BASE_INPUT_FILE = "base";
 				
 				HttpClient client = new DefaultHttpClient();
 				
