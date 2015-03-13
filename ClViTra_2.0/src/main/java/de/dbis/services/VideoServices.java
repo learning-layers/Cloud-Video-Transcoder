@@ -44,7 +44,7 @@ import com.xuggle.xuggler.IContainer;
 import de.dbis.db.Java2MySql;
 import de.dbis.i5cloud.ObjectStore;
 import de.dbis.i5cloud.UserStore;
-import de.dbis.mpeg7.sevianno;
+//import de.dbis.mpeg7.sevianno;
 import de.dbis.rabbitmq.RabbitMQReceive;
 import de.dbis.rabbitmq.RabbitMQSend;
 import de.dbis.util.CORS;
@@ -377,7 +377,7 @@ public class VideoServices {
 		            String thumbnailUri = Details[2];
 		            String uploader = Details[4];
 		            
-		            sevianno.addMediaDescription(URI, thumbnailUri, title, uploader);
+		            //sevianno.addMediaDescription(URI, thumbnailUri, title, uploader);
 				}
 				else
 				{

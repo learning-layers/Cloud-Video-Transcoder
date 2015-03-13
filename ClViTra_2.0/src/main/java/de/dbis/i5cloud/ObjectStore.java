@@ -111,8 +111,9 @@ public class ObjectStore {
 				
 				File f = new File(params[1]);
 				System.out.println("File Exists: "+f.exists());
-				base = GetProperty.getParam("uri", BASE_INPUT_FILE);
-				upload = base + GetProperty.getParam("upload", INPUT_FILE);
+				//base = GetProperty.getParam("uri", BASE_INPUT_FILE);
+				//upload = base + GetProperty.getParam("upload", INPUT_FILE);
+				upload = GetProperty.getParam("upload", INPUT_FILE);
 				HttpPut put = new HttpPut(upload + new File(params[1]).getName());
 
 				FileEntity fe = new FileEntity(new File(params[1]), "video/mp4");
