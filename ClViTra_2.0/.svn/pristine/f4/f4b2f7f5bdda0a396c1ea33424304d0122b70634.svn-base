@@ -1,5 +1,0 @@
-#oauth = http://137.226.58.11:8081/i5Cloud/services/3/auth
-#upload = http://137.226.58.11:8081/i5Cloud/services/3/storage/public/
-oauth = http://10.255.255.5:8081/i5Cloud/services/3/auth
-upload = http://10.255.255.5:8081/i5Cloud/services/3/storage/public/
-stringEntity = {"username": "", "password": ""}
