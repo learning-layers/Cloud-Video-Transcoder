@@ -45,8 +45,7 @@ import de.dbis.db.Java2MySql;
 import de.dbis.i5cloud.ObjectStore;
 import de.dbis.i5cloud.UserStore;
 //import de.dbis.mpeg7.sevianno;
-import de.dbis.rabbitmq.RabbitMQReceive;
-import de.dbis.rabbitmq.RabbitMQSend;
+
 import de.dbis.util.CORS;
 import de.dbis.util.GetProperty;
 import de.dbis.videoutils.Thumbnail;
@@ -311,11 +310,11 @@ public class VideoServices {
 			
 			if(username!=null){
 				String uploadPath, savePath, base; //uploadCode;
-				String INPUT_FILE = "tempFileLocation";
-				//String BASE_INPUT_FILE = "base";
+				String INPUT_FILE = "/etc/clvitra/tempFileLocation";
+				String BASE_INPUT_FILE = "/etc/clvitra/base";
 				//String INPUT_FILE_UploadCode = "FileUpload";
 				
-				//base = GetProperty.getParam("uri", BASE_INPUT_FILE);
+				base = GetProperty.getParam("uri", BASE_INPUT_FILE);
 				uploadPath = GetProperty.getParam("location", INPUT_FILE);
 				savePath = GetProperty.getParam("savePath", INPUT_FILE);
 							
@@ -339,9 +338,9 @@ public class VideoServices {
 				writeToFile(uploadedInputStream, uploadedFileLocation);
 					
 				// Generating Thumbnail
-				String thumbnails[] = Thumbnail.Generate_Thumbnail(uploadPath, newFile.getName());
+				//String thumbnails[] = Thumbnail.Generate_Thumbnail(uploadPath, newFile.getName());
 		
-				System.out.println("TURI: "+thumbnails[0]);
+				//System.out.println("TURI: "+thumbnails[0]);
 				//Get the duration of the video
 				long Duration = getDuration(uploadedFileLocation);
 					
@@ -350,14 +349,15 @@ public class VideoServices {
 				
 				String Codec = VideoInfo.videoInfo(uploadedFileLocation);
 				String ID;
-				ID = Java2MySql.VideoUpdate(savePath+newFile.getName(), Codec, thumbnails[0], thumbnails[1], Duration, username);
+				ID = Java2MySql.VideoUpdate(savePath+newFile.getName(), Codec, "thumbnail_0", "thumbnail_1", Duration, username);
 				
 				String bearer_token=null;
 				if(Codec.equals("h264"))
 				{
 					System.out.println("FileUpload -- ext==MP4");
-					ObjectStore ob = new ObjectStore();
-				   	String URI = ob.ObjectStoreStart(uploadPath + newFile.getName());
+					//ObjectStore ob = new ObjectStore();
+				   	//String URI = ob.ObjectStoreStart(uploadPath + newFile.getName());
+				   	String URI = base+"videos/"+newFile.getName();
 				   	System.out.println("VURI: "+URI);
 				   	Java2MySql.VideoUpdate(ID, newFile.getName(),URI, "0", "0","0");
 				   	
@@ -366,11 +366,11 @@ public class VideoServices {
 				   	//bearer_token = "Bearer "+token;
 				   	//System.out.println("USER STORE: "+us.uploadToUserStore(bearer_token, uploadPath + newFile.getName()));
 				   	
-				   	File inputfile = new File(uploadPath+newFile.getName());
+				   	/*File inputfile = new File(uploadPath+newFile.getName());
 				   	inputfile.setWritable(true);
 				   	System.out.println("FILE: "+uploadPath+newFile.getName());
 		    		boolean b = inputfile.delete();
-		    		System.out.println("MP4 delete: "+b);
+		    		System.out.println("MP4 delete: "+b);*/
 				   	
 				   	String[] Details = Java2MySql.getVideoDetails(ID);
 		            String title = Details[0];
@@ -383,8 +383,8 @@ public class VideoServices {
 				{
 					try {
 						System.out.println("SENT TO SLAVE: "+bearer_token);
-						RabbitMQSend.send(ID+"?"+bearer_token);
-						RabbitMQReceive.recv();
+						//RabbitMQSend.send(ID+"?"+bearer_token);
+						//RabbitMQReceive.recv();
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
